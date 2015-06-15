@@ -1,0 +1,23 @@
+<h2>Login</h2>
+<% if (!session.user) {%>
+	<form method='post' action='login'>
+
+		<div class="field">
+			<label for="login">Login:</label><br/>
+			<input type="text" id="login" name="login" size="30"/>
+		</div>
+	
+		<div class="field">
+			<label for="password">Password:</label><br/>
+			<input type="password" id="password" name="password" size="30"/>
+		</div>
+	
+		<div class="actions">
+			<input name="commit" type="submit" value="Login"/>
+		</div>
+	</form>
+<% } else { %>
+<p>Ya estas conectado!!! </p>
+<p> usuario= <%=session.user.email %></p>
+<p> rol = <%=session.user.role%></p>
+<% } %>	
