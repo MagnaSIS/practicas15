@@ -1,3 +1,21 @@
+/**  
+ *   placeForMe -
+ *   Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
+ *
+ *   This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /*
  * Required Variables
  */
@@ -9,7 +27,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -22,11 +39,37 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+app.use(cookieParser("placeForMe"));
+app.use(session({
+	  secret: 'placeForMe Secrets xD',
+	  resave: true,
+	  saveUninitialized:true,
+	  cookie: { maxAge: 3600000 } //Expira session tras 1h
+	}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+
+//Helpers dinamicos:
+app.use(function(req, res, next) {
+
+  // si no existe lo inicializa
+  if (!req.session.redir) {
+    req.session.redir = '/';
+  }
+  // guardar path en session.redir para despues de login
+  if (!req.path.match(/\/login|\/logout|\/user/)) {
+    req.session.redir = req.path;
+  }
+
+  // Hacer visible req.session en las vistas
+  res.locals.session = req.session;
+  next();
+});
+
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
