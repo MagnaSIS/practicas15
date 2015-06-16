@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -19,8 +20,31 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('Practicas 15'));
+app.use(session({
+    //secret: cookie_secret,
+    //name: cookie_name,
+    //store: sessionStore, // connect-mongo session store
+    proxy: true,
+    resave: true,
+    saveUninitialized: true}));
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+//Helpers dinamicos:
+app.use(function(req, res, next){
+
+  //guardar path en session.redir para despues de login
+  if(!req.path.match(/\/login|\/logout/)){
+    req.session.redir = req.path;
+  }
+
+  //hacer visible req.session en las vistas
+  res.locals.session = req.session;
+  next();
+});
+
+
 
 app.use('/', routes);
 app.use('/users', users);
@@ -30,6 +54,16 @@ app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
+
+
+//guardar path en session.redir para despues de login
+if(!req.path.match(/\/login|\/logout/)){
+  req.session.redir = req.path;
+}
+
+//hacer visible req.session en las vistas
+res.locals.session = req.session;
+next();
 });
 
 // error handlers
@@ -58,3 +92,4 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
