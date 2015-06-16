@@ -21,9 +21,9 @@ module.exports = router;
 /*
 *	Session Controller
 */
-//router.get('/login',		sessionController.new);
-//router.post('/login',		sessionController.create);
-//router.delete('/logout',	sessionController.loginRequired,	sessionController.destroy);
+router.get('/login',		sessionController.new);
+router.post('/login',		sessionController.create);
+router.delete('/logout',	sessionController.loginRequired,	sessionController.destroy);
 
 /*
 *	Students Controller
