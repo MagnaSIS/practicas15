@@ -17,7 +17,7 @@
  */
 
 var models=require("../models/models.js");
-
+var util=require("../includes/utilities.js");
 
 //Check if user is login
 exports.loginRequired = function (req,res,next){
@@ -56,39 +56,31 @@ exports.isAdmin = function (req,res,next){
 };
 
 
-//Get /login Formulario de login
+//Get /login Login Form
 exports.new = function(req,res){
-	//var errors=req.session.errors || {};
-	//req.session.errors={};
-	//res.render('session/new',{errors:errors});
-	res.render('session/login');
+	var errors=req.session.errors || {};
+	req.session.errors={};
+	res.render('session/login', {errors : errors});
 };
 
-//Post /login crear la sesion
+//Post /login Login check
 exports.create = function(req,res){
-	var login= req.body.login;
-	var pass = req.body.password;
-	
-	models.User.find({where: {email: login, password: pass}}).then(function(user) {
-		if (user) {
-			console.log("email= " + user.email + "\n role= " + user.role);
-			
-			req.session.user = {email: user.email, role: user.role};
-			res.redirect("/login");
-			return;
+	models.User.find({where: {email: req.body.login, password: util.encrypt(req.body.password)}}).then(function(user) {
+		if (user) {	
+			req.session.user = {email: user.email, role: user.role};			
 		} else{
-			req.session.errors =[{"message": 'usuario o contraseña incorrectas'}];
-			res.redirect("/login");
-			return;
+			req.session.errors =[{"message": 'Usuario o contraseña incorrectas'}];
 		}
+		res.redirect("/login");	
 	}).catch(function(error){
-		console.log("Error:" + error);
-		//next(error);
-		});
+		req.session.errors =[{"message": 'Usuario o contraseña incorrectas'} , {"message":("error: " + error) || ""}];	
+		res.redirect("/login");	
+	});
+	
 };
 	
-//Delete /logout destruir sesion
+//Delete /logout session destroy
 exports.destroy = function (req,res){
 	delete req.session.user;
-	res.redirect(req,session.redir.toString());
-};	
+	res.redirect("/");
+};
