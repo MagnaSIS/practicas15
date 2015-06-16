@@ -13,7 +13,7 @@
     "express": "~4.12.4",
     "express-session": "^1.11.3",
     "morgan": "~1.5.3",
-    "sequelize": "^3.2.0",
+    "sequelize": "^3.0.0",
     "serve-favicon": "~2.2.1"
   },
   "devDependencies": {

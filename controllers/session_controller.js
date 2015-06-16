@@ -17,7 +17,7 @@
  */
 
 var models=require("../models/models.js");
-
+var util=require("../includes/utilities.js");
 
 //Check if user is login
 exports.loginRequired = function (req,res,next){
@@ -68,6 +68,7 @@ exports.new = function(req,res){
 exports.create = function(req,res){
 	var login= req.body.login;
 	var pass = req.body.password;
+    pass = util.encrypt(pass);
 	
 	models.User.find({where: {email: login, password: pass}}).then(function(user) {
 		if (user) {
