@@ -6,8 +6,8 @@ var router = express.Router();
  */
 var sessionController	=	require	('../controllers/session_controller');
 var studentController	=	require	('../controllers/student_controller');
-/*var managerController	=	require ('../controllers/manage_controller');
-var courseController	=	require	('../controllers/course_controller');
+var managerController	=	require ('../controllers/manage_controller');
+/*var courseController	=	require	('../controllers/course_controller');
 var calcsController		=	require ('../controllers/course_controller');
 
 */
@@ -37,10 +37,10 @@ router.put('/students/:id',		sessionController.isStudent,	studentController.upda
 
 /*
 *	Manager Controller
-
-router.get('/manager',			sessionController.isAdmin,	managerController.new);
-router.post('/manager',			sessionController.isAdmin,	managerController.create);
-router.delete('/manager/:id',	sessionController.isAdmin,	managerController.destroy);
+*/
+router.get('/manager',				managerController.new);
+router.post('/manager',				managerController.create);
+/*router.delete('/manager/:id',	sessionController.isAdmin,	managerController.destroy);
 router.put('/manager/:id',		sessionController.isAdmin,	managerController.update);
 */
 /*
