@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+   <title> PlaceForMe </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link rel='stylesheet' 
+        type='text/css'
+        media='only screen and (min-width: 530px) and (min-device-width: 481px)'
+        href='/stylesheets/wide.css' />
+  <link rel='stylesheet'
+        type='text/css'
+        media='only screen and (max-width: 480px)' 
+        href='/stylesheets/smartphone.css' />
+
+</head> 
+
+<body>
+<div id="page-wrap">
+
+<!-- Menu superior -->
+  
+  <header class="main" id="h1">
+	<% if (!session.user) { %>
+    	<span class="right"> <a href="/login"><button>Login</button></a></span>
+    <% }else{ %>
+    <form method="post" action="logout?_method=delete">
+	<span class="right"> <button type="submit"">Logout</button></span>
+	</form>
+    <% } %>
+    	
+    <h2><span>Place For Me</span></h2>
+  </header>
+  
+<!-- FIN Menu superior -->
+
+<!-- Menu Izquierda -->
+
+  <nav class="left-menu" id="n1" role="navigation">
+    <span><a href="/">Inicio</a></span>
+	<% if (session.user) { %>
+		<% if ( session.user.role==="ADMIN") { %>
+			<span><a href="/manager">Gestión de roles</a></span>
+		<% } %>
+		<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
+		<span><a href="/course">Gestión de asignaturas</a></span>
+		<% } %>
+	<% } %>
+  </nav>
+
+<!-- FIN Menu Izquierda -->
+
+<!-- Centro -->
+   <section class="main" id="s1">
+    <div class="body"><%- body %></div>
+    
+      
+    <% if ( !(typeof errors==="undefined") && errors.length) { %>
+    <div class="errors">  
+        <% for (var i in errors) { %>
+           <span> <%= errors[i].message %> </span><br/>
+        <% } %>
+    <% } %>
+    </div>
+    
+  </section>
+<!-- FIN Menu Central -->
+
+<!-- Pie de pagina -->
+  <footer class="main" id="f1">
+    placeForMe  Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
+  </footer>
+ <!-- FIN Menu Central --> 
+  
+</div>
+</body> 
+</html>
