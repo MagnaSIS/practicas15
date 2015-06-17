@@ -10,9 +10,10 @@ var managerController	=	require ('../controllers/manage_controller');
 var courseController	=	require	('../controllers/course_controller');
 var calcsController		=	require ('../controllers/course_controller');
 
+*/
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'PlaceForMe', errors: [] });
 });
 
 module.exports = router;
@@ -28,29 +29,32 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 /*
 *	Students Controller
 */
-router.get('/students', studentController.new);
-router.post('/students', studentController.create);
-//router.delete('/students/:id',	sessionController.isStudent,	studentController.destroy);
-//router.put('/students/:id',		sessionController.isStudent,	studentController.update);
+
+router.get('/students',		studentController.new);
+router.post('/students',		studentController.create);
+router.delete('/students/:id',	sessionController.isStudent,	studentController.destroy);
+router.put('/students/:id',		sessionController.isStudent,	studentController.update);
 
 /*
 *	Manager Controller
-*/
-//router.get('/manager',			sessionController.isAdmin,	managerController.new);
-//router.post('/manager',			sessionController.isAdmin,	managerController.create);
-//router.delete('/manager/:id',	sessionController.isAdmin,	managerController.destroy);
-//router.put('/manager/:id',		sessionController.isAdmin,	managerController.update);
 
+router.get('/manager',			sessionController.isAdmin,	managerController.new);
+router.post('/manager',			sessionController.isAdmin,	managerController.create);
+router.delete('/manager/:id',	sessionController.isAdmin,	managerController.destroy);
+router.put('/manager/:id',		sessionController.isAdmin,	managerController.update);
+*/
 /*
  * Admin Controller
- */
-//router.get('/course',			sessionController.isManager,	courseController.new);
-//router.post('/course',			sessionController.isManager,	courseController.create);
-//router.delete('/course/:id',	sessionController.isManager,	courseController.destroy);
-//router.put('/course/:id',		sessionController.isManager,	courseController.update);
 
+router.get('/course',			sessionController.isManager,	courseController.new);
+router.post('/course',			sessionController.isManager,	courseController.create);
+router.delete('/course/:id',	sessionController.isManager,	courseController.destroy);
+router.put('/course/:id',		sessionController.isManager,	courseController.update);
+ */
 
 /*
 * Calcs controller
+
+router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcsController.new);
 */
-//router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcsController.new);
+
