@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Lista de Asignaturas </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head> 
+
+<body>
+
+	<h1>Lista de Asignaturas añadidas</h1><br/><br/>	
+	
+	<table>
+	  <% var i; for (i=0; i < course.length; i++) { %>        
+		<tr>
+		  <td><%= course[i].name %></td>
+		  <td><a href="/course/<%= course[i].id %>/edit"><button>Modificar asignatura</button></a></td>
+		  <td>
+			<form method="post" action="/course/<%= course[i].id %>?_method=delete">
+			  <button type="submit" onClick="return confirm('Borrar: <%= course[i].name %>');">
+				Borrar
+			  </button>
+			</form>
+		  </td>
+		</tr>
+	  <% } %>
+	</table>
+	
+	
+</body> 
+</html>

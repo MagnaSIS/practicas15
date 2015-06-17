@@ -16,8 +16,6 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'PlaceForMe', errors: [] });
 });
 
-router.param('courseId', courseController.load);  // autoload :courseId
-
 module.exports = router;
 
 
