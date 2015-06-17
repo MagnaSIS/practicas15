@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Crear Asignatura </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+
+</head> 
+
+<body>
+
+	<h1>Formulario para Modificar Asignatura</h1><br/><br/>
+	
+	<form method="post" action="/course/<%= course.id %>?_method=put">  
+      <label for="name">Nombre Asignatura: <span class="required">*</span></label>  
+      <input type="text" id="name" name="course[name]" value="<%= course.name %>" required="required" autofocus="autofocus" />
+	  <br/><br/>
+         
+      <label for="creditos">Número Créditos: <span class="required">*</span></label>  
+      <input type="creditos" id="creditos" name="course[credits]" value="<%= course.credits %>" required="required" />
+	  <br/><br/>
+
+      <label for="especialidad">Especialidad: </label> 
+      <select id="especialidad" name="course[specialisation]">  
+         <option value="C" <% if (course.specialisation === "C") { %> selected <% } %> >Computación</option>
+         <option value="IC" <% if (course.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>  
+         <option value="IS" <% if (course.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>  
+      </select> 
+	  <br/><br/>
+	  
+	  <label for="plazas">Número plazas: <span class="required">*</span></label>  
+      <input type="text" id="plazas" name="course[vacancies]" value="<%= course.vacancies %>" required="required" autofocus="autofocus" />
+	  <br/><br/>
+	  
+      <label for="descripcion">Descripción: <span class="required">*</span></label>  
+      <textarea id="descripcion" name="course[description]" value="<%= course.description %>" required="required"></textarea>  
+	  <br/><br/>
+		
+      <input type="submit" value="Guardar" id="submit" />
+   </form>  
+</body> 
+</html>
