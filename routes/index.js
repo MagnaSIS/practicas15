@@ -6,7 +6,7 @@ var router = express.Router();
  */
 var sessionController	=	require	('../controllers/session_controller');
 var studentController	=	require	('../controllers/student_controller');
-var managerController	=	require ('../controllers/manage_controller');
+/*var managerController	=	require ('../controllers/manage_controller');
 var courseController	=	require	('../controllers/course_controller');
 var calcsController		=	require ('../controllers/course_controller');
 
@@ -32,7 +32,7 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 
 router.get('/students',		studentController.new);
 router.post('/students',		studentController.create);
-router.delete('/students/:id',	sessionController.isStudent,	studentController.destroy);
+/*router.delete('/students/:id',	sessionController.isStudent,	studentController.destroy);
 router.put('/students/:id',		sessionController.isStudent,	studentController.update);
 
 /*
