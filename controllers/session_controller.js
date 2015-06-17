@@ -30,37 +30,45 @@ exports.loginRequired = function (req,res,next){
 
 //Check if user is Student
 exports.isStudent = function (req,res,next){
-		if (req.session.role === "STUDENT"){
+		if (req.session.user.role === "STUDENT"){
 			next();
 		}else{
-			new Error("Permiso denegado.")
+			next(new Error("Permiso denegado."));
 		}
 };
 
 //Check if user is Manager
 exports.isManager = function (req,res,next){
-		if (req.session.role === "MANAGER"){
+		if (req.session.user.role === "MANAGER"){
 			next();
 		}else{
-			new Error("Permiso denegado.")
+			next(new Error("Permiso denegado."));
 		}
 };
 
 //Check if user is Admin
 exports.isAdmin = function (req,res,next){
-		if (req.session.role === "ADMIN"){
+		if (req.session.user.role === "ADMIN"){
 			next();
-		}else{
-			new Error("Permiso denegado.")
+		}else{			
+			next(new Error("Permiso denegado."));			
 		}
 };
 
+//Check if user is Admin
+exports.isCourseAdmin = function (req,res,next){
+		if ( (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")){
+			next();
+		}else{			
+			next(new Error("Permiso denegado."));			
+		}
+};
 
 //Get /login Login Form
-exports.new = function(req,res){
-	var errors=req.session.errors || {};
-	req.session.errors={};
-	res.render('session/login', {errors : errors});
+exports.new = function(req,res){	 	
+		var errors=req.session.errors || {};
+		req.session.errors={};
+		res.render('session/login', {errors : errors});		
 };
 
 //Post /login Login check
