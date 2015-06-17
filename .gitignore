@@ -5,3 +5,4 @@ routes/index.js
 package.json
 models/models.js
 placeForMe.sqlite
+*~
