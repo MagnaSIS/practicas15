@@ -33,6 +33,7 @@ router.delete('/logout',util.requiredSecureConection,	sessionController.loginReq
 *	Students Controller
 */
 
+
 router.get('/students',			util.requiredSecureConection,		studentController.new);
 router.post('/students',		util.requiredSecureConection,		studentController.create);
 /*router.delete('/students/:id',	sessionController.isStudent,	studentController.destroy);
@@ -50,6 +51,7 @@ router.post('/manager',			util.requiredSecureConection,			sessionController.isAd
  * Admin Controller
 */
 
+
 router.get('/course',						util.requiredSecureConection,		sessionController.isCourseAdmin,	courseController.index);
 router.get('/course/new',					util.requiredSecureConection,		sessionController.isCourseAdmin,	courseController.new);
 router.post('/course/create',				util.requiredSecureConection,		sessionController.isCourseAdmin,	courseController.create);
@@ -57,7 +59,7 @@ router.get('/course/allcourses',			util.requiredSecureConection,		sessionControl
 router.get('/course/:courseId(\\d+)/edit',	util.requiredSecureConection,		sessionController.isCourseAdmin,	courseController.edit);
 router.put('/course/:courseId(\\d+)',		util.requiredSecureConection,		sessionController.isCourseAdmin,	courseController.update);
 router.delete('/course/:courseId(\\d+)',	util.requiredSecureConection,		sessionController.isCourseAdmin,	courseController.destroy);
- 
+
 
 /*
 * Calcs controller

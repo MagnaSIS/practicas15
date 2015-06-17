@@ -45,6 +45,7 @@ exports.new = function(req, res) {
 exports.create = function(req, res) {
   var course = models.Course.build( req.body.course );
 
+	console.log(req.body.course["name"]);
   course
   .validate()
   .then(
@@ -99,3 +100,4 @@ exports.destroy = function(req, res) {
     res.redirect('/course/allcourses');
   }).catch(function(error){next(error)});
 };
+

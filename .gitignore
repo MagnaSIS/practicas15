@@ -1,7 +1,15 @@
 /node_modules
 /.idea
 npm-debug.log
+<<<<<<< HEAD
 .project
 .git
 /varios.txt
 /.settings/
+=======
+routes/index.js
+package.json
+models/models.js
+placeForMe.sqlite
+*~
+>>>>>>> bdffa31bbfca5db137495f1c7c0791654de1b0fd
