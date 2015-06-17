@@ -46,10 +46,20 @@ module.exports = function(sequelize, DataTypes) {
         credits: {
             type: DataTypes.INTEGER,
             allowNull: false,
+			validate: {
+				isInt: {
+					msg: "-> El número de creditos debe ser número entero."
+				}
+			}
         },
         vacancies: {
             type: DataTypes.INTEGER,
             allowNull: false,
+			validate: {
+				isInt: {
+					msg: "-> El número de plazas debe ser número entero"
+				}
+			}
         }
     });
 }
