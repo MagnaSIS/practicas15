@@ -6,7 +6,6 @@ npm-debug.log
 /varios.txt
 /.settings/
 routes/index.js
-package.json
 models/models.js
 placeForMe.sqlite
 *~
