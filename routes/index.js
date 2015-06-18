@@ -38,9 +38,10 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 
 router.get('/students',			studentController.new);
 router.post('/students',		studentController.create);
-/*router.delete('/students/:id',	sessionController.isStudent,	studentController.destroy);
-router.put('/students/:id',		sessionController.isStudent,	studentController.update);
-*/
+router.get('/verify', studentController.verify);
+//router.delete('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.destroy);
+//router.put('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.update);
+
 /*
 *	Manager Controller
 */
@@ -69,4 +70,3 @@ router.delete('/course/:courseId(\\d+)',	sessionController.isCourseAdmin,	course
 
 router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcsController.new);
 */
-
