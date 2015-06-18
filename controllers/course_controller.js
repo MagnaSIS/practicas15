@@ -56,7 +56,7 @@ exports.create = function(req, res) {
         course // save: guarda en DB
         .save({fields: ["name", "description", "specialisation", "credits", "vacancies"]})
         .then( function(){ res.redirect('/course')}) 
-      }      // res.redirect: Redirección HTTP a lista de preguntas
+      }      // res.redirect: Redirecciï¿½n HTTP a lista de preguntas
     }
   ).catch(function(error){next(error)});
 	
@@ -89,7 +89,7 @@ exports.update = function(req, res) {
         req.course     // save: guarda campos pregunta y respuesta en DB
         .save( {fields: ["name", "description", "specialisation", "credits", "vacancies"]})
         .then( function(){ res.redirect('/course');});
-      }     // Redirección HTTP a lista de preguntas (URL relativo)
+      }     // Redirecciï¿½n HTTP a lista de preguntas (URL relativo)
     }
   );
 };
@@ -100,3 +100,4 @@ exports.destroy = function(req, res) {
     res.redirect('/course/allcourses');
   }).catch(function(error){next(error)});
 };
+
