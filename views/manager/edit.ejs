@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Lista de Asignaturas </title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head> 
+
+<body>
+
+	<h1>Editar usuario (ID: <%= user.id %>)</h1><br/><br/>	
+	
+	<form method="post" action="/manager/<%= user.id %>/?_method=put">
+			
+		<label>Email</label>
+		<input name="email" type="text" placeholder="<%= user.email %>"><br>
+		<label>Cambiar contraseña</label>
+		<input name="password" type="password" placeholder="Contraseña"><br>
+		<input type="submit" value="Editar"/><br>
+
+	</form>
+</body> 
+</html>
