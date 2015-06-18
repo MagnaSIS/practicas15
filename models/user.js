@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         locked: {
             type: DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         isValidate: {
             type: DataTypes.BOOLEAN,

@@ -19,6 +19,7 @@
    var models=require("../models/models.js");
    var util=require("../includes/utilities.js");
    var nodemailer = require('nodemailer');
+   var uuid = require('node-uuid');
 
    var crypto = require('crypto');
    var algorithm = 'aes-256-ctr';
@@ -42,12 +43,14 @@ exports.create = function(req,res) {
     console.log(password);
     var user = models.User.build();//creacion del user
     var student=models.Student.build();//creacion del student
+    var uuid4 = uuid.v4(); //id único para verificación del usuario
     password = util.encrypt(password);
 
     console.log(password);
     //asignacion de valores al user
     user.email=email;
     user.password=password;
+    user.confirmationToken=uuid4;
 
     //asignacion de valores al student
     student.name=name;
@@ -56,22 +59,7 @@ exports.create = function(req,res) {
     student.avgGrade=6.5;//idem
     student.credits=140;//idem
 
-    //Envio del correo
-
-    var transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'magnanode@gmail.com',
-        pass: 'Magna1234.'
-    }
-});
-
-    transporter.sendMail({
-      from: 'magnanode@gmail.com',
-      to: email,
-      subject: 'correo de verificación',
-      text: 'Por favor haz click en el siguiente enlace'
-});
+    console.log(req.get('host'));
 
    // console.log(user.password);
     //guardar en base de datos
@@ -80,7 +68,47 @@ exports.create = function(req,res) {
         res.redirect('/login');
         });
 
+        //Envio del correo
+        host=req.get('host');
+        link="http://"+req.get('host')+"/verify?id="+uuid4;
+
+        var transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: 'magnanode@gmail.com',
+            pass: 'Magna1234.'
+        }
+    });
+
+        transporter.sendMail({
+          from: 'magnanode@gmail.com',
+          to: email,
+          subject: 'Por favor verifica tu cuenta de correo',
+          html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
+    });
+
+
+
     };
+
+//verificacion
+exports.verify = function(req,res) {
+
+  var id = req.param("Id");
+  console.log(id);
+  models.User.findById(uuid).then(
+    function(user) {
+      if (user) {
+        res.write("Verificado correctamente");
+        next();
+      } else{next(new Error('No existe userId=' + id))}
+    }
+  ).catch(function(error){next(error)});
+
+  console.log(req.protocol+":/"+req.get('host'));
+  res.redirect('/login');
+};
+
 
 
 //TODO GOnzalo
