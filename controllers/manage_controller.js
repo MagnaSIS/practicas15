@@ -1,12 +1,28 @@
 
-var models=require("../models/models.js");
-var util=require("../includes/utilities.js");
+var models = require("../models/models.js");
+var util   = require("../includes/utilities.js");
+
+exports.load = function(req, res, next, userId) {
+  models.User.findById(userId).then(
+    function(user) {
+      if (user) {
+        req.user = user;
+        next();
+      } else{next(new Error('No existe userId=' + userId))}
+    }
+  ).catch(function(error){next(error)});
+};
 
 exports.new = function(req,res){
-	res.render('manager/manage');
+	models.User.findAll().then(
+    function(user) {
+      res.render('manager/manage', { users: user, errors: []});
+    }
+  ).catch(function(error) { next(error);})
 };
 
 exports.create = function(req,res) {
+
     var email = req.body.email;
     var password = req.body.password; 
     console.log("Password en texto-plano: " + password);
@@ -24,5 +40,31 @@ exports.create = function(req,res) {
     user.save().then(function(){
         res.redirect('/manager');
     });
+
+};
+
+exports.destroy = function(req,res){
+
+	console.log(" - La id que se va a borrar: " + req.param("userId"));
+
+    //borrar el user con la id que nos da
+    req.user.destroy().then( function() {
+        res.redirect('/manager');
+    }).catch(function(error){next(error)});
+
+};
+
+exports.edit = function(req,res){
+    console.log(" - La id del usuaro que se va a editar: " + req.param("userId"));
+    //take the object with the id
+    var user;
+    res.render('manager/edit', { user: user, errors: []});
+
+};
+
+exports.update = function(req,res){
+
+
+    
 
 };
