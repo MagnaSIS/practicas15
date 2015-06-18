@@ -21,7 +21,7 @@
 			<td><%= users[i].role %></td>
 			<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
 			<td>
-				<form method="post" action="/manager/<%= users[i].id %>?_method=put">
+				<form method="post" action="/manager/<%= users[i].id %>/edit?_method=get">
 					<button type="submit">Editar</button>
 				</form>
 			</td>

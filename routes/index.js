@@ -20,6 +20,7 @@ router.get('/', function(req, res, next) {
 router.param('courseId', courseController.load);  // autoload :courseId
 router.param('userId', managerController.load);
 
+
 module.exports = router;
 
 
@@ -46,7 +47,8 @@ router.post('/students',		studentController.create);
 router.get('/manager',						sessionController.isAdmin,	managerController.new);
 router.post('/manager',						sessionController.isAdmin,	managerController.create);
 router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.destroy);
-router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.edit);
+router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,	managerController.edit);
+router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.update);
 
 /*
  * Admin Controller

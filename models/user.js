@@ -1,5 +1,5 @@
-/**  
-*   placeForMe - 
+/**
+*   placeForMe -
 *   Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
 *
 *   This program is free software: you can redistribute it and/or modify
@@ -48,7 +48,22 @@ module.exports = function(sequelize, DataTypes) {
                 notEmpty: {
                     msg: "-> Falta Rol"
                 },
-            },
-        }
+            }
+        },
+        locked: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+        },
+        isValidate: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        confirmationToken: {
+            type: DataTypes.STRING,
+        },
+        lang: {
+            type: DataTypes.STRING,
+            values: ["es", "eus"],
+        },
     });
 }
