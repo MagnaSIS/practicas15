@@ -1,22 +1,41 @@
+
+
 <!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Lista de Asignaturas </title>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
-</head> 
-
+<head></head>
 <body>
-
-	<h1>Editar usuario (ID: <%= user.id %>)</h1><br/><br/>	
-	
-	<form method="post" action="/manager/<%= user.id %>/?_method=put">
-			
-		<label>Email</label>
-		<input name="email" type="text" placeholder="<%= user.email %>"><br>
-		<label>Cambiar contraseña</label>
-		<input name="password" type="password" placeholder="Contraseña"><br>
-		<input type="submit" value="Editar"/><br>
-
-	</form>
-</body> 
+	<div class="panel panel-default">
+		<div class="panel-heading">Editar usuario (ID: <%= user.id %>)</div>
+		<div class="panel-body">
+			<div style="margin: 0% 30% 0% 30%">
+				<form method="post" action="/manager/<%= user.id %>/?_method=put">
+					<div class="row">
+						<div class="col-md-6">
+							<label for="email">Email</label>
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" name="email" id="name" type="text" placeholder="<%= user.email %>">
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="password">Cambiar contraseña</label>
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" name="password" id="password" type="password" placeholder="Contraseña">
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<input class="btn btn-default" type="submit" value="Editar"/>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
 </html>
+
+	
+	

@@ -1,52 +1,42 @@
-<!--
-Author: W3layouts
-Author URL: http://w3layouts.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
--->
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<link href="/public/stylesheets/style.css" rel='stylesheet' type='text/css' />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!--webfonts-->
-<link href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
-<!--//webfonts-->
+	<!--
+		Author: W3layouts
+		Author URL: http://w3layouts.com
+		License: Creative Commons Attribution 3.0 Unported
+		License URL: http://creativecommons.org/licenses/by/3.0/
+	-->
 </head>
 <body>
-
-
-<!-- w3layouts_970x90 -->
-
-
-
-<div class="main">
-	  
-		<div class="clear"> </div>	
-      </div>
-      <h2>Or Signup with</h2>
-		<form method='post' action='students'>
-		   <div class="lable">
-		        <div class="col_1_of_2 span_1_of_2">	<input type="text" class="text" value="Nombre" name="name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Nombre';}" id="active"></div>
-                <div class="col_1_of_2 span_1_of_2"><input type="text" class="text" value="Apellidos" name="lastname" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Apellidos';}"></div>
-                <div class="clear"> </div>
-		   </div>
-		   <div class="lable-2"l>
-		        <input type="text" class="text" value="tuCorreo@ikasle.ehu.eus" name="email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'tuCorreo@ikasle.ehu.eus ';}">
-		        <input type="password" class="text" value="Password " name="password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password ';}">
-		   </div>
-		   
-		   <div class="submit">
-			  <input type="submit"  value="Registrarse" >
-		   </div>
-		   <div class="clear"> </div>
-		</form>
-		<!-----//end-main---->
+	<div class="panel panel-default">
+		<div class="panel-heading">Registrarse</div>
+		<div class="panel-body">
+			<div style="margin: 0% 40% 0% 40%">
+				<form method='post' action='students'>
+					<div class="row">
+						<input class="form-control" type="text" name="name" placeholder="Nombre" id="active">
+					</div>
+					<hr>
+					<div class="row">
+						<input class="form-control" type="text" name="lastname" placeholder="Apellido">
+					</div>
+					<hr>
+					<div class="row">
+						<input class="form-control" type="text" placeholder="tuCorreo@ikasle.ehu.eus" name="email">
+					</div>
+					<hr>
+					<div class="row">
+						<input class="form-control" type="password" class="text" placeholder="Contraseña" name="password">
+					</div>
+					<hr>
+					<div class="row">
+						<input class="btn btn-default" type="submit"  value="Registrarse" >
+					</div>
+				</form>
+			</div>
 		</div>
-		
-		
-	 
+	</div>
 </body>
 </html>

@@ -2,37 +2,53 @@
 <html>
 <head></head>
 <body>
-	<h1>Manager</h1>
-
-	<form method="post" action="manager">
-		<label>Nuevo manager:</label>
-		<input type="text" placeholder="Nombre" name="email"/>
-		<input type="password" name="password" placeholder="Contraseña">
-		<input type="submit" value="Registrar">
-	</form><br><br>
-	<table width="100%">
-		<tr><th>ID</th><th>Email</th><th>Nombre</th><th>Apellido</th><th>Tipo</th><th>Fecha de creación</th></tr>
-	  <% var i; for (i=0; i < users.length; i++) { %>        
-		<tr>
-			<td><%= users[i].id %></td>
-			<td><%= users[i].email %></td>
-			<td></td>
-			<td></td>
-			<td><%= users[i].role %></td>
-			<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
-			<td>
-				<form method="post" action="/manager/<%= users[i].id %>/edit?_method=get">
-					<button type="submit">Editar</button>
+	<div class="panel panel-default">
+		<div class="panel-heading">Gentión de usuarios</div>
+		<div class="panel-body">
+			<div>
+				<form method="post" action="manager">
+					<div class="row">
+						<div class="col-md-3"><label>Nuevo manager:</label></div>
+						<div class="col-md-3"><input class="form-control" type="text" placeholder="Nombre" name="email"/></div>
+						<div class="col-md-3"><input class="form-control" type="password" name="password" placeholder="Contraseña"></div>
+						<div class="col-md-3"><input class="btn btn-default" type="submit" value="Registrar"></div>
+					</div>
 				</form>
-			</td>
-			<td>
-				<form method="post" action="/manager/<%= users[i].id %>?_method=delete">
-					<button type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
-				</form>
-			</td>
-			
-		</tr>
-	  <% } %>
-	</table>
+			</div>
+			<br>
+			<table class="table table-striped">
+				<tr>
+					<th>ID</th>
+					<th>Email</th>
+					<th>Nombre</th>
+					<th>Apellido</th>
+					<th>Tipo</th>
+					<th>Fecha de creación</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<% var i; for (i=0; i < users.length; i++) { %>        
+					<tr>
+						<td><%= users[i].id %></td>
+						<td><%= users[i].email %></td>
+						<td></td>
+						<td></td>
+						<td><%= users[i].role %></td>
+						<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
+						<td>
+							<form method="post" action="/manager/<%= users[i].id %>/edit?_method=get">
+								<button class="btn btn-default" type="submit">Editar</button>
+							</form>
+						</td>
+						<td>
+							<form method="post" action="/manager/<%= users[i].id %>?_method=delete">
+								<button class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
+							</form>
+						</td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+	</div>
 </body>
 </html>

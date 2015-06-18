@@ -1,77 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
-   <title> PlaceForMe </title>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
-  <link rel='stylesheet' 
-        type='text/css'
-        media='only screen and (min-width: 530px) and (min-device-width: 481px)'
-        href='/stylesheets/wide.css' />
-  <link rel='stylesheet'
-        type='text/css'
-        media='only screen and (max-width: 480px)' 
-        href='/stylesheets/smartphone.css' />
-
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+	<title>placeForMe</title>
+	<link rel='stylesheet' href='/bootstrap-3.3.5-dist/css/bootstrap.css' />
 </head> 
 
 <body>
-<div id="page-wrap">
+<div class="panel panel-default">
+	<div class="panel-body">
+		<h1 align="center">placeForMe</h1>
 
-<!-- Menu superior -->
-  
-  <header class="main" id="h1">
-	<% if (!session.user) { %>
-    	<span class="right"> <a href="/login"><button>Login</button></a></span>
-    <% }else{ %>
-    <form method="post" action="logout?_method=delete">
-	<span class="right"> <button type="submit"">Logout</button></span>
-	</form>
-    <% } %>
-    	
-    <h2><span>Place For Me</span></h2>
-  </header>
-  
-<!-- FIN Menu superior -->
+		<div align="right">
+			<% if (!session.user) { %>
+				<form action="/login">
+					<button class="btn btn-default" type="submit">Login</button>
+				</form>
+			<% }else{ %>
+				<form method="post" action="logout?_method=delete">
+					<button class="btn btn-default" type="submit">Logout</button>
+				</form>
+			<% } %>
+		</div>
 
-<!-- Menu Izquierda -->
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+        				<li><a href="/">Inicio</a></li>
+        				<% if (session.user) { %>
+							<% if ( session.user.role==="ADMIN") { %>
+								<li><a href="/manager">Gestión de usuarios</a></li>
+							<% } %>
+							<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
+								<li><a href="/course">Gestión de asignaturas</a></li>
+							<% } %>
+						<% } %>
+					</ul>
+				</div>
+			</div>
+		</nav>
 
-  <nav class="left-menu" id="n1" role="navigation">
-    <span><a href="/">Inicio</a></span>
-	<% if (session.user) { %>
-		<% if ( session.user.role==="ADMIN") { %>
-			<span><a href="/manager">Gestión de roles</a></span>
-		<% } %>
-		<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
-		<span><a href="/course">Gestión de asignaturas</a></span>
-		<% } %>
-	<% } %>
-  </nav>
-
-<!-- FIN Menu Izquierda -->
-
-<!-- Centro -->
-   <section class="main" id="s1">
-    <div class="body"><%- body %></div>
-    
-      
-    <% if ( !(typeof errors==="undefined") && errors.length) { %>
-    <div class="errors">  
-        <% for (var i in errors) { %>
-           <span> <%= errors[i].message %> </span><br/>
-        <% } %>
-    <% } %>
-    </div>
-    
-  </section>
-<!-- FIN Menu Central -->
-
-<!-- Pie de pagina -->
-  <footer class="main" id="f1">
-    placeForMe  Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
-  </footer>
- <!-- FIN Menu Central --> 
-  
+		<section  id="s1">
+			<div>
+				<% if ( !(typeof errors==="undefined") && errors.length) { %>
+					<div class="errors">  
+					<% for (var i in errors) { %>
+						<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+							<%= errors[i].message %>
+							</div>
+					<% } %>
+				<% } %>
+			</div>
+			<div align="center">
+				<%- body %>
+			</div>
+		</section>
+	</div>
+	<div class="panel-footer" align="center">
+		placeForMe  Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
+	</div>
 </div>
 </body> 
 </html>
