@@ -24,7 +24,7 @@ exports.new = function(req,res){
 exports.create = function(req,res) {
 
     var email = req.body.email;
-    var password = req.body.password; 
+    var password = req.body.password;
     console.log("Password en texto-plano: " + password);
 
     var user = models.User.build();//creacion del user
@@ -35,7 +35,7 @@ exports.create = function(req,res) {
     user.email = email;
     user.password = password;
     user.role = "MANAGER";
-   
+
     //guardar en base de datos
     user.save().then(function(){
         res.redirect('/manager');
@@ -65,6 +65,6 @@ exports.edit = function(req,res){
 exports.update = function(req,res){
 
 
-    
+
 
 };
