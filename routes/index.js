@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 
 router.param('courseId', courseController.load);  // autoload :courseId
 router.param('userId', managerController.load);
-
+router.param('Id',studentController.load);
 
 module.exports = router;
 
@@ -38,7 +38,7 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 
 router.get('/students',			studentController.new);
 router.post('/students',		studentController.create);
-router.get('/verify', studentController.verify);
+router.get('/verify/:Id(\\d+)',   studentController.verify);
 //router.delete('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.destroy);
 //router.put('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.update);
 

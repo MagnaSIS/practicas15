@@ -91,22 +91,53 @@ exports.create = function(req,res) {
 
     };
 
-//verificacion
-exports.verify = function(req,res) {
+//verificacion de existencia
+exports.load = function(req,res, next, Id) {
 
-  var id = req.param("Id");
-  console.log(id);
-  models.User.findById(uuid).then(
-    function(user) {
+  console.log("Muestra el Id que llega por la URL: "+ Id);
+  models.User.find({
+      where:{
+        confirmationToken: Id
+      }
+  }).then(function(user) {
       if (user) {
+        req.user = user;
+        console.log("Verificado correctamente");
         res.write("Verificado correctamente");
         next();
-      } else{next(new Error('No existe userId=' + id))}
+      } else{next(new Error('No existe userId= ' + Id))}
     }
   ).catch(function(error){next(error)});
 
   console.log(req.protocol+":/"+req.get('host'));
   res.redirect('/login');
+
+};
+
+//Modificación en base de datos sobre su existencia.
+exports.verify = function(req,res){
+
+  console.log("Verify");
+  res.write("Verify");
+  res.redirect('/login');
+/*
+    var email = req.body.email;
+    var password = req.body.password;
+    var encrypt_password = util.encrypt(password);
+
+    console.log(" - Email: " + email + " || Password: " + password + " || Encrypt_Password: " + encrypt_password);
+
+    req.user.email = email;
+    req.user.password = encrypt_password;
+
+    if(email != '')
+        req.user.save({fields: ["email"]});
+    if(password != '')
+        req.user.save({fields: ["password"]});
+
+    res.redirect('/manager');
+*/
+
 };
 
 
