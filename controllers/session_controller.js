@@ -30,7 +30,7 @@ exports.loginRequired = function (req,res,next){
 
 //Check if user is Student
 exports.isStudent = function (req,res,next){
-		if (req.session.user.role === "STUDENT"){
+		if (req.session.user && req.session.user.role === "STUDENT"){
 			next();
 		}else{
 			next(new Error("Permiso denegado."));
@@ -39,7 +39,7 @@ exports.isStudent = function (req,res,next){
 
 //Check if user is Manager
 exports.isManager = function (req,res,next){
-		if (req.session.user.role === "MANAGER"){
+		if (req.session.user && req.session.user.role === "MANAGER"){
 			next();
 		}else{
 			next(new Error("Permiso denegado."));
@@ -48,7 +48,7 @@ exports.isManager = function (req,res,next){
 
 //Check if user is Admin
 exports.isAdmin = function (req,res,next){
-		if (req.session.user.role === "ADMIN"){
+		if (req.session.user && req.session.user.role === "ADMIN"){
 			next();
 		}else{			
 			next(new Error("Permiso denegado."));			
@@ -57,7 +57,7 @@ exports.isAdmin = function (req,res,next){
 
 //Check if user is Admin
 exports.isCourseAdmin = function (req,res,next){
-		if ( (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")){
+		if ( req.session.user && (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")){
 			next();
 		}else{			
 			next(new Error("Permiso denegado."));			
