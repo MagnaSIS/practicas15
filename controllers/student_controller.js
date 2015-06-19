@@ -30,7 +30,9 @@
 
 //GET /controllers/student
 exports.new = function(req, res) {
-    res.render('student/studentRegistration');
+    var errors=req.session.errors || {};
+    req.session.errors={};
+    res.render('student/studentRegistration', {errors: errors});
     //res.write("Hola");
     };
 

@@ -35,9 +35,8 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 *	Students Controller
 */
 
-
-router.get('/students',			studentController.new);
-router.post('/students',		studentController.create);
+router.get('/students',											studentController.new);
+router.post('/students',	managerController.notExistStudents, studentController.create);
 router.get('/verify/:Id(\\d+)',   studentController.verify);
 //router.delete('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.destroy);
 //router.put('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.update);
@@ -45,11 +44,11 @@ router.get('/verify/:Id(\\d+)',   studentController.verify);
 /*
 *	Manager Controller
 */
-router.get('/manager',						sessionController.isAdmin,	managerController.new);
-router.post('/manager',						sessionController.isAdmin,	managerController.create);
-router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.destroy);
-router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,	managerController.edit);
-router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.update);
+router.get('/manager',						sessionController.isAdmin,										managerController.new);
+router.post('/manager',						sessionController.isAdmin,	managerController.notExistManager,  managerController.create);
+router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.destroy);
+router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,										managerController.edit);
+router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.update);
 
 /*
  * Admin Controller
