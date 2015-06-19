@@ -1,25 +1,39 @@
-<h2>Login</h2>
-<% if (!session.user) {%>
-	<form method='post' action='login'>
 
-		<div class="field">
-			<label for="login">Login:</label><br/>
-			<input type="text" id="login" name="login" size="30"/>
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+	<div class="panel panel-default">
+		<div class="panel-heading">Login</div>
+		<div class="panel-body">
+			<div style="margin: 0% 40% 0% 40%">
+				<% if (!session.user) {%>
+					<form method="post" action="login">
+						<div class="row">
+							<input class="form-control" type="text" id="login" name="login" size="30" placeholder="Correo" autofocus/>
+						</div>
+						<hr>
+						<div class="row">
+							<input class="form-control" type="password" id="password" name="password" size="30" placeholder="Contraseña"/>
+						</div>
+						<hr>
+						<div class="row">
+							<input class="btn btn-default" name="commit" type="submit" value="Login"/>
+						</div>
+						<hr>
+						<div class="row">
+							<a href="/students">Registrate</a>
+						</div>
+					</form>
+				<% } else { %>
+					<div class="alert alert-success">
+						<p><b>¡Ya estas conectado!</b></p>
+						<p><b>Correo:</b> <%=session.user.email %></p>
+						<p><b>Tipo de usuario:</b> <%=session.user.role%></p>
+					</div>
+				<% } %>	
+			</div>
 		</div>
-	
-		<div class="field">
-			<label for="password">Password:</label><br/>
-			<input type="password" id="password" name="password" size="30"/>
-		</div>
-	
-		<div class="actions">
-			<input name="commit" type="submit" value="Login"/>
-		</div>
-		<div class="field">
-			<span class="right"> <a href="/students">Registrate</a></span>
-	</form>
-<% } else { %>
-<p>Ya estas conectado!!! </p>
-<p> usuario= <%=session.user.email %></p>
-<p> rol = <%=session.user.role%></p>
-<% } %>	
+	</div>
+</body>
+</html>

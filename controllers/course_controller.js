@@ -55,14 +55,14 @@ exports.create = function(req, res) {
       } else {
         course // save: guarda en DB
         .save({fields: ["name", "description", "specialisation", "credits", "vacancies"]})
-        .then( function(){ res.redirect('/course')}) 
+        .then( function(){ res.redirect('/course')})
       }      // res.redirect: Redirecci�n HTTP a lista de preguntas
     }
   ).catch(function(error){next(error)});
-	
+
 
 };
- 
+
 
 // GET /course/:id/edit
 exports.edit = function(req, res) {
@@ -100,4 +100,3 @@ exports.destroy = function(req, res) {
     res.redirect('/course/allcourses');
   }).catch(function(error){next(error)});
 };
-

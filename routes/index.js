@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var util=require("../includes/utilities.js");
 
 /*
  * Define Controllers
@@ -35,11 +34,12 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 */
 
 
-router.get('/students',			studentController.new);
-router.post('/students',		studentController.create);
-/*router.delete('/students/:id',	sessionController.isStudent,	studentController.destroy);
-router.put('/students/:id',		sessionController.isStudent,	studentController.update);
-*/
+router.get('/students',					studentController.new);
+router.post('/students',				studentController.create);
+//router.delete('/students/:id',		sessionController.isStudent,	studentController.destroy);
+//router.put('/students/:id',			sessionController.isStudent,	studentController.update);
+router.get('/students/courses',			sessionController.isStudent,	studentController.courses);
+router.post('/students/manageCourses',	sessionController.isStudent,	studentController.manageCourses);
 /*
 *	Manager Controller
 */

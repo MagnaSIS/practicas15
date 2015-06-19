@@ -36,7 +36,7 @@ var storage = process.env.DATABASE_STORAGE;
 
 }
 
-var          DB_name = (url[6] || null);
+var DB_name = (url[6] || null);
 var user = (url[2] || null);
 var pwd = (url[3] || null);
 var protocol = (url[1] || null);
@@ -67,6 +67,7 @@ var StudentCourse = sequelize.import(path.join(__dirname, 'student_course'));
 
 // Relaciones
 Student.belongsTo(User, {onDelete: 'cascade'});
+
 Student.belongsToMany(Course, {
     through: StudentCourse
 });
@@ -78,6 +79,7 @@ exports.User = User;
 exports.Student = Student;
 exports.Course = Course;
 exports.StudentCourse = StudentCourse;
+exports.Sequelize = sequelize;
 
 sequelize.sync().then(function() {
     console.log('Base de datos abierta');

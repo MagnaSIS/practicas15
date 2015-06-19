@@ -50,8 +50,8 @@ exports.isManager = function (req,res,next){
 exports.isAdmin = function (req,res,next){
 		if (req.session.user && req.session.user.role === "ADMIN"){
 			next();
-		}else{			
-			next(new Error("Permiso denegado."));			
+		}else{
+			next(new Error("Permiso denegado."));
 		}
 };
 
@@ -59,34 +59,34 @@ exports.isAdmin = function (req,res,next){
 exports.isCourseAdmin = function (req,res,next){
 		if ( req.session.user && (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")){
 			next();
-		}else{			
-			next(new Error("Permiso denegado."));			
+		}else{
+			next(new Error("Permiso denegado."));
 		}
 };
 
 //Get /login Login Form
-exports.new = function(req,res){	 	
+exports.new = function(req,res){
 		var errors=req.session.errors || {};
 		req.session.errors={};
-		res.render('session/login', {errors : errors});		
+		res.render('session/login', {errors : errors});
 };
 
 //Post /login Login check
 exports.create = function(req,res){
 	models.User.find({where: {email: req.body.login, password: util.encrypt(req.body.password)}}).then(function(user) {
-		if (user) {	
-			req.session.user = {email: user.email, role: user.role};			
+		if (user) {
+			req.session.user = {email: user.email, role: user.role, id: user.id};
 		} else{
 			req.session.errors =[{"message": 'Usuario o contraseña incorrectas'}];
 		}
-		res.redirect("/login");	
+		res.redirect("/login");
 	}).catch(function(error){
-		req.session.errors =[{"message": 'Usuario o contraseña incorrectas'} , {"message":("error: " + error) || ""}];	
-		res.redirect("/login");	
+		req.session.errors =[{"message": 'Usuario o contraseña incorrectas'} , {"message":("error: " + error) || ""}];
+		res.redirect("/login");
 	});
-	
+
 };
-	
+
 //Delete /logout session destroy
 exports.destroy = function (req,res){
 	delete req.session.user;
