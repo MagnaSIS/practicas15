@@ -75,7 +75,7 @@ exports.new = function(req,res){
 exports.create = function(req,res){
 	models.User.find({where: {email: req.body.login, password: util.encrypt(req.body.password)}}).then(function(user) {
 		if (user) {
-			req.session.user = {email: user.email, role: user.role};
+			req.session.user = {email: user.email, role: user.role, id: user.id};
 		} else{
 			req.session.errors =[{"message": 'Usuario o contraseña incorrectas'}];
 		}

@@ -111,7 +111,11 @@ exports.verify = function(req,res) {
   res.redirect('/login');
 };
 
+exports.edit = function(req,res){
 
+  res.render('student/edit');
+
+}
 
 //TODO GOnzalo
 /*
