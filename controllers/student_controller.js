@@ -72,7 +72,7 @@ exports.create = function(req,res) {
 
         //Envio del correo
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+uuid4;
+        link="http://"+req.get('host')+"/students/"+uuid4;
 
         var transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -93,22 +93,37 @@ exports.create = function(req,res) {
 
     };
 
-//verificacion
-exports.verify = function(req,res) {
+//Autoload :id
+exports.load = function(req,res, next, Id) {
 
-  var id = req.param("Id");
-  console.log(id);
-  models.User.findById(uuid).then(
-    function(user) {
+  models.User.find({
+      where:{
+        confirmationToken: Id
+      }
+  }).then(function(user) {
       if (user) {
-        res.write("Verificado correctamente");
+        req.user = user;
+        console.log("Verificado correctamente");
+        //res.write("Verificado correctamente");
         next();
-      } else{next(new Error('No existe userId=' + id))}
+      } else{next(new Error('No existe el Token= ' + Id))}
     }
   ).catch(function(error){next(error)});
 
-  console.log(req.protocol+":/"+req.get('host'));
-  res.redirect('/login');
+  //console.log(req.protocol+":/"+req.get('host'));
+  //res.redirect('/login');
+
+};
+
+//Modificación en base de datos sobre su existencia.
+exports.verify = function(req,res){
+
+  var user = req.user;
+  user.isValidate=true;
+  user.save().then(function(){
+      res.redirect('/login');
+      });
+
 };
 
 exports.edit = function(req,res){
