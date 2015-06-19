@@ -37,7 +37,7 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 
 router.get('/students',											studentController.new);
 router.post('/students',	managerController.notExistStudents, studentController.create);
-router.get('/verify/:Id(\\d+)',   studentController.verify);
+router.get('/students/:Id',   studentController.verify);
 //router.delete('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.destroy);
 //router.put('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.update);
 

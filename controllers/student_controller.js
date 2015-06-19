@@ -72,7 +72,7 @@ exports.create = function(req,res) {
 
         //Envio del correo
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+uuid4;
+        link="http://"+req.get('host')+"/students/"+uuid4;
 
         var transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -93,10 +93,9 @@ exports.create = function(req,res) {
 
     };
 
-//verificacion de existencia
+//Autoload :id
 exports.load = function(req,res, next, Id) {
 
-  console.log("Muestra el Id que llega por la URL: "+ Id);
   models.User.find({
       where:{
         confirmationToken: Id
@@ -105,40 +104,25 @@ exports.load = function(req,res, next, Id) {
       if (user) {
         req.user = user;
         console.log("Verificado correctamente");
-        res.write("Verificado correctamente");
+        //res.write("Verificado correctamente");
         next();
-      } else{next(new Error('No existe userId= ' + Id))}
+      } else{next(new Error('No existe el Token= ' + Id))}
     }
   ).catch(function(error){next(error)});
 
-  console.log(req.protocol+":/"+req.get('host'));
-  res.redirect('/login');
+  //console.log(req.protocol+":/"+req.get('host'));
+  //res.redirect('/login');
 
 };
 
 //Modificación en base de datos sobre su existencia.
 exports.verify = function(req,res){
 
-  console.log("Verify");
-  res.write("Verify");
-  res.redirect('/login');
-/*
-    var email = req.body.email;
-    var password = req.body.password;
-    var encrypt_password = util.encrypt(password);
-
-    console.log(" - Email: " + email + " || Password: " + password + " || Encrypt_Password: " + encrypt_password);
-
-    req.user.email = email;
-    req.user.password = encrypt_password;
-
-    if(email != '')
-        req.user.save({fields: ["email"]});
-    if(password != '')
-        req.user.save({fields: ["password"]});
-
-    res.redirect('/manager');
-*/
+  var user = req.user;
+  user.isValidate=true;
+  user.save().then(function(){
+      res.redirect('/login');
+      });
 
 };
 
