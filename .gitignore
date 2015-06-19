@@ -9,3 +9,5 @@ routes/index.js
 models/models.js
 placeForMe.sqlite
 *~
+.env
+.gitignore
