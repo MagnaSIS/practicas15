@@ -1,4 +1,4 @@
- /**  
+ /**
   *   placeForMe -
   *   Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
   *
@@ -21,26 +21,31 @@
    var nodemailer = require('nodemailer');
    var uuid = require('node-uuid');
 
-
    var crypto = require('crypto');
    var algorithm = 'aes-256-ctr';
    var password;
 
 
 
-
-
 //GET /controllers/student
 exports.new = function(req, res) {
-    res.render('student/studentRegistration');
+    var errors=req.session.errors || {};
+    req.session.errors={};
+    res.render('student/studentRegistration', {errors: errors});
+    //res.write("Hola");
     };
 
 //Post /controllers/student
 exports.create = function(req,res) {
+    var name = req.body.name;
+    var apellidos = req.body.lastname;
+    var email = req.body.email;
+    password = req.body.password;
+    console.log(password);
     var user = models.User.build();//creacion del user
     var student=models.Student.build();//creacion del student
     var uuid4 = uuid.v4(); //id único para verificación del usuario
-    password = util.encrypt(req.body.password);
+    password = util.encrypt(password);
 
     //asignacion de valores al user
     user.email=req.body.email;
@@ -54,7 +59,9 @@ exports.create = function(req,res) {
     student.avgGrade=6.5;//idem
     student.credits=140;//idem
 
-   // console.log(user.password); 
+    console.log(req.get('host'));
+
+   // console.log(user.password);
     //guardar en base de datos
     user.save();
     student.save().then(function(){
@@ -63,7 +70,7 @@ exports.create = function(req,res) {
 
         //Envio del correo
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+uuid4;
+        link="http://"+req.get('host')+"/students/"+uuid4;
 
         var transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -80,29 +87,46 @@ exports.create = function(req,res) {
           html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
     });
 
-
-
     };
 
-//verificacion
-exports.verify = function(req,res) {
+//Autoload :id
+exports.load = function(req,res, next, Id) {
 
-  var id = req.param("Id");
-  console.log(id);
-  models.User.findById(uuid).then(
-    function(user) {
+  models.User.find({
+      where:{
+        confirmationToken: Id
+      }
+  }).then(function(user) {
       if (user) {
-        res.write("Verificado correctamente");
+        req.user = user;
+        console.log("Verificado correctamente");
+        //res.write("Verificado correctamente");
         next();
-      } else{next(new Error('No existe userId=' + id))}
+      } else{next(new Error('No existe el Token= ' + Id))}
     }
   ).catch(function(error){next(error)});
 
-  console.log(req.protocol+":/"+req.get('host'));
-  res.redirect('/login');
+  //console.log(req.protocol+":/"+req.get('host'));
+  //res.redirect('/login');
+
 };
 
+//Modificación en base de datos sobre su existencia.
+exports.verify = function(req,res){
 
+  var user = req.user;
+  user.isValidate=true;
+  user.save().then(function(){
+      res.redirect('/login');
+      });
+
+};
+
+exports.edit = function(req,res){
+
+  res.render('student/edit');
+
+}
 
 //TODO GOnzalo
 /*

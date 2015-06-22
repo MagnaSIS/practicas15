@@ -32,11 +32,14 @@
 							<% if ( session.user.role==="ADMIN") { %>
 								<li><a href="/manager">Gestión de usuarios</a></li>
 							<% } %>
-							<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
-								<li><a href="/course">Gestión de asignaturas</a></li>
-							<% } %>
 							<% if ( session.user.role==="STUDENT") { %>
 								<li><a href="/students/courses">Mis Asignaturas</a></li>
+							<% } %>
+							<% if ( session.user.role==="STUDENT") { %>
+								<li><a href="/students/<%= session.user.id %>">Editar mi cuenta</a></li>
+							<% } %>
+							<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
+								<li><a href="/course">Gestión de asignaturas</a></li>
 							<% } %>
 						<% } %>
 					</ul>
@@ -51,7 +54,7 @@
 					<% for (var i in errors) { %>
 						<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 							<%= errors[i].message %>
-							</div>
+						</div>
 					<% } %>
 				<% } %>
 			</div>

@@ -1,4 +1,4 @@
-/**  
+/**
  *   placeForMe -
  *   Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
  *
@@ -75,8 +75,14 @@ exports.new = function(req,res){
 exports.create = function(req,res){
 	models.User.find({where: {email: req.body.login, password: util.encrypt(req.body.password)}}).then(function(user) {
 		if (user) {
-			req.session.user = {email: user.email, role: user.role, id: user.id};
+			if (user.isValidate){
+				req.session.user = {email: user.email, role: user.role, id: user.id};
+			} else {
+				console.log('Correo no validado');
+				req.session.errors =[{"message": 'Correo no validado'}];
+			}
 		} else{
+			console.log('Usuario o contraseña incorrectas');
 			req.session.errors =[{"message": 'Usuario o contraseña incorrectas'}];
 		}
 		res.redirect("/login");
@@ -84,11 +90,18 @@ exports.create = function(req,res){
 		req.session.errors =[{"message": 'Usuario o contraseña incorrectas'} , {"message":("error: " + error) || ""}];
 		res.redirect("/login");
 	});
-
 };
 
 //Delete /logout session destroy
 exports.destroy = function (req,res){
 	delete req.session.user;
 	res.redirect("/");
+};
+
+exports.isValidate = function (req,res,next){
+		if (req.session.user.role === "MANAGER"){
+			next();
+		}else{
+			next(new Error("Permiso denegado."));
+		}
 };

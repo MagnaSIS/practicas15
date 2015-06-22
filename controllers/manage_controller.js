@@ -19,7 +19,9 @@ exports.new = function(req,res){
 
 	models.User.findAll().then(
     function(user) {
-      res.render('manager/manage', { users: user, errors: []});
+        var errors=req.session.errors || {};
+        req.session.errors={};
+        res.render('manager/manage', { users: user, errors: errors});
     }
   ).catch(function(error) { next(error);})
 
@@ -84,4 +86,40 @@ exports.update = function(req,res){
     res.redirect('/manager');
 
 
+};
+
+exports.notExistManager = function(req,res,next){
+
+    var email = req.body.email;
+    
+    console.log(" - Correo: " + email);
+    models.User.find( { where:{ email: email } } ).then(function(user){
+        if(user){
+            console.log("TIENE QUE SALTAR EL ERROR");
+            req.session.errors =[{"message": 'Este usuario ya existe'}];
+            res.redirect('manager');
+        }
+        else{
+            console.log("NO TIENE QUE SALTAR");
+            next();
+        }
+    });
+};
+
+exports.notExistStudents = function(req,res,next){
+
+    var email = req.body.email;
+
+    console.log(" - Correo: " + email);
+    models.User.find( { where:{ email: email } } ).then(function(user){
+        if(user){
+            console.log("TIENE QUE SALTAR EL ERROR");
+            req.session.errors =[{"message": 'Este usuario ya existe'}];
+            res.redirect('students');
+        }
+        else{
+            console.log("NO TIENE QUE SALTAR");
+            next();
+        }
+    });
 };

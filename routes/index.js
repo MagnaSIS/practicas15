@@ -18,6 +18,7 @@ router.get('/', function(req, res, next) {
 
 router.param('courseId', courseController.load);  // autoload :courseId
 router.param('userId', managerController.load);
+router.param('Id',studentController.load);
 
 module.exports = router;
 
@@ -32,21 +33,23 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 /*
 *	Students Controller
 */
-
-
-router.get('/students',					studentController.new);
-router.post('/students',				studentController.create);
-//router.delete('/students/:id',		sessionController.isStudent,	studentController.destroy);
-//router.put('/students/:id',			sessionController.isStudent,	studentController.update);
+router.get('/students',																studentController.new);
+router.post('/students',						managerController.notExistStudents, studentController.create);
+router.get('/students/:studentId(\\d+)', 											studentController.edit);
+router.get('/students/:Id',   studentController.verify);
+//router.delete('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.destroy);
+//router.put('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.update);
 router.get('/students/courses',			sessionController.isStudent,	studentController.courses);
 router.post('/students/manageCourses',	sessionController.isStudent,	studentController.manageCourses);
+
 /*
 *	Manager Controller
 */
-router.get('/manager',						sessionController.isAdmin,	managerController.new);
-router.post('/manager',						sessionController.isAdmin,	managerController.create);
-router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.destroy);
-router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.edit);
+router.get('/manager',						sessionController.isAdmin,										managerController.new);
+router.post('/manager',						sessionController.isAdmin,	managerController.notExistManager,  managerController.create);
+router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.destroy);
+router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,										managerController.edit);
+router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.update);
 
 /*
  * Admin Controller
@@ -67,4 +70,3 @@ router.delete('/course/:courseId(\\d+)',	sessionController.isCourseAdmin,	course
 
 router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcsController.new);
 */
-
