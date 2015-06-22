@@ -21,11 +21,6 @@
    var nodemailer = require('nodemailer');
    var uuid = require('node-uuid');
 
-   var crypto = require('crypto');
-   var algorithm = 'aes-256-ctr';
-   var password;
-
-
 
 //GET /controllers/student
 exports.new = function(req, res) {
@@ -70,7 +65,7 @@ exports.create = function(req,res) {
 
         //Envio del correo
         host=req.get('host');
-        link="http://"+req.get('host')+"/students/"+uuid4;
+        link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
         var transporter = nodemailer.createTransport({
           service: 'gmail',
