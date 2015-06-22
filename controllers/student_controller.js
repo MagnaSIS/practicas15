@@ -129,15 +129,26 @@ exports.edit = function(req,res){
 exports.update = function(req, res) {
 
   models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
+
     student.name = req.body.name_edit;
     student.surname = req.body.surname_edit;
     student.avgGrade = req.body.avg_edit;
     student.credits = req.body.credits_edit;
     student.year = req.body.year_edit;
     student.specialisation = req.body.specialisation_edit;
-    student.save({fields: ["name", "surname", "specialisation", "year", "avgGrade", "credits"]}).then(function(student){
-      res.render('student/edit', {student:student, errors:[]});
-    });
+
+    student.validate().then(function(err){
+      if(err){
+        res.render('student/edit', {student:student, errors:err.errors})
+      }
+      else{
+        student.save({fields: ["name", "surname", "specialisation", "year", "avgGrade", "credits"]}).then(function(student){
+          res.render('student/edit', {student:student, errors:[]});
+        });
+      }
+    }).catch(function(error){next(error)});
+
+    
 });
 
 //TODO GOnzalo
