@@ -49,17 +49,23 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.FLOAT,
             allowNull: false,
             validate: {
-                min: 0,
-                max: 10,
+                min: {args: [0], msg: "La media no puede tener valor negativo"},
+                max: {args: [10], msg: "La media no puede ser mayor que 10"},
+                isFloat: {
+                    msg: "La nota media tiene que ser un número"
+                },
             }
         },
         credits: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
-                min: 0,
-                max: 240,
-            }
+                min: {args: [0], msg: "El número de creditos no puede ser negativo"},
+                max: {args: [240], msg: "El número de creditos no puede ser mayor que 240"},
+                isInt: {
+                    msg: "Los créditos tiene que ser un número"
+                },
+            },
         },
         specialisation: {
             type: DataTypes.ENUM,
