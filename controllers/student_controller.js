@@ -124,9 +124,26 @@ exports.verify = function(req,res){
 
 exports.edit = function(req,res){
 
-  res.render('student/edit');
+  models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
+    res.render('student/edit', {student:student, errors:[]});
+  });
 
-}
+};
+
+// PUT 
+exports.update = function(req, res) {
+
+  models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
+    student.name = req.body.name_edit;
+    student.surname = req.body.surname_edit;
+    student.avgGrade = req.body.avg_edit;
+    student.credits = req.body.credits_edit;
+    student.year = req.body.year_edit;
+    student.specialisation = req.body.specialisation_edit;
+    student.save({fields: ["name", "surname", "specialisation", "year", "avgGrade", "credits"]}).then(function(student){
+      res.render('student/edit', {student:student, errors:[]});
+    });
+});
 
 //TODO GOnzalo
 /*
@@ -165,10 +182,11 @@ exports.destroy = function(req,res){
 //PUT /controllers/student
 
 
+*/
 
-// PUT /course/:id
-exports.update = function(req, res) {
-  req.course.name  = req.body.course.name;
+
+
+  /*req.course.name  = req.body.course.name;
   req.course.description = req.body.course.description;
   req.course.specialisation  = req.body.course.specialisation;
   req.course.credits = req.body.course.credits;
@@ -186,9 +204,9 @@ exports.update = function(req, res) {
         .then( function(){ res.redirect('/course');});
       }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
     }
-  );
+  );*/
 };
-*/
+
     
 /* 
  * GET /students/courses
