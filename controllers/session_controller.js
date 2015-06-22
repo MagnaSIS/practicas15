@@ -75,11 +75,20 @@ exports.new = function(req,res){
 exports.create = function(req,res){
 	models.User.find({where: {email: req.body.login, password: util.encrypt(req.body.password)}}).then(function(user) {
 		if (user) {
-			if (user.isValidate){
-				req.session.user = {email: user.email, role: user.role, id: user.id};
-			} else {
+			var error=false;
+			if (!user.isValidate){
+				error=true;
 				console.log('Correo no validado');
 				req.session.errors =[{"message": 'Correo no validado'}];
+			}
+			
+			if (user.locked){
+				error=true;
+				console.log('Usuario bloqueado');
+				req.session.errors =[{"message": 'Cuenta bloqueada'}];				
+			}
+			if (!error){
+				req.session.user = {email: user.email, role: user.role, id: user.id};
 			}
 		} else{
 			console.log('Usuario o contraseña incorrectas');
