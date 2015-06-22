@@ -24,8 +24,16 @@ exports.recalculate = function(req,res) {
 	//Añadir o eliminar asignatura req.body.add
 	//ID del curso req.body.courseID
 	//ID del alumno req.session.user.id
+	models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
+		models.StudentCourse.findALL({
+			where: {CourseID:req.body.courseID},
+			model: Student, required: true}
+		}).then(function(studentCourses){
+		
+	}
+	
+		
 
-	models.StudentCourse.findALL({where: {CourseID:req.body.courseID}}).then(function(studentCourses){
 		
 	}
 }

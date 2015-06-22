@@ -145,69 +145,6 @@ exports.update = function(req, res) {
     });
 });
 
-//TODO GOnzalo
-/*
-//DELETE /controllers/student
-exports.destroy = function(req, res) {
-
-  req.
-
-};
-
-
-// DELETE /course/:id
-exports.destroy = function(req, res) {
-  req.course.destroy().then( function() {
-    res.redirect('/course/allcourses');
-  }).catch(function(error){next(error)});
-};
-
-//Delete /logout session destroy
-exports.destroy = function (req,res){
-	delete req.session.user;
-	res.redirect("/");
-};
-
-exports.destroy = function(req,res){
-
-	console.log(" - La id que se va a borrar: " + req.param("userId"));
-
-    //borrar el user con la id que nos da
-    req.user.destroy().then( function() {
-        res.redirect('/manager');
-    }).catch(function(error){next(error)});
-
-};
-
-//PUT /controllers/student
-
-
-*/
-
-
-
-
-
-  /*req.course.name  = req.body.course.name;
-  /*req.course.name  = req.body.course.name;
-  req.course.description = req.body.course.description;
-  req.course.specialisation  = req.body.course.specialisation;
-  req.course.credits = req.body.course.credits;
-  req.course.vacancies = req.body.course.vacancies;
-
-  req.course
-  .validate()
-  .then(
-    function(err){
-      if (err) {
-        res.render('course/edit', {course: req.course, errors: err.errors});
-      } else {
-        req.course     // save: guarda campos pregunta y respuesta en DB
-        .save( {fields: ["name", "description", "specialisation", "credits", "vacancies"]})
-        .then( function(){ res.redirect('/course');});
-      }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
-    }
-  );*/
 };
 
     
