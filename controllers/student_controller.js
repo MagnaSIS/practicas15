@@ -119,15 +119,12 @@ exports.verify = function(req,res){
   user.save().then(function(){
       res.redirect('/login');
       });
-
 };
 
 exports.edit = function(req,res){
-
   models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
     res.render('student/edit', {student:student, errors:[]});
   });
-
 };
 
 // PUT 
@@ -146,7 +143,6 @@ exports.update = function(req, res) {
 });
 
 };
-
     
 /* 
  * GET /students/courses
@@ -175,9 +171,7 @@ exports.courses = function(req,res) {
 	}).catch(function(error){ 
 		 console.log("error cach3");
 		 res.render('student/courses.ejs',{courses:[],total:[], errors:error });
-	 });
-	
-	
+	 });	
 }
 
 /* 
