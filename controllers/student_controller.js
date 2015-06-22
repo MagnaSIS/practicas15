@@ -48,45 +48,45 @@ exports.create = function(req,res) {
     var tmpCredits=140;//idem
 
     //guardar en base de datos
-	models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){   	
-		models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
-			newStudent.setUser(newUser).then(function(newStudent){
-    	   		//Envio del correo
-        		host=req.get('host');
-        		link="http://"+req.get('host')+"/students/verify/"+uuid4;
-
-            	var transporter = nodemailer.createTransport({
-            		ervice: 'gmail',
-            		auth: {
-            			user: 'magnanode@gmail.com',
-            			pass: 'Magna1234.'
-            		}
-            	});
-
-            	transporter.sendMail({
-            		from: 'magnanode@gmail.com',
-            		to: email,
-            		subject: 'Por favor verifica tu cuenta de correo',
-            		html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
-            	});
+    models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){   	
+    	models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
+    		newStudent.setUser(newUser).then(function(newStudent){
     			
-    		}).catch(function(error){        		
-				console.log("Error al enlazar student" + error);
+    			
+    		});
+
+
+
+    		//Envio del correo
+    		host=req.get('host');
+    		link="http://"+req.get('host')+"/students/verify/"+uuid4;
+
+        	var transporter = nodemailer.createTransport({
+        		ervice: 'gmail',
+        		auth: {
+        			user: 'magnanode@gmail.com',
+        			pass: 'Magna1234.'
+        		}
+        	});
+
+        	transporter.sendMail({
+        		from: 'magnanode@gmail.com',
+        		to: email,
+        		subject: 'Por favor verifica tu cuenta de correo',
+        		html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
+        	});
+
+        	res.redirect('/login');
+        	}).catch(function(error){        		
+				console.log("Error al crear student" + error);
 				req.session.errors= "ha ocurrido un error al crear el usuario"+error;
 				res.redirect('/login');
 			 });
-
-        	res.redirect('/login');
-        }).catch(function(error){        		
-			console.log("Error al crear student" + error);
-			req.session.errors= "ha ocurrido un error al crear el usuario"+error;
-			res.redirect('/login');
-		});
     }).catch(function(error){        		
-    	console.log("Error al crear usuario"+ error);
-    	req.session.errors= "ha ocurrido un error al crear el usuario"+error;
-    	res.redirect('/login');
-    });
+		console.log("Error al crear usuario"+ error);
+		req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+		res.redirect('/login');
+	 });
 }
 
 //Autoload :id
@@ -124,9 +124,26 @@ exports.verify = function(req,res){
 
 exports.edit = function(req,res){
 
-  res.render('student/edit');
+  models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
+    res.render('student/edit', {student:student, errors:[]});
+  });
 
-}
+};
+
+// PUT 
+exports.update = function(req, res) {
+
+  models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
+    student.name = req.body.name_edit;
+    student.surname = req.body.surname_edit;
+    student.avgGrade = req.body.avg_edit;
+    student.credits = req.body.credits_edit;
+    student.year = req.body.year_edit;
+    student.specialisation = req.body.specialisation_edit;
+    student.save({fields: ["name", "surname", "specialisation", "year", "avgGrade", "credits"]}).then(function(student){
+      res.render('student/edit', {student:student, errors:[]});
+    });
+});
 
 //TODO GOnzalo
 /*
@@ -165,10 +182,14 @@ exports.destroy = function(req,res){
 //PUT /controllers/student
 
 
+*/
 
-// PUT /course/:id
-exports.update = function(req, res) {
-  req.course.name  = req.body.course.name;
+
+
+
+
+  /*req.course.name  = req.body.course.name;
+  /*req.course.name  = req.body.course.name;
   req.course.description = req.body.course.description;
   req.course.specialisation  = req.body.course.specialisation;
   req.course.credits = req.body.course.credits;
@@ -186,9 +207,9 @@ exports.update = function(req, res) {
         .then( function(){ res.redirect('/course');});
       }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
     }
-  );
+  );*/
 };
-*/
+
     
 /* 
  * GET /students/courses
