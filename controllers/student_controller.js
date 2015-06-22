@@ -42,47 +42,52 @@ exports.create = function(req,res) {
     var uuid4 = uuid.v4(); //id único para verificación del usuario
     password = util.encrypt(password);
 
-    //asignacion de valores al user
-    user.email=req.body.email;
-    user.password=password;
-    user.confirmationToken=uuid4;
+	 //asignacion de valores al student
+    var tmpYear=3;//falta que lo coja del ejs
+    var tmpAvgGrade=6.5;//idem
+    var tmpCredits=140;//idem
 
-    //asignacion de valores al student
-    student.name=req.body.name;
-    student.surname=req.body.lastname;
-    student.year=3;//falta que lo coja del ejs
-    student.avgGrade=6.5;//idem
-    student.credits=140;//idem
-
-    console.log(req.get('host'));
-
-   // console.log(user.password);
     //guardar en base de datos
-    user.save();
-    student.save().then(function(){
-        res.redirect('/login');
-        });
+    models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){   	
+    	models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
+    		newStudent.setUser(newUser).then(function(newStudent){
+    			
+    			
+    		});
 
-        //Envio del correo
-        host=req.get('host');
-        link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
-        var transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'magnanode@gmail.com',
-            pass: 'Magna1234.'
-        }
-    });
 
-        transporter.sendMail({
-          from: 'magnanode@gmail.com',
-          to: email,
-          subject: 'Por favor verifica tu cuenta de correo',
-          html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
-    });
+    		//Envio del correo
+    		host=req.get('host');
+    		link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
-    };
+        	var transporter = nodemailer.createTransport({
+        		ervice: 'gmail',
+        		auth: {
+        			user: 'magnanode@gmail.com',
+        			pass: 'Magna1234.'
+        		}
+        	});
+
+        	transporter.sendMail({
+        		from: 'magnanode@gmail.com',
+        		to: email,
+        		subject: 'Por favor verifica tu cuenta de correo',
+        		html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
+        	});
+
+        	res.redirect('/login');
+        	}).catch(function(error){        		
+				console.log("Error al crear student" + error);
+				req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+				res.redirect('/login');
+			 });
+    }).catch(function(error){        		
+		console.log("Error al crear usuario"+ error);
+		req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+		res.redirect('/login');
+	 });
+}
 
 //Autoload :id
 exports.load = function(req,res, next, Id) {
@@ -114,15 +119,12 @@ exports.verify = function(req,res){
   user.save().then(function(){
       res.redirect('/login');
       });
-
 };
 
 exports.edit = function(req,res){
-
   models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
     res.render('student/edit', {student:student, errors:[]});
   });
-
 };
 
 // PUT 
@@ -151,68 +153,7 @@ exports.update = function(req, res) {
     
 });
 
-//TODO GOnzalo
-/*
-//DELETE /controllers/student
-exports.destroy = function(req, res) {
-
-  req.
-
 };
-
-
-// DELETE /course/:id
-exports.destroy = function(req, res) {
-  req.course.destroy().then( function() {
-    res.redirect('/course/allcourses');
-  }).catch(function(error){next(error)});
-};
-
-//Delete /logout session destroy
-exports.destroy = function (req,res){
-	delete req.session.user;
-	res.redirect("/");
-};
-
-exports.destroy = function(req,res){
-
-	console.log(" - La id que se va a borrar: " + req.param("userId"));
-
-    //borrar el user con la id que nos da
-    req.user.destroy().then( function() {
-        res.redirect('/manager');
-    }).catch(function(error){next(error)});
-
-};
-
-//PUT /controllers/student
-
-
-*/
-
-
-
-  /*req.course.name  = req.body.course.name;
-  req.course.description = req.body.course.description;
-  req.course.specialisation  = req.body.course.specialisation;
-  req.course.credits = req.body.course.credits;
-  req.course.vacancies = req.body.course.vacancies;
-
-  req.course
-  .validate()
-  .then(
-    function(err){
-      if (err) {
-        res.render('course/edit', {course: req.course, errors: err.errors});
-      } else {
-        req.course     // save: guarda campos pregunta y respuesta en DB
-        .save( {fields: ["name", "description", "specialisation", "credits", "vacancies"]})
-        .then( function(){ res.redirect('/course');});
-      }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
-    }
-  );*/
-};
-
     
 /* 
  * GET /students/courses
@@ -241,9 +182,7 @@ exports.courses = function(req,res) {
 	}).catch(function(error){ 
 		 console.log("error cach3");
 		 res.render('student/courses.ejs',{courses:[],total:[], errors:error });
-	 });
-	
-	
+	 });	
 }
 
 /* 
