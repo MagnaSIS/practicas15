@@ -184,14 +184,14 @@ exports.update = function(req, res) {
   );
 };
 */
-    
-/* 
+
+/*
  * GET /students/courses
  * Show Students Available courses
- */    
+ */
 exports.courses = function(req,res) {
-	models.Course.findAll().then(function(courses) {	
-		if (courses){	
+	models.Course.findAll().then(function(courses) {
+		if (courses){
 			models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 				if (student){
 					student.getCourses().then(function(userInCourses){
@@ -200,60 +200,60 @@ exports.courses = function(req,res) {
 						}else{
 						res.render('student/courses.ejs',{courses:courses,userCourses:[], errors:[] });
 						}
-					}).catch(function(error){ 
+					}).catch(function(error){
 						res.render('student/courses.ejs',{courses:[],userCourses:[], errors:error });
 					});
 				}
-			}).catch(function(error){ 
+			}).catch(function(error){
 				console.log("error cach2");
 				res.render('student/courses.ejs',{courses:[],userCourses:[], errors:error });
-			 });	
-		}		
-	}).catch(function(error){ 
+			 });
+		}
+	}).catch(function(error){
 		 console.log("error cach3");
 		 res.render('student/courses.ejs',{courses:[],total:[], errors:error });
 	 });
-	
-	
+
+
 }
 
-/* 
+/*
  * POST /students/manageCourses
  * Edit student course preferences
- */    
+ */
 exports.manageCourses = function(req,res) {
 		models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 			models.Course.findById(req.body.courseID).then(function(course){
-				if (req.body.add==="yes"){	
-					/* 
+				if (req.body.add==="yes"){
+					/*
 					 * Por Completar
 					 * Recalcular posiciones (alumno desapuntado de asignatura)
 					 */
 					var priority=0;
 					var position=0;
 					student.addCourse(course, {student_priority: priority, course_position:position}).then(function(){
-						res.redirect('/students/courses');						
+						res.redirect('/students/courses');
 					}).catch(function(error){
 						req.session.error="error manageCourses cath0= "+error;
 						res.redirect('/students/courses');
-					});	
+					});
 				}else{
 					models.StudentCourse.destroy({where: {StudentId:student.id,CourseId: course.id}}).then(function(){
 						/* Por Completar
 						 * Recalcular posiciones (alumno desapuntado de asignatura)
-						 */res.redirect('/students/courses');						
+						 */res.redirect('/students/courses');
 					}).catch(function(error){
 						req.session.error="error manageCourses cath0= "+error;
 						res.redirect('/students/courses');
-					});	
+					});
 				}
 			}).catch(function(error){
 				req.session.error="error manageCourses cath1= "+error;
 				res.redirect('/students/courses');
-			});	
+			});
 		}).catch(function(error){
 			req.session.error="error manageCourses cath2= "+error;
 			res.redirect('/students/courses');
-		});				
+		});
 
 }

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,14 +6,17 @@
 		Author URL: http://w3layouts.com
 		License: Creative Commons Attribution 3.0 Unported
 		License URL: http://creativecommons.org/licenses/by/3.0/
+		type="text/javascript"
+		type="application/x-javascript"
 	-->
+	<script  src="scripts/myScriptEstudiante.js" type="application/x-javascript"></script>
 </head>
 <body>
 	<div class="panel panel-default">
 		<div class="panel-heading">Registrarse</div>
 		<div class="panel-body">
 			<div style="margin: 0% 40% 0% 40%">
-				<form method='post' action='students'>
+				<form method='post' action='students' onsubmit="return check()">
 					<div class="row">
 						<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="active">
 					</div>
@@ -30,6 +31,9 @@
 					<hr>
 					<div class="row">
 						<input class="form-control" required type="password" class="text" placeholder="Contraseña" name="password">
+					</div>
+					<div class="row">
+						<input class="form-control" required type="password" class="text" placeholder="Repite Contraseña" name="password1">
 					</div>
 					<hr>
 					<div class="row">

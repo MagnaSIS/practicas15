@@ -91,7 +91,7 @@ exports.update = function(req,res){
 exports.notExistManager = function(req,res,next){
 
     var email = req.body.email;
-    
+
     console.log(" - Correo: " + email);
     models.User.find( { where:{ email: email } } ).then(function(user){
         if(user){
