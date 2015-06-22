@@ -42,47 +42,52 @@ exports.create = function(req,res) {
     var uuid4 = uuid.v4(); //id único para verificación del usuario
     password = util.encrypt(password);
 
-    //asignacion de valores al user
-    user.email=req.body.email;
-    user.password=password;
-    user.confirmationToken=uuid4;
+	 //asignacion de valores al student
+    var tmpYear=3;//falta que lo coja del ejs
+    var tmpAvgGrade=6.5;//idem
+    var tmpCredits=140;//idem
 
-    //asignacion de valores al student
-    student.name=req.body.name;
-    student.surname=req.body.lastname;
-    student.year=3;//falta que lo coja del ejs
-    student.avgGrade=6.5;//idem
-    student.credits=140;//idem
-
-    console.log(req.get('host'));
-
-   // console.log(user.password);
     //guardar en base de datos
-    user.save();
-    student.save().then(function(){
-        res.redirect('/login');
-        });
+	models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){   	
+		models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
+			newStudent.setUser(newUser).then(function(newStudent){
+    	   		//Envio del correo
+        		host=req.get('host');
+        		link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
-        //Envio del correo
-        host=req.get('host');
-        link="http://"+req.get('host')+"/students/verify/"+uuid4;
+            	var transporter = nodemailer.createTransport({
+            		ervice: 'gmail',
+            		auth: {
+            			user: 'magnanode@gmail.com',
+            			pass: 'Magna1234.'
+            		}
+            	});
 
-        var transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'magnanode@gmail.com',
-            pass: 'Magna1234.'
-        }
+            	transporter.sendMail({
+            		from: 'magnanode@gmail.com',
+            		to: email,
+            		subject: 'Por favor verifica tu cuenta de correo',
+            		html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
+            	});
+    			
+    		}).catch(function(error){        		
+				console.log("Error al enlazar student" + error);
+				req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+				res.redirect('/login');
+			 });
+
+        	res.redirect('/login');
+        }).catch(function(error){        		
+			console.log("Error al crear student" + error);
+			req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+			res.redirect('/login');
+		});
+    }).catch(function(error){        		
+    	console.log("Error al crear usuario"+ error);
+    	req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+    	res.redirect('/login');
     });
-
-        transporter.sendMail({
-          from: 'magnanode@gmail.com',
-          to: email,
-          subject: 'Por favor verifica tu cuenta de correo',
-          html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
-    });
-
-    };
+}
 
 //Autoload :id
 exports.load = function(req,res, next, Id) {
