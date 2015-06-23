@@ -46,20 +46,82 @@ exports.create = function(req,res) {
     var tmpYear=3;//falta que lo coja del ejs
     var tmpAvgGrade=6.5;//idem
     var tmpCredits=140;//idem
+    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
+    if(allowedEmail.test(email)){
+          //guardar en base de datos
+          models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){
+          	models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
+          		newStudent.setUser(newUser).then(function(newStudent){
 
-    //guardar en base de datos
-    models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){
-    	models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
-    		newStudent.setUser(newUser).then(function(newStudent){
+          		});
+          		//Envio del correo
+          		host=req.get('host');
+          		link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
 
-    		});
+              	var transporter = nodemailer.createTransport({
+              		service: 'gmail',
+              		auth: {
+              			user: 'magnanode@gmail.com',
+              			pass: 'Magna1234.'
+              		}
+              	});
 
 
+              	transporter.sendMail({
+              		from: 'magnanode@gmail.com',
+              		to: email,
+              		subject: 'Por favor verifica tu cuenta de correo',
+              		html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
+              	});
 
-    		//Envio del correo
+              	res.redirect('/login');
+              	}).catch(function(error){
+      				console.log("Error al crear student" + error);
+      				req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+      				res.redirect('/login');
+      			 });
+          }).catch(function(error){
+      		console.log("Error al crear usuario"+ error);
+      		req.session.errors= "ha ocurrido un error al crear el usuario"+error;
+      		res.redirect('/login');
+      	 });
+    }
+    else{
+        req.session.errors =[{"message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'}];
+        res.render('student/studentRegistration', {errors: req.session.errors});
+    }
+}
+
+exports.loadEmail = function(req, res, next, emailId) {
+
+  models.User.find({where: {email: emailId}}).then(
+    function(user) {
+      if (user) {
+        req.session.user = user;
+        console.log('Aqui llego:' +user);
+        next();
+      } else{next(new Error('No existe emailId=' + emailId))}
+    }
+  ).catch(function(error){next(error)});
+
+};
+
+//GET /modifipass
+exports.formPassword = function(req, res) {
+    var errors=req.session.errors || {};
+//    req.session.errors={};
+	console.log('Mensaje de Formulario');
+    res.render('session/form', {errors: errors});
+    //res.write("Hola");
+};
+
+exports.mostrarOK = function(req,res){
+  var user1 = req.session.user;  // req.course: autoload de instancia de course
+
+  //Envio del correo
     		host=req.get('host');
-    		link="http://"+req.get('host')+"/students/verify/"+uuid4;
+    		link="http://"+req.get('host')+"/modifipass/"+user1.confirmationToken+"/edit";
 
         	var transporter = nodemailer.createTransport({
         		service: 'gmail',
@@ -71,23 +133,78 @@ exports.create = function(req,res) {
 
         	transporter.sendMail({
         		from: 'magnanode@gmail.com',
-        		to: email,
-        		subject: 'Por favor verifica tu cuenta de correo',
-        		html : "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href="+link+">Presiona aquí para verificar</a>"
+        		to: user1.email,
+        		subject: 'PlaeForMe: Modificar Contraseña',
+        		html : "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href="+link+">Presiona aquí para modificar el password</a>"
         	});
 
-        	res.redirect('/login');
-        	}).catch(function(error){
-				console.log("Error al crear student" + error);
-				req.session.errors= "ha ocurrido un error al crear el usuario"+error;
-				res.redirect('/login');
-			 });
-    }).catch(function(error){
-		console.log("Error al crear usuario"+ error);
-		req.session.errors= "ha ocurrido un error al crear el usuario"+error;
-		res.redirect('/login');
-	 });
-}
+
+  console.log('Mensaje OKPASS');
+  console.log(user1.email);
+  console.log(user1.confirmationToken);
+  res.render('session/okpass', {errors: []});
+};
+
+exports.editPassword = function(req,res){
+  console.log('Aqui llego 0');
+  var user = req.session.user;  // req.course: autoload de instancia de course
+  console.log(user);
+  res.render('session/editpass', {user: user, errors: []});
+
+};
+
+exports.updatePassword = function(req, res, Id) {
+//  models.User.findOne({where: {UserId:req.session.user.id}}).then(function(user){
+//  var user = req.session.user;
+  var password = req.body.changepass;
+  var encrypt_password = util.encrypt(password);
+
+  console.log('Aqui llego pass0');
+  req.user.password= encrypt_password;
+  console.log('Aqui llego pass1');
+  req.user
+  .validate()
+  .then(
+    function(err){
+      if (err) {
+        res.render('session/editpass', {user: req.user, errors: err.errors});
+        console.log('Aqui llego pass2');
+      } else {
+        console.log('Aqui llego pass3');
+        req.user     // save: guarda campos pregunta y respuesta en DB
+        .save( {fields: ["password"]})
+        .then( function(){ res.redirect('/login');});
+        console.log('Aqui llego pass4');
+      }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
+    }
+    );
+/*  models.User.find({
+      where:{
+        confirmationToken: Id
+      }
+  }).then(function(user){
+    console.log('Aqui llego pass1');
+    req.user.password= encrypt_password;
+    req.user.validate().then(
+      function(err){
+        if (err) {
+          res.render('session/editpass', {user: req.user, errors: err.errors});
+          console.log('Aqui llego pass2');
+        } else {
+          console.log('Aqui llego pass3');
+          req.user     // save: guarda campos pregunta y respuesta en DB
+          .save( {fields: ["password"]})
+          .then( function(){ res.redirect('/login');});
+          console.log('Aqui llego pass4');
+        }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
+      }
+    );
+  }).catch(function(error){next(error)});*/
+
+//  }
+};
+
+
 
 //Autoload :id
 exports.load = function(req,res, next, Id) {
@@ -156,7 +273,6 @@ exports.update = function(req, res) {
 };
 
 /*
-
  * GET /students/courses
  * Show Students Available courses
  */
@@ -185,7 +301,6 @@ exports.courses = function(req,res) {
 		 res.render('student/courses.ejs',{courses:[],total:[], errors:error });
 
 	 });
-
 }
 
 /*

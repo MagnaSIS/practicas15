@@ -19,6 +19,7 @@ router.get('/', function(req, res, next) {
 router.param('courseId', courseController.load);  // autoload :courseId
 router.param('userId', managerController.load);
 router.param('Id',studentController.load);
+router.param('emailId', studentController.loadEmail);
 
 module.exports = router;
 
@@ -30,6 +31,10 @@ router.get('/login',		sessionController.new);
 router.post('/login',		sessionController.create);
 router.delete('/logout',	sessionController.loginRequired,	sessionController.destroy);
 
+router.get('/modifipass',		studentController.formPassword);
+router.get('/modifipass/:emailId/okpass',		studentController.mostrarOK);
+router.get('/modifipass/:Id/edit',		studentController.editPassword);
+router.put('/modifipass/:Id',		studentController.updatePassword);
 /*
 *	Students Controller
 */
