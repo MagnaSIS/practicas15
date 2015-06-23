@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Nombre"
+                    msg: "Falta escribir el nombre"
                 }
             }
         },
@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Apellido"
+                    msg: "Falta escribir el apellido"
                 }
             }
         },
@@ -41,25 +41,33 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Curso"
+                    msg: "Falta definir el curso"
                 },
+                min: {args: [3], msg: "El año no puede ser menor que 3"},
+                max: {args: [4], msg: "El año no puede ser mayor que 4"},
             },
         },
         avgGrade: {
             type: DataTypes.FLOAT,
             allowNull: false,
             validate: {
-                min: 0,
-                max: 10,
+                min: {args: [0], msg: "La media no puede tener valor negativo"},
+                max: {args: [10], msg: "La media no puede ser mayor que 10"},
+                isFloat: {
+                    msg: "La nota media tiene que ser un número"
+                },
             }
         },
         credits: {
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
-                min: 0,
-                max: 240,
-            }
+                min: {args: [0], msg: "El número de creditos no puede ser negativo"},
+                max: {args: [240], msg: "El número de creditos no puede ser mayor que 240"},
+                isInt: {
+                    msg: "Los créditos tiene que ser un número"
+                },
+            },
         },
         specialisation: {
             type: DataTypes.ENUM,

@@ -8,6 +8,7 @@ var sessionController	=	require	('../controllers/session_controller');
 var studentController	=	require	('../controllers/student_controller');
 var managerController	=	require ('../controllers/manage_controller');
 var courseController	=	require	('../controllers/course_controller');
+var userController 		= 	require ('../controllers/user_controller');
 /*var calcsController		=	require ('../controllers/course_controller');
 
 */
@@ -16,9 +17,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'PlaceForMe', errors: [] });
 });
 
-router.param('courseId', courseController.load);  // autoload :courseId
-router.param('userId', managerController.load);
-router.param('Id',studentController.load);
+router.param('courseId', 	courseController.load);  // autoload :courseId
+router.param('userId', 		userController.load);
+router.param('Id',			studentController.load);
+router.param('Id',			managerController.load);
+router.param('emailId', 	studentController.loadEmail);
 
 module.exports = router;
 
@@ -30,6 +33,10 @@ router.get('/login',		sessionController.new);
 router.post('/login',		sessionController.create);
 router.delete('/logout',	sessionController.loginRequired,	sessionController.destroy);
 
+router.get('/modifipass',		studentController.formPassword);
+router.get('/modifipass/:emailId/okpass',		studentController.mostrarOK);
+router.get('/modifipass/:Id/edit',		studentController.editPassword);
+router.put('/modifipass/:Id',		studentController.updatePassword);
 /*
 *	Students Controller
 */
@@ -48,6 +55,8 @@ router.post('/students/manageCourses',	sessionController.isStudent,	studentContr
 */
 router.get('/manager',						sessionController.isAdmin,										managerController.new);
 router.post('/manager',						sessionController.isAdmin,	managerController.notExistManager,  managerController.create);
+router.get('/manage/password/:Id',																			managerController.password);
+router.put('/manage/createpassword',																		managerController.putPassword);
 router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.destroy);
 router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,										managerController.edit);
 router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.update);
