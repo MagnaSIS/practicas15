@@ -110,8 +110,8 @@ exports.loadEmail = function(req, res, next, emailId) {
 //GET /modifipass
 exports.formPassword = function(req, res) {
     var errors=req.session.errors || {};
-    req.session.errors={};
-	   console.log('Mensaje de Formulario');
+//    req.session.errors={};
+	console.log('Mensaje de Formulario');
     res.render('session/form', {errors: errors});
     //res.write("Hola");
 };
@@ -143,6 +143,66 @@ exports.mostrarOK = function(req,res){
   console.log(user1.confirmationToken);
   res.render('session/okpass', {errors: []});
 };
+
+exports.editPassword = function(req,res){
+  console.log('Aqui llego 0');
+  var user = req.session.user;  // req.course: autoload de instancia de course
+  console.log(user);
+  res.render('session/editpass', {user: user, errors: []});
+
+};
+
+exports.updatePassword = function(req, res, Id) {
+//  models.User.findOne({where: {UserId:req.session.user.id}}).then(function(user){
+//  var user = req.session.user;
+  var password = req.body.changepass;
+  var encrypt_password = util.encrypt(password);
+
+  console.log('Aqui llego pass0');
+  req.user.password= encrypt_password;
+  console.log('Aqui llego pass1');
+  req.user
+  .validate()
+  .then(
+    function(err){
+      if (err) {
+        res.render('session/editpass', {user: req.user, errors: err.errors});
+        console.log('Aqui llego pass2');
+      } else {
+        console.log('Aqui llego pass3');
+        req.user     // save: guarda campos pregunta y respuesta en DB
+        .save( {fields: ["password"]})
+        .then( function(){ res.redirect('/login');});
+        console.log('Aqui llego pass4');
+      }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
+    }
+    );
+/*  models.User.find({
+      where:{
+        confirmationToken: Id
+      }
+  }).then(function(user){
+    console.log('Aqui llego pass1');
+    req.user.password= encrypt_password;
+    req.user.validate().then(
+      function(err){
+        if (err) {
+          res.render('session/editpass', {user: req.user, errors: err.errors});
+          console.log('Aqui llego pass2');
+        } else {
+          console.log('Aqui llego pass3');
+          req.user     // save: guarda campos pregunta y respuesta en DB
+          .save( {fields: ["password"]})
+          .then( function(){ res.redirect('/login');});
+          console.log('Aqui llego pass4');
+        }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
+      }
+    );
+  }).catch(function(error){next(error)});*/
+
+//  }
+};
+
 
 //Autoload :id
 exports.load = function(req,res, next, Id) {
