@@ -75,6 +75,9 @@ Course.belongsToMany(Student, {
     through: StudentCourse
 });
 
+StudentCourse.belongsTo(Student, {onDelete: 'cascade'});
+StudentCourse.belongsTo(Course, {onDelete: 'cascade'});
+
 exports.User = User;
 exports.Student = Student;
 exports.Course = Course;

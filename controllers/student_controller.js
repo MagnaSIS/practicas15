@@ -18,6 +18,7 @@
 
    var models=require("../models/models.js");
    var util=require("../includes/utilities.js");
+   var calcsController=require("../controllers/calcsController.js");
    var nodemailer = require('nodemailer');
    var uuid = require('node-uuid');
 
@@ -153,9 +154,9 @@ exports.courses = function(req,res) {
 		if (courses){	
 			models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 				if (student){
-					student.getCourses().then(function(userInCourses){
+					models.StudentCourse.findAll({where: {StudentId:student.id}}).then(function(userInCourses){					
 						if (userInCourses){
-							res.render('student/courses.ejs',{courses:courses,userCourses:userInCourses, errors:[] });
+							res.render('student/courses.ejs',{courses:courses,userCourses:userInCourses, student:student, errors:[] });
 						}else{
 						res.render('student/courses.ejs',{courses:courses,userCourses:[], errors:[] });
 						}
@@ -181,24 +182,39 @@ exports.courses = function(req,res) {
 exports.manageCourses = function(req,res) {
 		models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 			models.Course.findById(req.body.courseID).then(function(course){
+				req.body.redirect='/students/courses';
 				if (req.body.add==="yes"){	
-					/* 
-					 * Por Completar
-					 * Recalcular posiciones (alumno desapuntado de asignatura)
-					 */
-					var priority=0;
-					var position=0;
-					student.addCourse(course, {student_priority: priority, course_position:position}).then(function(){
-						res.redirect('/students/courses');						
-					}).catch(function(error){
-						req.session.error="error manageCourses cath0= "+error;
-						res.redirect('/students/courses');
-					});	
+						student.getCourses().then(function(total){
+							student.addCourse(course, {student_priority: total.length+1, course_position:0}).then(function(){							
+								calcsController.recalculateMinNote(req,res,course);
+							}).catch(function(error){
+							req.session.error="error al añadir estudiate al curso cath0= "+error;
+							res.redirect('/students/courses');
+							});													
+						}).catch(function(error){
+							req.session.error="error al añadir estudiate al curso cath0= "+error;
+							res.redirect('/students/courses');
+						});								
+				
 				}else{
-					models.StudentCourse.destroy({where: {StudentId:student.id,CourseId: course.id}}).then(function(){
-						/* Por Completar
-						 * Recalcular posiciones (alumno desapuntado de asignatura)
-						 */res.redirect('/students/courses');						
+					models.StudentCourse.findOne({where: {StudentId:student.id,CourseId: course.id}}).then(function(studentCourse){
+					var deletedPosition=studentCourse.student_priority;
+						studentCourse.destroy().then(function(){
+							//Recalcular preferencias
+							models.StudentCourse.findAll({where: {StudentId:student.id}}).then(function(userInCourses){					
+								userInCourses.forEach(function(courseTmp){
+								if (courseTmp.student_priority>deletedPosition){
+									courseTmp.student_priority--;
+									courseTmp.save();
+								}
+								});
+								calcsController.recalculateMinNote(req,res,course);	
+							});
+						}).catch(function(error){
+							req.session.error="error Deleting Student Course = "+error;
+							res.redirect('/students/courses');
+						});	
+						
 					}).catch(function(error){
 						req.session.error="error manageCourses cath0= "+error;
 						res.redirect('/students/courses');

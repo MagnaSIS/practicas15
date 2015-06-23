@@ -60,6 +60,15 @@ module.exports = function(sequelize, DataTypes) {
 					msg: "-> El número de plazas debe ser número entero"
 				}
 			}
-        }
+        },MinimalGrade: {
+        	type: DataTypes.FLOAT,
+        	allowNull: false,
+        	defaultValue:0.0,
+        	validate: {
+        		isFloat: {
+        		  msg: "el grado minimo tiene que ser un float"
+        		}
+        	}
+        } 
     });
 }

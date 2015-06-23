@@ -18,22 +18,39 @@
 
 var models=require("../models/models.js");
 
-//Post /controllers/student
-exports.recalculate = function(req,res) {
-	
-	//Añadir o eliminar asignatura req.body.add
-	//ID del curso req.body.courseID
-	//ID del alumno req.session.user.id
-	models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
-		models.StudentCourse.findALL({
-			where: {CourseID:req.body.courseID},
-			model: Student, required: true}
-		}).then(function(studentCourses){
-		
-	}
-	
-		
 
-		
-	}
+//Recalculate course minimal note
+//req.body.redirect === REDIRECT URL!! (ASIGN BEFORE CALL recalculateMinNote!!)
+exports.recalculateMinNote = function(req,res,course){
+	
+	models.StudentCourse.count({where: {CourseId:course.id}}).then(function(matriculados){
+		var courseStudentsGrades=new Array();	
+		models.StudentCourse.findAll(
+			{	where: {CourseId:course.id},
+				include: [{model: models.Student}]
+			}).then(function(studentCourses){
+				studentCourses.forEach(function(student){
+					courseStudentsGrades.push(student.Student.avgGrade);
+				});
+				courseStudentsGrades.sort();
+				
+				if (matriculados>14){
+					course.MinimalGrade=courseStudentsGrades[course.vacancies-1];
+				}else{
+					course.MinimalGrade=0;
+				}			
+				course.save().then(function(){
+					res.redirect(req.body.redirect);
+				}).catch(function(error){
+					req.session.error="Error al guardar el curso= "+error;
+					res.redirect(req.body.redirect);
+				});	
+			}).catch(function(error){
+				req.session.error="Error al recalcular nota minima= "+error;
+				res.redirect(req.body.redirect);
+			});	
+	}).catch(function(error){
+		req.session.error="Error al contar numero de alumnos matriculados= "+error;
+		res.redirect(req.body.redirect);
+	});	
 }
