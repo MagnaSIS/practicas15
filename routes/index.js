@@ -33,8 +33,8 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 
 router.get('/modifipass',		studentController.formPassword);
 router.get('/modifipass/:emailId/okpass',		studentController.mostrarOK);
-
-
+router.get('/modifipass/:Id/edit',		studentController.editPassword);
+router.put('/modifipass/:Id',		studentController.updatePassword);
 /*
 *	Students Controller
 */
