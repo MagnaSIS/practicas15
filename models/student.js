@@ -24,7 +24,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Nombre"
+                    msg: "Falta escribir el nombre"
                 }
             }
         },
@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Apellido"
+                    msg: "Falta escribir el apellido"
                 }
             }
         },
@@ -41,8 +41,10 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Curso"
+                    msg: "Falta definir el curso"
                 },
+                min: {args: [3], msg: "El año no puede ser menor que 3"},
+                max: {args: [4], msg: "El año no puede ser mayor que 4"},
             },
         },
         avgGrade: {
