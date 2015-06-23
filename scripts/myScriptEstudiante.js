@@ -1,16 +1,17 @@
 function check()
 {
-
-    var nombre=document.getElementById("name").value;
+  alert("Entra al check");
+    var nombre=document.getElementById("name");
+  //  document.getElementsByName('name');
     var apellidos=document.getElementById("lastname").value;
     var email=document.getElementById("email").value;
-
     var password1=document.getElementById("password1").value;
     var password=document.getElementById("password").value;
     var allowedName = /^([a-zA-Z]+[a-zA-Z]$)/;
     var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
     var allowedTelefono = /^([9]\d{8}$)/;
     var allowedPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+
 
     if(name==null || name=="" )
     {
@@ -64,6 +65,8 @@ function check()
 
 function login()
 {
+  alert("Entra al login");
+
     var email=document.getElementById("email").value;
     var password=document.getElementById("password").value;
 
@@ -78,5 +81,7 @@ function login()
         return false;
     }
     return true;
+
+
 
 }

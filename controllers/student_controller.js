@@ -62,7 +62,7 @@ exports.create = function(req,res) {
     		link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
         	var transporter = nodemailer.createTransport({
-        		ervice: 'gmail',
+        		service: 'gmail',
         		auth: {
         			user: 'magnanode@gmail.com',
         			pass: 'Magna1234.'
@@ -150,7 +150,7 @@ exports.update = function(req, res) {
       }
     }).catch(function(error){next(error)});
 
-    
+
 });
 
 };
