@@ -91,6 +91,57 @@ exports.create = function(req,res) {
     }
 }
 
+exports.loadEmail = function(req, res, next, emailId) {
+
+  models.User.find({where: {email: emailId}}).then(
+    function(user) {
+      if (user) {
+        req.session.user = user;
+        console.log('Aqui llego:' +user);
+        next();
+      } else{next(new Error('No existe emailId=' + emailId))}
+    }
+  ).catch(function(error){next(error)});
+
+};
+
+//GET /modifipass
+exports.formPassword = function(req, res) {
+    var errors=req.session.errors || {};
+    req.session.errors={};
+	console.log('Mensaje de Formulario');
+    res.render('session/form', {errors: errors});
+    //res.write("Hola");
+};
+
+exports.mostrarOK = function(req,res){
+  var user1 = req.session.user;  // req.course: autoload de instancia de course
+
+  //Envio del correo
+    		host=req.get('host');
+    		link="http://"+req.get('host')+"/modifipass/"+user1.confirmationToken+"/edit";
+
+        	var transporter = nodemailer.createTransport({
+        		service: 'gmail',
+        		auth: {
+        			user: 'magnanode@gmail.com',
+        			pass: 'Magna1234.'
+        		}
+        	});
+
+        	transporter.sendMail({
+        		from: 'magnanode@gmail.com',
+        		to: user1.email,
+        		subject: 'PlaeForMe: Modificar Contraseña',
+        		html : "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href="+link+">Presiona aquí para modificar el password</a>"
+        	});
+
+  console.log('Mensaje OKPASS');
+  console.log(user1.email);
+  console.log(user1.confirmationToken);
+  res.render('session/okpass', {errors: []});
+};
+
 //Autoload :id
 exports.load = function(req,res, next, Id) {
 
@@ -129,7 +180,7 @@ exports.edit = function(req,res){
   });
 };
 
-// PUT 
+// PUT
 exports.update = function(req, res) {
 
   models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
@@ -152,18 +203,18 @@ exports.update = function(req, res) {
       }
     }).catch(function(error){next(error)});
 
-    
+
 });
 
 };
-    
-/* 
+
+/*
  * GET /students/courses
  * Show Students Available courses
- */    
+ */
 exports.courses = function(req,res) {
-	models.Course.findAll().then(function(courses) {	
-		if (courses){	
+	models.Course.findAll().then(function(courses) {
+		if (courses){
 			models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 				if (student){
 					student.getCourses().then(function(userInCourses){
@@ -172,58 +223,58 @@ exports.courses = function(req,res) {
 						}else{
 						res.render('student/courses.ejs',{courses:courses,userCourses:[], errors:[] });
 						}
-					}).catch(function(error){ 
+					}).catch(function(error){
 						res.render('student/courses.ejs',{courses:[],userCourses:[], errors:error });
 					});
 				}
-			}).catch(function(error){ 
+			}).catch(function(error){
 				console.log("error cach2");
 				res.render('student/courses.ejs',{courses:[],userCourses:[], errors:error });
-			 });	
-		}		
-	}).catch(function(error){ 
+			 });
+		}
+	}).catch(function(error){
 		 console.log("error cach3");
 		 res.render('student/courses.ejs',{courses:[],total:[], errors:error });
-	 });	
+	 });
 }
 
-/* 
+/*
  * POST /students/manageCourses
  * Edit student course preferences
- */    
+ */
 exports.manageCourses = function(req,res) {
 		models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 			models.Course.findById(req.body.courseID).then(function(course){
-				if (req.body.add==="yes"){	
-					/* 
+				if (req.body.add==="yes"){
+					/*
 					 * Por Completar
 					 * Recalcular posiciones (alumno desapuntado de asignatura)
 					 */
 					var priority=0;
 					var position=0;
 					student.addCourse(course, {student_priority: priority, course_position:position}).then(function(){
-						res.redirect('/students/courses');						
+						res.redirect('/students/courses');
 					}).catch(function(error){
 						req.session.error="error manageCourses cath0= "+error;
 						res.redirect('/students/courses');
-					});	
+					});
 				}else{
 					models.StudentCourse.destroy({where: {StudentId:student.id,CourseId: course.id}}).then(function(){
 						/* Por Completar
 						 * Recalcular posiciones (alumno desapuntado de asignatura)
-						 */res.redirect('/students/courses');						
+						 */res.redirect('/students/courses');
 					}).catch(function(error){
 						req.session.error="error manageCourses cath0= "+error;
 						res.redirect('/students/courses');
-					});	
+					});
 				}
 			}).catch(function(error){
 				req.session.error="error manageCourses cath1= "+error;
 				res.redirect('/students/courses');
-			});	
+			});
 		}).catch(function(error){
 			req.session.error="error manageCourses cath2= "+error;
 			res.redirect('/students/courses');
-		});				
+		});
 
 }
