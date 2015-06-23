@@ -46,7 +46,9 @@ exports.create = function(req,res) {
     var tmpYear=3;//falta que lo coja del ejs
     var tmpAvgGrade=6.5;//idem
     var tmpCredits=140;//idem
+
     var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/; 
+
     if(allowedEmail.test(email)){
           //guardar en base de datos
           models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){   	
@@ -109,7 +111,7 @@ exports.loadEmail = function(req, res, next, emailId) {
 exports.formPassword = function(req, res) {
     var errors=req.session.errors || {};
     req.session.errors={};
-	console.log('Mensaje de Formulario');
+	   console.log('Mensaje de Formulario');
     res.render('session/form', {errors: errors});
     //res.write("Hola");
 };
