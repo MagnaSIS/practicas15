@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Correo"
+                    msg: "Falta escribir el correo electrónico"
                 }
             }
         },
@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Password"
+                    msg: "Falta escribir el password"
                 }
             }
         },
@@ -46,7 +46,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: "STUDENT",
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Rol"
+                    msg: "Falta definir el rol"
                 },
             }
         },
