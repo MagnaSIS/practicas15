@@ -190,6 +190,7 @@ exports.updatePassword = function(req, res, Id) {
       }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
     }
     );
+}
 //Modificación en base de datos sobre su existencia.
 exports.verify = function(req,res){
 
