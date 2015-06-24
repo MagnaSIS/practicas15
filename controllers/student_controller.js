@@ -142,13 +142,14 @@ exports.mostrarOK = function(req,res){
   console.log('Mensaje OKPASS');
   console.log(user1.email);
   console.log(user1.confirmationToken);
+  delete req.session.user;
   res.render('session/okpass', {errors: []});
 };
 
 exports.editPassword = function(req,res){
   console.log('Aqui llego 0');
-  var user = req.session.user;  // req.course: autoload de instancia de course
-  console.log(user);
+  var user = req.user;  // req.user: autoload de instancia de course
+  console.log(req.user);
   res.render('session/editpass', {user: user, errors: []});
 
 };
