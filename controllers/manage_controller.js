@@ -29,7 +29,7 @@ exports.new = function(req,res){
 
 exports.create = function(req,res) {
 
-    /*var email = req.body.email;
+    var email = req.body.email;
     var password = req.body.password;
     console.log("Password en texto-plano: " + password);
 
@@ -41,22 +41,11 @@ exports.create = function(req,res) {
     user.email = email;
     user.password = password;
     user.role = "MANAGER";
-    user.validate().then(
-        function(err){
-          if (err) {
-            res.render('/manage', {course: course, errors: err.errors});
-          } else {
-            user
-            .save({fields: ["email", "password", "role"]})
-            .then( function(){ res.redirect('/manager')})
-          }      // res.redirect: Redirecci�n HTTP a lista de preguntas
-        }
-    ).catch(function(error){next(error)});
 
     //guardar en base de datos
     user.save().then(function(){
         res.redirect('/manager');
-    });*/
+    });
 
 };
 
@@ -102,7 +91,7 @@ exports.update = function(req,res){
 exports.notExistManager = function(req,res,next){
 
     var email = req.body.email;
-    
+
     console.log(" - Correo: " + email);
     models.User.find( { where:{ email: email } } ).then(function(user){
         if(user){

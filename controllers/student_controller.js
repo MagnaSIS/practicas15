@@ -46,13 +46,13 @@ exports.create = function(req,res) {
     var tmpYear=3;//falta que lo coja del ejs
     var tmpAvgGrade=6.5;//idem
     var tmpCredits=140;//idem
-    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/; 
+    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
     if(allowedEmail.test(email)){
           //guardar en base de datos
-          models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){   	
+          models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){
           	models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
           		newStudent.setUser(newUser).then(function(newStudent){
-          			
+
           		});
           		//Envio del correo
           		host=req.get('host');
@@ -74,12 +74,12 @@ exports.create = function(req,res) {
               	});
 
               	res.redirect('/login');
-              	}).catch(function(error){        		
+              	}).catch(function(error){
       				console.log("Error al crear student" + error);
       				req.session.errors= "ha ocurrido un error al crear el usuario"+error;
       				res.redirect('/login');
       			 });
-          }).catch(function(error){        		
+          }).catch(function(error){
       		console.log("Error al crear usuario"+ error);
       		req.session.errors= "ha ocurrido un error al crear el usuario"+error;
       		res.redirect('/login');
