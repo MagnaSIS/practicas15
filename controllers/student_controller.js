@@ -154,8 +154,6 @@ exports.editPassword = function(req,res){
 };
 
 exports.updatePassword = function(req, res, Id) {
-//  models.User.findOne({where: {UserId:req.session.user.id}}).then(function(user){
-//  var user = req.session.user;
   var password = req.body.changepass;
   var encrypt_password = util.encrypt(password);
 
@@ -178,53 +176,6 @@ exports.updatePassword = function(req, res, Id) {
       }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
     }
     );
-/*  models.User.find({
-      where:{
-        confirmationToken: Id
-      }
-  }).then(function(user){
-    console.log('Aqui llego pass1');
-    req.user.password= encrypt_password;
-    req.user.validate().then(
-      function(err){
-        if (err) {
-          res.render('session/editpass', {user: req.user, errors: err.errors});
-          console.log('Aqui llego pass2');
-        } else {
-          console.log('Aqui llego pass3');
-          req.user     // save: guarda campos pregunta y respuesta en DB
-          .save( {fields: ["password"]})
-          .then( function(){ res.redirect('/login');});
-          console.log('Aqui llego pass4');
-        }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
-      }
-    );
-  }).catch(function(error){next(error)});*/
-
-//  }
-};
-
-
-//Autoload :id
-exports.load = function(req,res, next, Id) {
-
-  models.User.find({
-      where:{
-        confirmationToken: Id
-      }
-  }).then(function(user) {
-      if (user) {
-        req.user = user;
-        console.log("Verificado correctamente");
-        //res.write("Verificado correctamente");
-        next();
-      } else{next(new Error('No existe el Token= ' + Id))}
-    }
-  ).catch(function(error){next(error)});
-
-  //console.log(req.protocol+":/"+req.get('host'));
-  //res.redirect('/login');
-
 };
 
 //Modificación en base de datos sobre su existencia.
