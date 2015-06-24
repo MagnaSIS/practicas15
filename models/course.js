@@ -63,6 +63,15 @@ module.exports = function(sequelize, DataTypes) {
                 min: {args: [0], msg: "El número de alumnos no puede ser menor que 0"},
 
 			}
-        }
+        },MinimalGrade: {
+        	type: DataTypes.FLOAT,
+        	allowNull: false,
+        	defaultValue:0.0,
+        	validate: {
+        		isFloat: {
+        		  msg: "el grado minimo tiene que ser un float"
+        		}
+        	}
+        } 
     });
 }

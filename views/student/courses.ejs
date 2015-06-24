@@ -1,33 +1,51 @@
 <table class="table">
 	<tr>
 		<th>Nombre del curso</th>
-		<th>Especializacion</th>
-		<th>credito</th>
+		<th>Especialización</th>
+		<th>créditos</th>
 		<th>Plazas</th>
+		<th>Nota mínima</th>
 		<th>Detalles</th>
+		<th>Preferencia</th>
 		<th>Aputarse</th>
 	</tr>
 <% var i; for (i=0; i<courses.length; i++) { %>
 	<tr>
 	<% 	var esta=false;
+
+		var pos=0;
  		var c; for (c=0; c< userCourses.length; c++) {
-		if (userCourses[c].id== courses[i].id) {
+		if (userCourses[c].CourseId== courses[i].id) {
 			esta=true;
+			pos=c;
 		 }
 	 }
 
-	if (esta) { %>
-	<tr class="alert alert-success">
+	 if (esta) {
+	 	if (student.avgGrade < courses[i].MinimalGrade){ %>
+			<tr class="alert alert-danger">
+		<% }else  {%>
+			<tr class="alert alert-success">
+		<% } %>
 	<% }else{ %>
-	<tr class="alert alert-info">
+		<tr class="alert alert-info">
 	<% } %>
+
 
 	<td><%=courses[i].name%></td>
 	<td><%=courses[i].specialisation%></td>
 	<td><%=courses[i].credits%></td>
 	<td><%=courses[i].vacancies%></td>
+	<td><%=courses[i].MinimalGrade%></td>
 	<td><%=courses[i].description%></td>
 
+	<td>
+	<% if (esta) {%>
+		<%=userCourses[pos].student_priority%>
+	<% }else { %>
+	0
+	<% } %>
+	</td>
 	<td><form action="/students/manageCourses" method="POST">
 		<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
 	<% if (esta) { %>
