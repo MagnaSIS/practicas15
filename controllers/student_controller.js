@@ -49,8 +49,10 @@ exports.create = function(req,res) {
     var tmpCredits=140;//idem
 
     var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
+    var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
+    var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
 
-    if(allowedEmail.test(email)){
+    if(allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)){
           //guardar en base de datos
           models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){
           	models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
@@ -91,7 +93,15 @@ exports.create = function(req,res) {
       	 });
     }
     else{
-        req.session.errors =[{"message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'}];
+        if (!allowedEmail.test(email)){
+          req.session.errors =[{"message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'}];
+        }
+        if (!allowedName.test(name)){
+          req.session.errors =[{"message": 'El nombre debe tener letras'}];
+        }
+        if (!allowedLastName.test(apellidos)){
+          req.session.errors =[{"message": 'El apellido debe tener letras'}];
+        }
         res.render('student/studentRegistration', {errors: req.session.errors});
     }
 }
