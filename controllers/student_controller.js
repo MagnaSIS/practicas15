@@ -48,26 +48,30 @@ exports.create = function(req,res) {
     var tmpAvgGrade=6.5;//idem
     var tmpCredits=140;//idem
 
-    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/; 
+    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
+    var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
+    var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
 
-    if(allowedEmail.test(email)){
+    if(allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)){
           //guardar en base de datos
-          models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){   	
+          models.User.create({email:req.body.email,password:password,confirmationToken:uuid4}).then(function(newUser){
           	models.Student.create({name:req.body.name,surname:req.body.lastname,year: tmpYear ,avgGrade:tmpAvgGrade,credits:tmpCredits}).then(function(newStudent){
           		newStudent.setUser(newUser).then(function(newStudent){
-          			
+
           		});
           		//Envio del correo
           		host=req.get('host');
           		link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
+
               	var transporter = nodemailer.createTransport({
-              		ervice: 'gmail',
+              		service: 'gmail',
               		auth: {
               			user: 'magnanode@gmail.com',
               			pass: 'Magna1234.'
               		}
               	});
+
 
               	transporter.sendMail({
               		from: 'magnanode@gmail.com',
@@ -77,19 +81,27 @@ exports.create = function(req,res) {
               	});
 
               	res.redirect('/login');
-              	}).catch(function(error){        		
+              	}).catch(function(error){
       				console.log("Error al crear student" + error);
       				req.session.errors= "ha ocurrido un error al crear el usuario"+error;
       				res.redirect('/login');
       			 });
-          }).catch(function(error){        		
+          }).catch(function(error){
       		console.log("Error al crear usuario"+ error);
       		req.session.errors= "ha ocurrido un error al crear el usuario"+error;
       		res.redirect('/login');
       	 });
     }
     else{
-        req.session.errors =[{"message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'}];
+        if (!allowedEmail.test(email)){
+          req.session.errors =[{"message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'}];
+        }
+        if (!allowedName.test(name)){
+          req.session.errors =[{"message": 'El nombre debe tener letras'}];
+        }
+        if (!allowedLastName.test(apellidos)){
+          req.session.errors =[{"message": 'El apellido debe tener letras'}];
+        }
         res.render('student/studentRegistration', {errors: req.session.errors});
     }
 }
@@ -135,20 +147,22 @@ exports.mostrarOK = function(req,res){
         	transporter.sendMail({
         		from: 'magnanode@gmail.com',
         		to: user1.email,
-        		subject: 'PlaeForMe: Modificar Contraseña',
+        		subject: 'placeForMe: Modificar Contraseña',
         		html : "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href="+link+">Presiona aquí para modificar el password</a>"
         	});
+
 
   console.log('Mensaje OKPASS');
   console.log(user1.email);
   console.log(user1.confirmationToken);
+  delete req.session.user;
   res.render('session/okpass', {errors: []});
 };
 
 exports.editPassword = function(req,res){
   console.log('Aqui llego 0');
-  var user = req.session.user;  // req.course: autoload de instancia de course
-  console.log(user);
+  var user = req.user;  // req.user: autoload de instancia de course
+  console.log(req.user);
   res.render('session/editpass', {user: user, errors: []});
 
 };
@@ -176,8 +190,6 @@ exports.updatePassword = function(req, res, Id) {
       }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
     }
     );
-};
-
 //Modificación en base de datos sobre su existencia.
 exports.verify = function(req,res){
 
@@ -231,7 +243,7 @@ exports.courses = function(req,res) {
 		if (courses){
 			models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 				if (student){
-					models.StudentCourse.findAll({where: {StudentId:student.id}}).then(function(userInCourses){					
+					models.StudentCourse.findAll({where: {StudentId:student.id}}).then(function(userInCourses){
 						if (userInCourses){
 							res.render('student/courses.ejs',{courses:courses,userCourses:userInCourses, student:student, errors:[] });
 						}else{
@@ -249,6 +261,7 @@ exports.courses = function(req,res) {
 	}).catch(function(error){
 		 console.log("error cach3");
 		 res.render('student/courses.ejs',{courses:[],total:[], errors:error });
+
 	 });
 }
 
@@ -260,37 +273,37 @@ exports.manageCourses = function(req,res) {
 		models.Student.findOne({where: {UserId:req.session.user.id}}).then(function(student){
 			models.Course.findById(req.body.courseID).then(function(course){
 				req.body.redirect='/students/courses';
-				if (req.body.add==="yes"){	
+				if (req.body.add==="yes"){
 						student.getCourses().then(function(total){
-							student.addCourse(course, {student_priority: total.length+1, course_position:0}).then(function(){							
+							student.addCourse(course, {student_priority: total.length+1, course_position:0}).then(function(){
 								calcsController.recalculateMinNote(req,res,course);
 							}).catch(function(error){
 							req.session.error="error al añadir estudiate al curso cath0= "+error;
 							res.redirect('/students/courses');
-							});													
+							});
 						}).catch(function(error){
 							req.session.error="error al añadir estudiate al curso cath0= "+error;
 							res.redirect('/students/courses');
-						});								
-				
+						});
+
 				}else{
 					models.StudentCourse.findOne({where: {StudentId:student.id,CourseId: course.id}}).then(function(studentCourse){
 					var deletedPosition=studentCourse.student_priority;
 						studentCourse.destroy().then(function(){
 							//Recalcular preferencias
-							models.StudentCourse.findAll({where: {StudentId:student.id}}).then(function(userInCourses){					
+							models.StudentCourse.findAll({where: {StudentId:student.id}}).then(function(userInCourses){
 								userInCourses.forEach(function(courseTmp){
 								if (courseTmp.student_priority>deletedPosition){
 									courseTmp.student_priority--;
 									courseTmp.save();
 								}
 								});
-								calcsController.recalculateMinNote(req,res,course);	
+								calcsController.recalculateMinNote(req,res,course);
 							});
 						}).catch(function(error){
 							req.session.error="error Deleting Student Course = "+error;
 							res.redirect('/students/courses');
-						});							
+						});
 					}).catch(function(error){
 						req.session.error="error manageCourses cath0= "+error;
 						res.redirect('/students/courses');

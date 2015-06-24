@@ -13,3 +13,18 @@ exports.checkUserId = function(req, res, next, userId) {
   ).catch(function(error){next(error)});
 
 };
+
+exports.changeLock = function(req,res){
+
+	console.log(' - Iniciando cambio de bloqueo');
+	console.log(' - Email del user seleccionado: ' + req.user.email);
+	if(req.user.locked){
+		req.user.locked = false;
+	}
+	else{
+		req.user.locked = true;
+	}
+	req.user.save();
+	res.redirect('/manager');
+
+}

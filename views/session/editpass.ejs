@@ -1,20 +1,19 @@
-<!!DOCTYPE html>
-<html>
-<head></head>
-<body>
 	<div class="panel panel-default">
 		<div class="panel-heading">Modificar password del usuario</div>
 		<div class="panel-body">
 			<div style="margin: 0% 30% 0% 30%">
-			<form method="post" action="/modifipass/<%= session.user.confirmationToken %>?_method=put">
+			<form method="post" action="/modifipass/<%= user.confirmationToken %>?_method=put">
 				<div class="row">
-					Password: <input class="form-control" type="text" name="changepass" size="30" placeholder="Correo" autofocus/>
+					<div class="col-md-6">
+						<label>Password</label>
+					</div>
+					<div class="col-md-6">
+						<input class="form-control" type="password" name="changepass" required="required" size="30" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Nueva contraseña" autofocus/>
+					</div>
 				</div>
 				<br/>
-				<input class="btn btn-default" type="submit" value="Cambiar pass" id="submit" />
+				<input class="btn btn-default" type="submit" value="Confirmar el cambio" id="submit" />
 			</form>
 			</div>
 		</div>
 	</div>
-</body>
-</html>

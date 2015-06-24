@@ -27,10 +27,10 @@ exports.create = function(req,res) {
     user.confirmationToken = uuid4;
     user.password = "none";
 
-    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/; 
+    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
 
     if(allowedEmail.test(email)){
-    
+
             //Envio del correo
             host = req.get('host');
             link = "http://"+req.get('host')+"/manage/password/"+uuid4;
@@ -114,7 +114,7 @@ exports.putPassword = function(req,res){
 
         }
     })
-    
+
 }
 
 exports.destroy = function(req,res){
@@ -159,7 +159,7 @@ exports.update = function(req,res){
 exports.notExistManager = function(req,res,next){
 
     var email = req.body.email;
-    
+
     console.log(" - Correo: " + email);
     models.User.find( { where:{ email: email } } ).then(function(user){
         if(user){

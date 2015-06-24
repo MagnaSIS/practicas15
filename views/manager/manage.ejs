@@ -15,23 +15,27 @@
 				<tr>
 					<th>ID</th>
 					<th>Email</th>
-					<th>Nombre</th>
-					<th>Apellido</th>
 					<th>Tipo</th>
+					<th>Validado</th>
+					<th>Activado</th>
 					<th>Fecha de creación</th>
 					<th></th>
 					<th></th>
 				</tr>
-				<% var i; for (i=0; i < users.length; i++) { %>        
+				<% var i; for (i=0; i < users.length; i++) { %>
 					<tr>
 						<td><%= users[i].id %></td>
 						<td><%= users[i].email %></td>
-						<td><% if (users[i].role === "SUDENT") { %> <%= users[i].name %> <% } %></td>
-						<td><% if (users[i].role === "STUDENT") { %> <%= users[i].surname %> <% } %></td>
 						<td>
 							<% if (users[i].role === "ADMIN") { %> Administrador <% } %>
 							<% if (users[i].role === "MANAGER") { %> Gestor <% } %>
 							<% if (users[i].role === "STUDENT") { %> Estudiante <% } %>
+						</td>
+						<td><% if(users[i].isValidate){ %>Si<% }else{ %>No<% } %></td>
+						<td>
+							<input <% if (users[i].role === "ADMIN") { %> disabled <% } %> 
+							<% if (!users[i].locked) { %> checked <% } %>
+							onclick="window.location='/user/changelock/<%= users[i].id %>';" type="checkbox">
 						</td>
 						<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
 						<td>
@@ -41,7 +45,7 @@
 						</td>
 						<td>
 							<form method="post" action="/manager/<%= users[i].id %>?_method=delete">
-								<button class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
+								<button <% if (users[i].role === "ADMIN") { %> disabled <% } %> class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
 							</form>
 						</td>
 					</tr>

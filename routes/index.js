@@ -14,7 +14,7 @@ var userController 		= 	require ('../controllers/user_controller');
 */
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'PlaceForMe', errors: [] });
+  res.render('index', { title: 'placeForMe', errors: [] });
 });
 
 router.param('courseId', 	courseController.load);  // autoload :courseId
@@ -23,6 +23,11 @@ router.param('emailId', 	studentController.loadEmail);
 
 module.exports = router;
 
+
+/*
+*	User controller
+*/
+router.get('/user/changelock/:userId', 				sessionController.isAdmin,			userController.changeLock);
 
 /*
 *	Session Controller
