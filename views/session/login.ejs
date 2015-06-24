@@ -5,7 +5,7 @@
 				<% if (!session.user) {%>
 					<form method="post" action="login">
 						<div class="row">
-							<input class="form-control" type="text" id="login" name="login" pattern="(^[a-zA-Z]{1,20}$)" size="30" placeholder="Correo" autofocus/>
+							<input class="form-control" type="text" id="login" name="login"  pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" size="30" placeholder="Correo" autofocus/>
 						</div>
 						<hr>
 						<div class="row">
