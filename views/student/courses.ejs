@@ -12,14 +12,15 @@
 <% var i; for (i=0; i<courses.length; i++) { %>
 	<tr>
 	<% 	var esta=false;
+
 		var pos=0;
- 		var c; for (c=0; c< userCourses.length; c++) { 
+ 		var c; for (c=0; c< userCourses.length; c++) {
 		if (userCourses[c].CourseId== courses[i].id) {
-			esta=true; 
+			esta=true;
 			pos=c;
-		 } 	
-	 }	
-	 
+		 }
+	 }
+
 	 if (esta) {
 	 	if (student.avgGrade < courses[i].MinimalGrade){ %>
 			<tr class="alert alert-danger">
@@ -28,8 +29,9 @@
 		<% } %>
 	<% }else{ %>
 		<tr class="alert alert-info">
-	<% } %>	
-		
+	<% } %>
+
+
 	<td><%=courses[i].name%></td>
 	<td><%=courses[i].specialisation%></td>
 	<td><%=courses[i].credits%></td>
@@ -48,11 +50,11 @@
 		<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
 	<% if (esta) { %>
 		<input type="hidden" name="add" value="no"/>
-		<button class="btn btn-default" type="submit">Desapuntarse</button>		
+		<button class="btn btn-default" type="submit">Desapuntarse</button>
 	<% }else{ %>
 		<input type="hidden" name="add" value="yes"/>
 		<button class="btn btn-default" type="submit">Apuntarse</button>
-	<% } %>	
+	<% } %>
 	</form></td>
 </tr>
 <% } %>

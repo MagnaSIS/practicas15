@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
+
 	<div class="panel panel-default">
 		<div class="panel-heading">Editar mi perfil</div>
 		<div class="panel-body" style="margin: 0% 30% 0% 30%">
@@ -11,7 +8,7 @@
 						<label for="name_edit">Nombre</label>
 					</div>
 					<div class="col-md-6">
-						<input autofocus name="name_edit" id="name_edit" class="form-control" type="text" value="<%= student.name %>">
+						<input autofocus name="name_edit" id="name_edit" class="form-control" type="text" pattern="(^[a-zA-Z]{1,20}$)" value="<%= student.name %>">
 					</div>
 				</div>
 				<hr>
@@ -20,7 +17,7 @@
 						<label for="surname_edit">Apellido</label>
 					</div>
 					<div class="col-md-6">
-						<input name="surname_edit" id="surname_edit" class="form-control" type="text" value="<%= student.surname %>">
+						<input name="surname_edit" id="surname_edit" class="form-control" type="text" pattern="(^[a-zA-Z]{1,20}$)" value="<%= student.surname %>">
 					</div>
 				</div>
 				<hr>
@@ -56,10 +53,10 @@
 						<label for="specialisation_edit">Especialización</label>
 					</div>
 					<div class="col-md-6">
-						<select class="form-control" id="specialisation_edit" name="specialisation_edit">  
+						<select class="form-control" id="specialisation_edit" name="specialisation_edit">
 							<option value="C" <% if (student.specialisation === "C") { %> selected <% } %> >Computación</option>
-							<option value="IC" <% if (student.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>  
-							<option value="IS" <% if (student.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>  
+							<option value="IC" <% if (student.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
+							<option value="IS" <% if (student.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
 						</select>
 					</div>
 				</div>
@@ -70,5 +67,3 @@
 			</form>
 		</div>
 	</div>
-</body>
-</html>

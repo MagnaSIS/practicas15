@@ -81,11 +81,11 @@ exports.create = function(req,res){
 				console.log('Correo no validado');
 				req.session.errors =[{"message": 'Correo no validado'}];
 			}
-			
+
 			if (user.locked){
 				error=true;
 				console.log('Usuario bloqueado');
-				req.session.errors =[{"message": 'Cuenta bloqueada'}];				
+				req.session.errors =[{"message": 'Cuenta bloqueada'}];
 			}
 			if (!error){
 				req.session.user = {email: user.email, role: user.role, id: user.id};
