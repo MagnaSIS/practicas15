@@ -63,6 +63,7 @@ exports.create = function(req,res) {
           		host=req.get('host');
           		link="http://"+req.get('host')+"/students/verify/"+uuid4;
 
+
               	var transporter = nodemailer.createTransport({
               		service: 'gmail',
               		auth: {
@@ -70,6 +71,7 @@ exports.create = function(req,res) {
               			pass: 'Magna1234.'
               		}
               	});
+
 
               	transporter.sendMail({
               		from: 'magnanode@gmail.com',
@@ -145,9 +147,10 @@ exports.mostrarOK = function(req,res){
         	transporter.sendMail({
         		from: 'magnanode@gmail.com',
         		to: user1.email,
-        		subject: 'PlaeForMe: Modificar Contraseña',
+        		subject: 'placeForMe: Modificar Contraseña',
         		html : "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href="+link+">Presiona aquí para modificar el password</a>"
         	});
+
 
   console.log('Mensaje OKPASS');
   console.log(user1.email);
@@ -214,6 +217,7 @@ exports.updatePassword = function(req, res, Id) {
 
 //  }
 };
+
 
 
 //Autoload :id
@@ -309,6 +313,7 @@ exports.courses = function(req,res) {
 	}).catch(function(error){
 		 console.log("error cach3");
 		 res.render('student/courses.ejs',{courses:[],total:[], errors:error });
+
 	 });
 }
 

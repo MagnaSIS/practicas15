@@ -1,8 +1,3 @@
-﻿
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
 	<div class="panel panel-default">
 		<div class="panel-heading">Crear asignatura</div>
 		<div class="panel-body">
@@ -10,16 +5,16 @@
 				<form method="post" action="/course/create">
 					<div class="row">
 						<div class="col-md-6">
-							<label for="name">Nombre Asignatura:<span class="required">*</span></label>  
+							<label for="name">Nombre Asignatura:<span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
-							<input class="form-control"type="text" id="name" name="course[name]" placeholder="Nombre" required="required" autofocus="autofocus"/>
+							<input class="form-control"type="text" id="name" name="course[name]" placeholder="Nombre" pattern="(^[a-zA-Z]{1,20}$)" required="required" autofocus="autofocus"/>
 						</div>
 					</div>
 					<hr>
 					<div class="row">
 						<div class="col-md-6">
-							<label for="creditos">Número Créditos:<span class="required">*</span></label>  
+							<label for="creditos">Número Créditos:<span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
 							<input class="form-control" type="creditos" id="creditos" name="course[credits]" placeholder="Creditos" required="required"/>
@@ -28,20 +23,20 @@
 					<hr>
 					<div class="row">
 						<div class="col-md-6">
-							<label for="especialidad">Especialidad:</label> 
+							<label for="especialidad">Especialidad:</label>
 						</div>
 						<div class="col-md-6">
-							<select class="form-control" id="especialidad" name="course[specialisation]">  
+							<select class="form-control" id="especialidad" name="course[specialisation]">
 								<option value="C" <% if (course.specialisation === "C") { %> selected <% } %> >Computación</option>
-								<option value="IC" <% if (course.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>  
-								<option value="IS" <% if (course.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>  
+								<option value="IC" <% if (course.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
+								<option value="IS" <% if (course.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
 							</select>
 						</div>
 					</div>
 					<hr>
 					<div class="row">
 						<div class="col-md-6">
-							<label for="plazas">Número plazas: <span class="required">*</span></label>  
+							<label for="plazas">Número plazas: <span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
 							<input class="form-control" type="text" id="plazas" name="course[vacancies]" placeholder="Número de plazas" required="required" autofocus="autofocus"/>
@@ -50,7 +45,7 @@
 					<hr>
 					<div class="row">
 						<div class="col-md-6">
-							<label for="descripcion">Descripción: <span class="required">*</span></label>  
+							<label for="descripcion">Descripción: <span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
 							<textarea class="form-control" id="message" name="course[description]" value="<%= course.description %>" placeholder="Escribe la descripción de la asignatura." required="required"></textarea>
@@ -64,16 +59,3 @@
 			</div>
 		</div>
 	</div>
-</body>
-</html>
-
- 	   <% if (errors.length) { %>
-	      <span>
-		Corregir errores:<br/>
-		<% for (var i in errors) { %>
-		   <span> <%= errors[i].message %> </span><br/>
-		<% } %>
-	      </span>
-	    <% } %>
-	<br/>
-	
