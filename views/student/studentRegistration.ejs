@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<!--
-		Author: W3layouts
-		Author URL: http://w3layouts.com
-		License: Creative Commons Attribution 3.0 Unported
-		License URL: http://creativecommons.org/licenses/by/3.0/
-		type="text/javascript"
-		type="application/x-javascript"
-	-->
-
-</head>
-<body>
 	<div class="panel panel-default">
 		<div class="panel-heading">Registrarse</div>
 		<div class="panel-body">
@@ -19,15 +5,15 @@
 				<form method='post' action='students' >
 			<!--	<form method='post' action='students' onsubmit="return check()"> -->
 					<div class="row">
-						<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="/^([a-zA-Z]+[a-zA-Z]$)/"/>
+						<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z]{1,20}$)"/>
 					</div>
 					<hr>
 					<div class="row">
-						<input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="/^([a-zA-Z]+[a-zA-Z]$)/"/>
+						<input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="(^[a-zA-Z]{1,20}$)"/>
 					</div>
 					<hr>
 					<div class="row">
-						<input class="form-control" required type="text" pattern="/^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/" placeholder="tuCorreo@ikasle.ehu.eus" name="email" id="email"/>
+						<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" placeholder="tuCorreo@ikasle.ehu.eus" name="email" id="email"/>
 					</div>
 					<hr>
 					<div class="row">
@@ -44,5 +30,3 @@
 			</div>
 		</div>
 	</div>
-</body>
-</html>

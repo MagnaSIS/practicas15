@@ -1,8 +1,3 @@
-
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
 	<div class="panel panel-default">
 		<div class="panel-heading">Login</div>
 		<div class="panel-body">
@@ -10,11 +5,11 @@
 				<% if (!session.user) {%>
 					<form method="post" action="login">
 						<div class="row">
-							<input class="form-control" type="text" id="login" name="login" size="30" placeholder="Correo" autofocus/>
+							<input class="form-control" type="text" id="login" name="login" pattern="(^[a-zA-Z]{1,20}$)" size="30" placeholder="Correo" autofocus/>
 						</div>
 						<hr>
 						<div class="row">
-							<input class="form-control" type="password" id="password" name="password" size="30" placeholder="Contraseña"/>
+							<input class="form-control" type="password" id="password" name="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" size="30" placeholder="Contraseña"/>
 						</div>
 						<hr>
 						<div class="row">
@@ -37,5 +32,3 @@
 			</div>
 		</div>
 	</div>
-</body>
-</html>

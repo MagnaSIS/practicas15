@@ -1,9 +1,3 @@
-
-
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
 	<div class="panel panel-default">
 		<div class="panel-heading">Editar usuario (ID: <%= user.id %>)</div>
 		<div class="panel-body">
@@ -14,7 +8,7 @@
 							<label for="email">Email</label>
 						</div>
 						<div class="col-md-6">
-							<input autofocus class="form-control" name="email" id="name" type="text" placeholder="<%= user.email %>">
+							<input autofocus class="form-control" name="email" id="name" type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" placeholder="<%= user.email %>">
 						</div>
 					</div>
 					<hr>
@@ -23,7 +17,7 @@
 							<label for="password">Cambiar contraseña</label>
 						</div>
 						<div class="col-md-6">
-							<input class="form-control" name="password" id="password" type="password" placeholder="Contraseña">
+							<input class="form-control" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" id="password" type="password" placeholder="Contraseña">
 						</div>
 					</div>
 					<hr>
@@ -34,8 +28,3 @@
 			</div>
 		</div>
 	</div>
-</body>
-</html>
-
-	
-	

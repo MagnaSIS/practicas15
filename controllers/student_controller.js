@@ -137,7 +137,7 @@ exports.mostrarOK = function(req,res){
         	transporter.sendMail({
         		from: 'magnanode@gmail.com',
         		to: user1.email,
-        		subject: 'PlaeForMe: Modificar Contraseña',
+        		subject: 'placeForMe: Modificar Contraseña',
         		html : "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href="+link+">Presiona aquí para modificar el password</a>"
         	});
 
