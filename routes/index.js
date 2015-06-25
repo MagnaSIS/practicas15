@@ -53,7 +53,7 @@ router.post('/students',						managerController.notExistStudents, studentControl
 router.get('/students/edit', 					sessionController.isStudent,		studentController.edit);
 router.put('/students/update',					sessionController.isStudent,		studentController.update);
 //router.get('/students/:studentId(\\d+)', 											studentController.edit);
-router.get('/students/verify/:Id',   												studentController.verify);
+router.get('/students/verify/:verificationToken',   												studentController.verify);
 //router.delete('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.destroy);
 router.get('/students/courses',			sessionController.isStudent,	studentController.courses);
 router.post('/students/manageCourses',	sessionController.isStudent,	studentController.manageCourses);

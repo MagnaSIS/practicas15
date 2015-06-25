@@ -193,12 +193,23 @@ exports.updatePassword = function(req, res, Id) {
 }
 //Modificación en base de datos sobre su existencia.
 exports.verify = function(req,res){
-
-  var user = req.user;
-  user.isValidate=true;
-  user.save().then(function(){
-      res.redirect('/login');
-      });
+	models.User.findOne({where: {confirmationToken:req.verificationToken}}).then(function(user){
+		if (user){
+			user.isValidate=true;
+			user.save().then(function(){
+				res.redirect('/login');
+			}).catch(function(error){
+				console.log("Error al actualizar usuario");
+				res.render('/students/verify', {errors:error} );
+			});
+		}else{
+			error = new Error("Usuario no encontrado");
+			res.render('/students/verify', {errors:error} );
+		}
+	}).catch(function(error){
+	 console.log("Error al actualizar usuario");
+	 res.render('/login', {errors:error });
+ 	});
 };
 
 exports.edit = function(req,res){
