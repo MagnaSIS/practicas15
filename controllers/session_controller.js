@@ -19,6 +19,10 @@
 var models=require("../models/models.js");
 var util=require("../includes/utilities.js");
 
+
+
+
+
 //Check if user is login
 exports.loginRequired = function (req,res,next){
 		if (req.session.user){

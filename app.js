@@ -32,14 +32,17 @@ var methodOverride = require ('method-override');
 
 
 
-
-
-
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+//Set Application on development mode
+
+//app.set('env', 'development');
+//development || production
+app.set('env', 'production');
+
 app.use(partials());
 
 // uncomment after placing your favicon in /public
@@ -85,7 +88,7 @@ app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err = new Error('Página no encontrada');
   err.status = 404;
   next(err);
 });
@@ -109,12 +112,25 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
+	console.log("catch error...");
   res.status(err.status || 500);
+ 
+  var errors=req.session.errors || {};
+  req.session.errors={};
+  
   res.render('error', {
+	  message: err.message,
+	  error: {}, 
+	  errors: errors 
+	  });
+  
+  
+ /* res.render('error', {
     message: err.message,
     error: {},
     errors: []
-  });
+  });*/
+  
 });
 
 

@@ -18,9 +18,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.param('courseId', 	courseController.load);  // autoload :courseId
-router.param('userId', 		userController.load);
-router.param('Id',			studentController.load);
-router.param('Id',			managerController.load);
+router.param('userId', 		userController.checkUserId);
 router.param('emailId', 	studentController.loadEmail);
 
 module.exports = router;
@@ -40,6 +38,11 @@ router.delete('/logout',	sessionController.loginRequired,	sessionController.dest
 
 router.get('/modifipass',		studentController.formPassword);
 router.get('/modifipass/:emailId/okpass',		studentController.mostrarOK);
+router.get('/modifipass//okpass', function(req, res, next) {
+	req.session.errors =[{"message": 'No has introducido ningun email'}];
+	next();
+}, studentController.formPassword);
+
 router.get('/modifipass/:Id/edit',		studentController.editPassword);
 router.put('/modifipass/:Id',		studentController.updatePassword);
 /*
@@ -50,7 +53,7 @@ router.post('/students',						managerController.notExistStudents, studentControl
 router.get('/students/edit', 					sessionController.isStudent,		studentController.edit);
 router.put('/students/update',					sessionController.isStudent,		studentController.update);
 //router.get('/students/:studentId(\\d+)', 											studentController.edit);
-router.get('/students/verify/:Id',   												studentController.verify);
+router.get('/students/verify/:verificationToken',   												studentController.verify);
 //router.delete('/students/:userId(\\d+)',	sessionController.isStudent,	studentController.destroy);
 router.get('/students/courses',			sessionController.isStudent,	studentController.courses);
 router.post('/students/manageCourses',	sessionController.isStudent,	studentController.manageCourses);
@@ -60,7 +63,7 @@ router.post('/students/manageCourses',	sessionController.isStudent,	studentContr
 */
 router.get('/manager',						sessionController.isAdmin,										managerController.new);
 router.post('/manager',						sessionController.isAdmin,	managerController.notExistManager,  managerController.create);
-router.get('/manage/password/:Id',																			managerController.password);
+router.get('/manage/password/:token',																		managerController.password);
 router.put('/manage/createpassword',																		managerController.putPassword);
 router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.destroy);
 router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,										managerController.edit);

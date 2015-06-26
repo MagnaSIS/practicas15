@@ -4,27 +4,6 @@ var util   = require("../includes/utilities.js");
 var uuid = require('node-uuid');
 var nodemailer = require('nodemailer');
 
-exports.load = function(req,res, next, Id) {
-
-  models.User.find({
-      where:{
-        confirmationToken: Id
-      }
-  }).then(function(user) {
-      if (user) {
-        req.user = user;
-        console.log("Verificado correctamente");
-        //res.write("Verificado correctamente");
-        next();
-      } else{next(new Error('No existe el Token= ' + Id))}
-    }
-  ).catch(function(error){next(error)});
-
-  //console.log(req.protocol+":/"+req.get('host'));
-  //res.redirect('/login');
-
-};
-
 exports.new = function(req,res){
 
 	models.User.findAll().then(
