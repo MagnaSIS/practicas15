@@ -16,15 +16,23 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// models/student_course.js
+exports.encrypt = (function(password){
+	var crypto = require('crypto');
+	return (crypto.createHash('sha256').update(password).digest('base64'));
+});
 
-module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('Student_Course', {
-        student_priority: {
-            type: DataTypes.INTEGER,
-        },
-        course_position: {
-            type: DataTypes.INTEGER,
-        }
-    });
-}
+
+exports.requiredSecureConection = function (req,res,next){
+	var url = "https://"+ req.headers.host + ':'+ process.env.SECUREPORT+req.url;
+	console.log("local port= " + process.env.PORT);
+	console.log("local Secureport= " + process.env.SECUREPORT);
+	console.log("url="+url);
+	
+	if (!req.secure) {
+		 console.log("no secure Connection");
+		 res.redirect(url);
+	 }else{
+		 console.log("Secure Connection");
+		 next();
+	 }
+};

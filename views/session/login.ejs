@@ -1,0 +1,34 @@
+	<div class="panel panel-default">
+		<div class="panel-heading">Login</div>
+		<div class="panel-body">
+			<div style="margin: 0% 40% 0% 40%">
+				<% if (!session.user) {%>
+					<form method="post" action="login">
+						<div class="row">
+							<input class="form-control" type="text" id="login" name="login"  pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" size="30" placeholder="Correo" autofocus/>
+						</div>
+						<hr>
+						<div class="row">
+							<input class="form-control" type="password" id="password" name="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" size="30" placeholder="Contraseña"/>
+						</div>
+						<hr>
+						<div class="row">
+							<input class="btn btn-default" name="commit" type="submit" value="Login"/>
+						</div>
+						<hr>
+						<div class="row">
+							<a href="/students">Registrate</a>
+							<br/><br/>
+							<a href="/modifipass">¿No recuerdas tú contraseña?, da click para recuperarla.</a>
+						</div>
+					</form>
+				<% } else { %>
+					<div class="alert alert-success">
+						<p><b>¡Ya estas conectado!</b></p>
+						<p><b>Correo:</b> <%=session.user.email %></p>
+						<p><b>Tipo de usuario:</b> <%=session.user.role%></p>
+					</div>
+				<% } %>
+			</div>
+		</div>
+	</div>

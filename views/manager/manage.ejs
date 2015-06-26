@@ -1,0 +1,55 @@
+	<div class="panel panel-default">
+		<div class="panel-heading">Gentión de usuarios</div>
+		<div class="panel-body">
+			<div>
+				<form method="post" action="manager">
+					<div class="row" style="margin: 0% 25% 0% 25%">
+						<div class="col-md-3"><label>Nuevo manager:</label></div>
+						<div class="col-md-3"><input required autofocus class="form-control" type="text" placeholder="Email" name="email"/></div>
+						<div class="col-md-3"><input class="btn btn-default" type="submit" value="Registrar"></div>
+					</div>
+				</form>
+			</div>
+			<br>
+			<table class="table table-striped">
+				<tr>
+					<th>ID</th>
+					<th>Email</th>
+					<th>Tipo</th>
+					<th>Validado</th>
+					<th>Activado</th>
+					<th>Fecha de creación</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<% var i; for (i=0; i < users.length; i++) { %>
+					<tr>
+						<td><%= users[i].id %></td>
+						<td><%= users[i].email %></td>
+						<td>
+							<% if (users[i].role === "ADMIN") { %> Administrador <% } %>
+							<% if (users[i].role === "MANAGER") { %> Gestor <% } %>
+							<% if (users[i].role === "STUDENT") { %> Estudiante <% } %>
+						</td>
+						<td><% if(users[i].isValidate){ %>Si<% }else{ %>No<% } %></td>
+						<td>
+							<input <% if (users[i].role === "ADMIN") { %> disabled <% } %> 
+							<% if (!users[i].locked) { %> checked <% } %>
+							onclick="window.location='/user/changelock/<%= users[i].id %>';" type="checkbox">
+						</td>
+						<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
+						<td>
+							<form method="post" action="/manager/<%= users[i].id %>/edit?_method=get">
+								<button class="btn btn-default" type="submit">Editar</button>
+							</form>
+						</td>
+						<td>
+							<form method="post" action="/manager/<%= users[i].id %>?_method=delete">
+								<button <% if (users[i].role === "ADMIN") { %> disabled <% } %> class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
+							</form>
+						</td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+	</div>

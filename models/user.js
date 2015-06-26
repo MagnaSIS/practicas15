@@ -1,5 +1,5 @@
-/**  
-*   placeForMe - 
+/**
+*   placeForMe -
 *   Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
 *
 *   This program is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Correo"
+                    msg: "Falta escribir el correo electrónico"
                 }
             }
         },
@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Password"
+                    msg: "Falta escribir el password"
                 }
             }
         },
@@ -46,9 +46,24 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: "STUDENT",
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Rol"
+                    msg: "Falta definir el rol"
                 },
-            },
-        }
+            }
+        },
+        locked: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        isValidate: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        confirmationToken: {
+            type: DataTypes.STRING,
+        },
+        lang: {
+            type: DataTypes.STRING,
+            values: ["es", "eus"],
+        },
     });
 }

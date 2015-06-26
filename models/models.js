@@ -22,7 +22,20 @@ var path = require('path');
 
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
 // SQLite   DATABASE_URL = sqlite://:@:/
+//Pruebas locales
+if (false){
+        DATABASE_URL = "sqlite://:@:/";
+        DATABASE_STORAGE = "placeForMe.sqlite";
+
+        var url = DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+var storage = DATABASE_STORAGE;
+
+}else{
 var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+var storage = process.env.DATABASE_STORAGE;
+
+}
+
 var DB_name = (url[6] || null);
 var user = (url[2] || null);
 var pwd = (url[3] || null);
@@ -30,7 +43,8 @@ var protocol = (url[1] || null);
 var dialect = (url[1] || null);
 var port = (url[5] || null);
 var host = (url[4] || null);
-var storage = process.env.DATABASE_STORAGE;
+//var storage = process.env.DATABASE_STORAGE;
+
 
 // Cargar Modelo ORM
 var Sequelize = require('sequelize');
@@ -52,7 +66,8 @@ var Course = sequelize.import(path.join(__dirname, 'course'));
 var StudentCourse = sequelize.import(path.join(__dirname, 'student_course'));
 
 // Relaciones
-Student.belongsTo(User);
+Student.belongsTo(User, {onDelete: 'cascade'});
+
 Student.belongsToMany(Course, {
     through: StudentCourse
 });
@@ -60,10 +75,14 @@ Course.belongsToMany(Student, {
     through: StudentCourse
 });
 
+StudentCourse.belongsTo(Student, {onDelete: 'cascade'});
+StudentCourse.belongsTo(Course, {onDelete: 'cascade'});
+
 exports.User = User;
 exports.Student = Student;
 exports.Course = Course;
 exports.StudentCourse = StudentCourse;
+exports.Sequelize = sequelize;
 
 sequelize.sync().then(function() {
     console.log('Base de datos abierta');

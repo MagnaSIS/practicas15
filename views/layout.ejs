@@ -1,28 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <title> placeForMe </title>
-    <link rel="stylesheet"
-          type="text/css"
-          href="/stylesheets/style.css"/>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>placeForMe</title>
+	<link rel='stylesheet' href='/bootstrap-3.3.5-dist/css/bootstrap.css' />
+<!--	<script  src="scripts/myScriptEstudiante.js" type="text/javascript" >
+
+</script> -->
+
 </head>
+
 <body>
-<div id="page-wrap">
-    <header class="main" id="h1">
-        <h1>placeForMe</h1>
-    </header>
-    <nav class="main" id="n1" role="navigation">
-        <span><a href="/">Inicio</a></span>
-        <span><a href="/login">Login</a></span>
-        <span><a href="/logout">Logout</a></span>
-    </nav>
-    <section class="main" id="s1">
-        <%- body %>
-    </section>
-    <footer class="main" id="f1">
-        <a href="http://www.magnasis.com">By Magna SIS</a>
-    </footer>
+<div class="panel panel-default">
+	<div class="panel-body">
+		<h1 align="center">placeForMe</h1>
+			
+		<div class="media">
+			<div class="media-body">
+				<nav class="navbar navbar-default">
+					<div style="margin: 0% 30% 0% 30%">
+						<div class="container-fluid">
+							<div class="collapse navbar-collapse">
+		    					<ul class="nav navbar-nav nav-pills">
+									<li><a class="navbar-link" href="/">Inicio</a></li>
+			        				<% if (session.user) { %>
+										<% if ( session.user.role==="ADMIN") { %>
+											<li><a class="navbar-link" href="/manager">Gestión de usuarios</a></li>
+										<% } %>
+										<% if ( session.user.role==="STUDENT") { %>
+											<li><a class="navbar-link" href="/students/courses">Mis Asignaturas</a></li>
+										<% } %>
+										<% if ( session.user.role==="STUDENT") { %>
+											<li><a class="navbar-link" href="/students/edit">Editar mi cuenta</a></li>
+										<% } %>
+										<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
+											<li><a class="navbar-link" href="/course">Gestión de asignaturas</a></li>
+										<% } %>
+									<% } %>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</nav>
+			</div>
+			<div class="media-right">
+				<% if (!session.user) { %>
+					<form action="/login">
+						<button class="btn btn-default" type="submit">Login</button>
+					</form>
+				<% }else{ %>
+					<form method="post" action="/logout?_method=delete">
+						<button class="btn btn-default" type="submit">Logout</button>
+					</form>
+				<% } %>
+			</div>
+		</div>
+		
+
+		<section  id="s1">
+			<div>
+				<% if ( !(typeof errors==="undefined") && errors.length) { %>
+					<div class="errors">
+					<% for (var i in errors) { %>
+						<div align="center" class="alert alert-danger alert-dismissible" role="alert">
+							<%= errors[i].message %>
+						</div>
+					<% } %>
+				<% } %>
+			</div>
+			<div align="center">
+				<%- body %>
+			</div>
+		</section>
+	</div>
+	<div class="panel-footer" align="center">
+		placeForMe  Copyright (C) 2015 by Magna SIS <magnasis@magnasis.com>
+	</div>
 </div>
 </body>
 </html>

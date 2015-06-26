@@ -1,0 +1,61 @@
+	<div class="panel panel-default">
+		<div class="panel-heading">Modificar asignatura (ID: <%= course.id %>)</div>
+		<div class="panel-body">
+			<div style="margin: 0% 30% 0% 30%">
+				<form method="post" action="/course/<%= course.id %>?_method=put">
+					<div class="row">
+						<div class="col-md-6">
+							<label for="name">Nombre Asignatura: <span class="required">*</span></label>
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" type="text" id="name" name="course[name]" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= course.name %>" required="required" autofocus="autofocus"/>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="creditos">Número Créditos: <span class="required">*</span></label>
+						</div>
+						<div class="col-md-6">
+							<input class="form-control" type="creditos" id="creditos" name="course[credits]" value="<%= course.credits %>" required="required"/>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="especialidad">Especialidad: </label>
+						</div>
+						<div class="col-md-6">
+							<select id="especialidad" class="form-control" name="course[specialisation]">
+								<option value="C" <% if (course.specialisation === "C") { %> selected <% } %> >Computación</option>
+								<option value="IC" <% if (course.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
+								<option value="IS" <% if (course.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="plazas">Número plazas: <span class="required">*</span></label>
+						</div>
+						<div class="col-md-6">
+							<input type="text" id="plazas" class="form-control" name="course[vacancies]" value="<%= course.vacancies %>" required="required" autofocus="autofocus"/>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="descripcion">Descripción: <span class="required">*</span></label>
+						</div>
+						<div class="col-md-6">
+							<textarea id="descripcion" name="course[description]" class="form-control"  required="required"><%= course.description %></textarea>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<input class="btn btn-default" type="submit" value="Guardar" id="submit" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>

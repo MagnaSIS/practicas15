@@ -1,0 +1,30 @@
+	<div class="panel panel-default">
+		<div class="panel-heading">Formulario para modificar password del usuario</div>
+		<div class="panel-body">
+			<div style="margin: 0% 30% 0% 30%">
+
+				<div class="row">
+					<div class="col-md-6">
+						<label>Email</label>
+					</div>
+					<div class="col-md-6">
+						<input class="form-control" type="text" id="email" name="email" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" required="required" size="30" placeholder="Correo" autofocus/>
+					</div>
+				</div>
+
+				<script type="text/javascript">
+					function checkInput() {
+						var textInput = document.getElementById('email').value;
+//						return textInput;
+						location.href="/modifipass/"+ textInput +"/okpass";
+//						return "/modifipass/"+ textInput +"/okpass";
+//						alert(textInput);
+					}
+				</script>
+
+				<br/>
+			<button class="btn btn-default" onclick="checkInput();">Mandar mensaje para cambiar pass</button>
+
+			</div>
+		</div>
+	</div>

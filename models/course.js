@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Nombre"
+                    msg: "Falta escribir un nombre al curso"
                 }
             }
         },
@@ -34,7 +34,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "-> Falta Descripcion"
+                    msg: "Falta  escribir una descripción al curso"
                 }
             }
         },
@@ -46,10 +46,32 @@ module.exports = function(sequelize, DataTypes) {
         credits: {
             type: DataTypes.INTEGER,
             allowNull: false,
+			validate: {
+				isInt: {
+					msg: "El número de créditos debe ser un número entero"
+				},
+                min: {args: [0], msg: "El número de créditos no puede ser menor que 0"},
+			}
         },
         vacancies: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        }
+			validate: {
+				isInt: {
+					msg: "El número de plazas debe ser un número entero"
+				},
+                min: {args: [0], msg: "El número de alumnos no puede ser menor que 0"},
+
+			}
+        },MinimalGrade: {
+        	type: DataTypes.FLOAT,
+        	allowNull: false,
+        	defaultValue:0.0,
+        	validate: {
+        		isFloat: {
+        		  msg: "el grado minimo tiene que ser un float"
+        		}
+        	}
+        } 
     });
 }

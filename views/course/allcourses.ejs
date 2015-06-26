@@ -1,0 +1,25 @@
+	<div class="panel panel-default">
+		<div class="panel-heading">Lista de asignaturas</div>
+		<div class="panel-body">
+			<table class="table tabel-striped">
+				<tr>
+					<th>Nombre</th>
+					<th></th>
+					<th></th>
+				</tr>
+				<% var i; for (i=0; i < course.length; i++) { %>
+					<tr>
+						<td><%= course[i].name %></td>
+						<td><a href="/course/<%= course[i].id %>/edit"><button class="btn btn-default">Modificar asignatura</button></a></td>
+						<td>
+							<form method="post" action="/course/<%= course[i].id %>?_method=delete">
+								<button class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= course[i].name %>');">
+								Borrar
+								</button>
+							</form>
+						</td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+	</div>
