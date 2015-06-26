@@ -17,7 +17,7 @@
   */
 
    var models=require("../models/models.js");
-   var util=require("../includes/utilities.js");
+   var util=require("../libs/utilities.js");
    var calcsController=require("../controllers/calcsController.js");
    var nodemailer = require('nodemailer');
    var uuid = require('node-uuid');

@@ -5,11 +5,11 @@
 				<% if (!session.user) {%>
 					<form method="post" action="login">
 						<div class="row">
-							<input class="form-control" type="text" id="login" name="login"  pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" size="30" placeholder="Correo" autofocus/>
+							<input class="form-control" type="text" id="login" name="login" size="30" placeholder="Correo" autofocus/>
 						</div>
 						<hr>
 						<div class="row">
-							<input class="form-control" type="password" id="password" name="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" size="30" placeholder="Contraseña"/>
+							<input class="form-control" type="password" id="password" name="password" size="30" placeholder="Contraseña"/>
 						</div>
 						<hr>
 						<div class="row">

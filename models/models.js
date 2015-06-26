@@ -23,18 +23,9 @@ var path = require('path');
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
 // SQLite   DATABASE_URL = sqlite://:@:/
 //Pruebas locales
-if (false){
-        DATABASE_URL = "sqlite://:@:/";
-        DATABASE_STORAGE = "placeForMe.sqlite";
 
-        var url = DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
-var storage = DATABASE_STORAGE;
-
-}else{
 var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
 var storage = process.env.DATABASE_STORAGE;
-
-}
 
 var DB_name = (url[6] || null);
 var user = (url[2] || null);
@@ -66,7 +57,9 @@ var Course = sequelize.import(path.join(__dirname, 'course'));
 var StudentCourse = sequelize.import(path.join(__dirname, 'student_course'));
 
 // Relaciones
-Student.belongsTo(User, {onDelete: 'cascade'});
+Student.belongsTo(User, {
+    onDelete: 'cascade'
+});
 
 Student.belongsToMany(Course, {
     through: StudentCourse
@@ -75,8 +68,12 @@ Course.belongsToMany(Student, {
     through: StudentCourse
 });
 
-StudentCourse.belongsTo(Student, {onDelete: 'cascade'});
-StudentCourse.belongsTo(Course, {onDelete: 'cascade'});
+StudentCourse.belongsTo(Student, {
+    onDelete: 'cascade'
+});
+StudentCourse.belongsTo(Course, {
+    onDelete: 'cascade'
+});
 
 exports.User = User;
 exports.Student = Student;
@@ -85,5 +82,20 @@ exports.StudentCourse = StudentCourse;
 exports.Sequelize = sequelize;
 
 sequelize.sync().then(function() {
+    User.count({
+        where: {
+            role: 'ADMIN'
+        }
+    }).then(function(count) {
+        // Si no hay ningun admin, crea uno.
+        if (count < 1) {
+            User.create({
+                email: 'admin@magnasis.com',
+                password: require('../libs/utilities').encrypt('admin'),
+                role: 'ADMIN',
+                isValidate: true,
+            });
+        }
+    })
     console.log('Base de datos abierta');
 });
