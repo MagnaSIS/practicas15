@@ -24,38 +24,47 @@ exports.index = function(req, res) {
 
 // GET /course/allcourses
 exports.show = function(req, res) {
-	models.Course.findAll().then(
-    function(course) {
-      res.render('course/allcourses.ejs', { course: course, errors: []});
+	var action = req.session.action || null;
+	var editedCourse = req.session.course || null;
+	req.session.action=null;
+	req.session.course=null;
+	
+	models.Course.findAll().then(function(courses) {
+      res.render('course/allcourses.ejs', { course: courses,action:action,editedCourse:editedCourse, errors: []});
     }
   ).catch(function(error) { next(error);})
-//  res.render('course/show', { course: req.course, errors: []});
-};            // req.course: instancia de course cargada con autoload
+
+};
 
 
 // GET /course/new
-exports.new = function(req, res) {
-  var course = models.Course.build(
-    {name: "Nombre", description: "Descripcion", specialisation: "Especializacion", credits: "creditos", vacancies: "vacantes"}
+exports.new = function(req, res) { 
+	var course = models.Course.build({
+			name: "Nombre", 
+			escription: "Descripcion", 
+			specialisation: "Especializacion", 
+			credits: "creditos", 
+			vacancies: "vacantes"}
   );
-
-  res.render('course/new', {course: course, errors: []});
+	var newCourse= req.session.newCourse || null;
+	req.session.newCourse=null;
+	res.render('course/new', {course: course,newCourse: newCourse, errors: []});
 };
 
+// POST /course/create
 exports.create = function(req, res) {
-  var course = models.Course.build( req.body.course );
+	var course = models.Course.build( req.body.course );
 
 	console.log(req.body.course["name"]);
-  course
-  .validate()
-  .then(
-    function(err){
-      if (err) {
-        res.render('course/new', {course: course, errors: err.errors});
-      } else {
-        course // save: guarda en DB
-        .save({fields: ["name", "description", "specialisation", "credits", "vacancies"]})
-        .then( function(){ res.redirect('/course')})
+	course.validate().then(function(err){
+		if (err) {
+			res.render('course/new', {course: course, errors: err.errors});
+		} else {
+			//course.save({fields: ["name", "description", "specialisation", "credits", "vacancies"]})
+			course.save().then( function(){ 
+				req.session.newCourse=req.body.course;
+				res.redirect('/course/new')
+			});
       }      // res.redirect: Redirecci�n HTTP a lista de preguntas
     }
   ).catch(function(error){next(error)});
@@ -86,9 +95,12 @@ exports.update = function(req, res) {
       if (err) {
         res.render('course/edit', {course: req.course, errors: err.errors});
       } else {
-        req.course     // save: guarda campos pregunta y respuesta en DB
-        .save( {fields: ["name", "description", "specialisation", "credits", "vacancies"]})
-        .then( function(){ res.redirect('/course');});
+        req.course.save( {
+        	fields: ["name", "description", "specialisation", "credits", "vacancies"]}).then( function(){ 
+        		req.session.action="editado";
+        		req.session.course=req.course.name;
+        		res.redirect('/course/allcourses');
+        	});
       }     // Redirecci�n HTTP a lista de preguntas (URL relativo)
     }
   );
@@ -96,7 +108,9 @@ exports.update = function(req, res) {
 
 // DELETE /course/:id
 exports.destroy = function(req, res) {
-  req.course.destroy().then( function() {
-    res.redirect('/course/allcourses');
-  }).catch(function(error){next(error)});
+	req.course.destroy().then( function() {
+		req.session.action="borrado";
+		req.session.course=req.course.name;
+		res.redirect('/course/allcourses');
+	}).catch(function(error){next(error)});
 };
