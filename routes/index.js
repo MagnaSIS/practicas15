@@ -23,6 +23,11 @@ router.param('emailId', 	studentController.loadEmail);
 
 module.exports = router;
 
+/*GET terms */
+router.get('/terms', function(req, res, next) {
+   res.render('terms'); 
+});
+
 
 /*
 *	User controller
