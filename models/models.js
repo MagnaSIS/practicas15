@@ -23,7 +23,7 @@ var path = require('path');
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
 // SQLite   DATABASE_URL = sqlite://:@:/
 //Pruebas locales
-if (false){
+if (process.env.NODE_ENV){
         DATABASE_URL = "sqlite://:@:/";
         DATABASE_STORAGE = "placeForMe.sqlite";
 
