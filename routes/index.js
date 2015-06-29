@@ -28,6 +28,7 @@ module.exports = router;
 *	User controller
 */
 router.get('/user/changelock/:userId', 				sessionController.isAdmin,			userController.changeLock);
+router.get('/user/confirm', userController.confirm);
 
 /*
 *	Session Controller
@@ -63,11 +64,12 @@ router.post('/students/manageCourses',	sessionController.isStudent,	studentContr
 */
 router.get('/manager',						sessionController.isAdmin,										managerController.new);
 router.post('/manager',						sessionController.isAdmin,	managerController.notExistManager,  managerController.create);
-router.get('/manage/password/:token',																		managerController.password);
+router.get('/manage/password/:token', managerController.password);
 router.put('/manage/createpassword',																		managerController.putPassword);
-router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.destroy);
+router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,	managerController.destroy);
 router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,										managerController.edit);
 router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.update);
+router.post('/admin', sessionController.isAdmin, userController.create);
 
 /*
  * Admin Controller
