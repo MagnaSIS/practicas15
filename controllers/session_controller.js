@@ -59,9 +59,10 @@ exports.isAdmin = function (req,res,next){
 		}
 };
 
-//Check if user is Admin
+//Check if user is Course Admin
 exports.isCourseAdmin = function (req,res,next){
-		if ( req.session.user && (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")){
+	console.log("#####isCourseAdmin="+ typeof(req.session.user));
+		if (req.session.user && ((req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER"))){
 			next();
 		}else{
 			next(new Error("Permiso denegado."));

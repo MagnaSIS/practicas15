@@ -27,7 +27,7 @@ module.exports = router;
 /*
 *	User controller
 */
-router.get('/user/changelock/:userId', 				sessionController.isAdmin,			userController.changeLock);
+
 
 /*
 *	Session Controller
@@ -45,6 +45,7 @@ router.get('/modifipass//okpass', function(req, res, next) {
 
 router.get('/modifipass/:Id/edit',		studentController.editPassword);
 router.put('/modifipass/:Id',		studentController.updatePassword);
+
 /*
 *	Students Controller
 */
@@ -68,6 +69,8 @@ router.put('/manage/createpassword',																		managerController.putPassw
 router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.destroy);
 router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,										managerController.edit);
 router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.update);
+router.get('/manager/changelock/:userId', 		sessionController.isAdmin,										managerController.changeLock);
+
 
 /*
  * Admin Controller

@@ -4,20 +4,30 @@ var util   = require("../includes/utilities.js");
 var uuid = require('node-uuid');
 var nodemailer = require('nodemailer');
 
+//GET /manager
 exports.new = function(req,res){
-
-	models.User.findAll().then(
-    function(user) {
+	models.User.findAll().then(function(user) {
         var errors=req.session.errors || {};
         req.session.errors={};
-        res.render('manager/manage', { users: user, errors: errors});
+        
+        var action=req.session.action || null;
+        var userTmp=req.session.userTmp || null;
+        console.log("action= "+req.session.action + "userTmp= "+req.session.userTmp);
+        req.session.action=null;
+        req.session.userTmp=null;
+        
+        res.render('manager/manage', { users: user, action: action, userTmp: userTmp, errors: errors});
     }
-  ).catch(function(error) { next(error);})
+  ).catch(function(error) {
+	  //no funciona correctamente
+	  console.log(error);
+	  next(new Error(error)); //Next no se utiliza cuando es el controlador final
+	  });
 
 };
 
+//POST /manager
 exports.create = function(req,res) {
-
     var email = req.body.email;
     var uuid4 = uuid.v4();
 
@@ -52,12 +62,14 @@ exports.create = function(req,res) {
 
             //guardar en base de datos
             user.save().then(function(){
+            	 req.session.action="creado";
+            	 req.session.userTmp="administrador " +user.email;
                 res.redirect('/manager');
             });
     }
     else{
         req.session.errors =[{"message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'}];
-        res.render('manager/manage', {errors: req.session.errors});
+        res.redirect('/manager');
     }
 
 };
@@ -121,8 +133,9 @@ exports.destroy = function(req,res){
 
 	console.log(" - La id que se va a borrar: " + req.param("userId"));
 
-    //borrar el user con la id que nos da
     req.user.destroy().then( function() {
+   	 req.session.action="eliminado";
+	 req.session.userTmp=req.user.email;
         res.redirect('/manager');
     }).catch(function(error){next(error)});
 
@@ -150,9 +163,10 @@ exports.update = function(req,res){
         req.user.save({fields: ["email"]});
     if(password != '')
         req.user.save({fields: ["password"]});
-
-    res.redirect('/manager');
-
+    
+    	req.session.action="editado";
+    	req.session.userTmp=req.user.email;
+    	res.redirect('/manager');
 
 };
 
@@ -191,3 +205,18 @@ exports.notExistStudents = function(req,res,next){
         }
     });
 };
+
+//GET /manager/changelock/:userId
+exports.changeLock = function(req,res){
+	req.user.locked=!req.user.locked;
+	req.user.save().then(function(){
+		req.session.action="desbloqueado";
+		if (req.user.locked){
+			req.session.action="bloqueado";
+		}		
+    	req.session.userTmp=req.user.email;
+		res.redirect('/manager');
+	}).catch(function(error){
+		//Throw error...
+	});
+}
