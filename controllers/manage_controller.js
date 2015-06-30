@@ -92,16 +92,16 @@ exports.create = function(req, res) {
 exports.password = function(req, res, next) {
     var errors = req.session.errors || {};
     req.session.errors = {};
-    req.session.token = req.param("Id");
+    req.session.token = req.param("token");
     models.User.find({
         where: {
-            confirmationToken: req.param("Id")
+            confirmationToken: req.param("token")
         }
     }).then(function(user) {
         if (user) {
             console.log(" - Se va a renderizar la pagina de crear un password del usuario: " + user.email);
             res.render('manager/password', {
-                token: req.param("Id"),
+                token: req.param("token"),
                 email: user.email,
                 errors: errors
             });
