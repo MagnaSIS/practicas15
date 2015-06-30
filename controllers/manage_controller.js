@@ -10,6 +10,7 @@ exports.new = function(req,res){
     function(user) {
         var errors=req.session.errors || {};
         req.session.errors={};
+        req.session.where = 'users';
         res.render('manager/manage', { users: user, errors: errors});
     }
   ).catch(function(error) { next(error);})
@@ -57,6 +58,7 @@ exports.create = function(req,res) {
     }
     else{
         req.session.errors =[{"message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'}];
+        req.session.where = 'users';
         res.render('manager/manage', {errors: req.session.errors});
     }
 
@@ -75,6 +77,7 @@ exports.password = function(req,res){
           }).then(function(user) {
               if (user) {
                 console.log(" - Se va a renderizar la pagina de crear un passworddel usuario: " + user.email);
+                req.session.where = '';
                 res.render('manager/password', {token: req.param("Id"), email: user.email, errors: errors});
               } else{next(new Error('No existe el Token= ' + Id))}
             }
@@ -96,6 +99,7 @@ exports.putPassword = function(req,res){
             user.validate().then(function(err){
               if(err){
                 console.log(" - La validacion del usuario actualizado a dado ERROR");
+                req.session.where = '';
                 res.render('manager/password', {token: req.param("Id"), email: user.email, errors: err.errors});
               }
               else{
@@ -110,6 +114,7 @@ exports.putPassword = function(req,res){
         else{
             console.log(" - Error al elegir un usuario del modelo de datos (no se a podido sacar ninguno)");
             req.session.errors =[{"message": 'Este usuario no esta a la espera de crear una contraseña'}];
+            req.session.where = '';
             res.render('manager/password', {errors: req.session.errors});
 
         }
@@ -131,6 +136,7 @@ exports.destroy = function(req,res){
 exports.edit = function(req,res){
 
     console.log(" - La id del usuaro que se va a editar: " + req.param("userId"));
+    req.session.where = 'users';
     res.render('manager/edit', { user: req.user, errors: []});
 
 };

@@ -17,6 +17,7 @@ exports.load = function(req, res, next, courseId) {
 exports.index = function(req, res) {
   models.Course.findAll().then(
     function(course) {
+      req.session.where = 'all_courses';
       res.render('course', { course: course, errors: []});
     }
   ).catch(function(error) { next(error);})
@@ -26,6 +27,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
 	models.Course.findAll().then(
     function(course) {
+      req.session.where = 'all_courses';
       res.render('course/allcourses.ejs', { course: course, errors: []});
     }
   ).catch(function(error) { next(error);})
@@ -38,7 +40,7 @@ exports.new = function(req, res) {
   var course = models.Course.build(
     {name: "Nombre", description: "Descripcion", specialisation: "Especializacion", credits: "creditos", vacancies: "vacantes"}
   );
-
+  req.session.where = 'all_courses';
   res.render('course/new', {course: course, errors: []});
 };
 
@@ -51,6 +53,7 @@ exports.create = function(req, res) {
   .then(
     function(err){
       if (err) {
+        req.session.where = 'all_courses';
         res.render('course/new', {course: course, errors: err.errors});
       } else {
         course // save: guarda en DB
@@ -67,7 +70,7 @@ exports.create = function(req, res) {
 // GET /course/:id/edit
 exports.edit = function(req, res) {
   var course = req.course;  // req.course: autoload de instancia de course
-
+  req.session.where = 'all_courses';
   res.render('course/edit', {course: course, errors: []});
 };
 
@@ -84,6 +87,7 @@ exports.update = function(req, res) {
   .then(
     function(err){
       if (err) {
+        req.session.where = 'all_courses';
         res.render('course/edit', {course: req.course, errors: err.errors});
       } else {
         req.course     // save: guarda campos pregunta y respuesta en DB
@@ -97,6 +101,7 @@ exports.update = function(req, res) {
 // DELETE /course/:id
 exports.destroy = function(req, res) {
   req.course.destroy().then( function() {
+    req.session.where = 'all_courses';
     res.redirect('/course/allcourses');
   }).catch(function(error){next(error)});
 };
