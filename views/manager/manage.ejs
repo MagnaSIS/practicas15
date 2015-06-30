@@ -1,3 +1,10 @@
+<% if (action) { %>
+<script>
+  $(document).ready(function(){
+    alert('Se ha <%=action%> satisfactoriamente el/la administrador/a: <%=userTmp%>');
+  });
+</script>
+<% } %>
 	<div class="panel panel-default">
 		<div class="panel-heading">Gentión de usuarios</div>
 		<div class="panel-body">
@@ -35,7 +42,7 @@
 						<td>
 							<input <% if (users[i].role === "ADMIN") { %> disabled <% } %> 
 							<% if (!users[i].locked) { %> checked <% } %>
-							onclick="window.location='/user/changelock/<%= users[i].id %>';" type="checkbox">
+							onclick="window.location='/manager/changelock/<%= users[i].id %>';" type="checkbox"/>
 						</td>
 						<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
 						<td>

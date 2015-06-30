@@ -40,8 +40,6 @@ exports.create = function(req, res) {
   var apellidos = req.body.lastname;
   var email = req.body.email;
   var password = req.body.password;
-  var user = models.User.build(); //creacion del user
-  var student = models.Student.build(); //creacion del student
   var uuid4 = uuid.v4(); //id único para verificación del usuario
   password = util.encrypt(password);
 
@@ -50,10 +48,10 @@ exports.create = function(req, res) {
   var tmpAvgGrade = 6.5; //idem
   var tmpCredits = 140; //idem
 
-  var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
+  var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)/;
   var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
-
+  /* TODO validar Student Y User antes de crearlos */
   if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
     //guardar en base de datos
     models.User.create({
@@ -72,9 +70,7 @@ exports.create = function(req, res) {
 
         });
         //Envio del correo
-        host = req.get('host');
-        link = "http://" + req.get('host') + "/students/verify/" + uuid4;
-
+        var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
 
         var transporter = nodemailer.createTransport({
           service: 'gmail',
@@ -83,7 +79,6 @@ exports.create = function(req, res) {
             pass: 'Magna1234.'
           }
         });
-
 
         transporter.sendMail({
           from: 'magnanode@gmail.com',
@@ -124,10 +119,9 @@ exports.create = function(req, res) {
       errors: req.session.errors
     });
   }
-}
+};
 
 exports.loadEmail = function(req, res, next, emailId) {
-
   models.User.find({
     where: {
       email: emailId
@@ -140,13 +134,12 @@ exports.loadEmail = function(req, res, next, emailId) {
         next();
       }
       else {
-        next(new Error('No existe emailId=' + emailId))
+        next(new Error('No existe emailId=' + emailId));
       }
     }
   ).catch(function(error) {
-    next(error)
+    next(error);
   });
-
 };
 
 //GET /modifipass
@@ -164,8 +157,7 @@ exports.mostrarOK = function(req, res) {
   var user1 = req.session.user; // req.course: autoload de instancia de course
 
   //Envio del correo
-  host = req.get('host');
-  link = "http://" + req.get('host') + "/modifipass/" + user1.confirmationToken + "/edit";
+  var link = "http://" + req.get('host') + "/modifipass/" + user1.confirmationToken + "/edit";
 
   var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -181,11 +173,10 @@ exports.mostrarOK = function(req, res) {
     subject: 'placeForMe: Modificar Contraseña',
     html: "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href=" + link + ">Presiona aquí para modificar el password</a>"
   });
-
-
-  console.log('Mensaje OKPASS');
-  console.log(user1.email);
-  console.log(user1.confirmationToken);
+  /*
+    console.log('Mensaje OKPASS');
+    console.log(user1.email);
+    console.log(user1.confirmationToken);*/
   delete req.session.user;
   res.render('session/okpass', {
     errors: []
@@ -193,49 +184,50 @@ exports.mostrarOK = function(req, res) {
 };
 
 exports.editPassword = function(req, res) {
-  console.log('Aqui llego 0');
+  //console.log('Aqui llego 0');
   var user = req.user; // req.user: autoload de instancia de course
-  console.log(req.user);
+  //console.log(req.user);
   res.render('session/editpass', {
     user: user,
     errors: []
   });
 
+
 };
 
 exports.updatePassword = function(req, res, Id) {
-    var password = req.body.changepass;
-    var encrypt_password = util.encrypt(password);
+  var password = req.body.changepass;
+  var encrypt_password = util.encrypt(password);
 
-    console.log('Aqui llego pass0');
-    req.user.password = encrypt_password;
-    console.log('Aqui llego pass1');
-    req.user
-      .validate()
-      .then(
-        function(err) {
-          if (err) {
-            res.render('session/editpass', {
-              user: req.user,
-              errors: err.errors
-            });
-            console.log('Aqui llego pass2');
-          }
-          else {
-            console.log('Aqui llego pass3');
-            req.user // save: guarda campos pregunta y respuesta en DB
-              .save({
-                fields: ["password"]
-              })
-              .then(function() {
-                res.redirect('/login');
-              });
-            console.log('Aqui llego pass4');
-          } // Redirecci�n HTTP a lista de preguntas (URL relativo)
+  console.log('Aqui llego pass0');
+  req.user.password = encrypt_password;
+  console.log('Aqui llego pass1');
+  req.user
+    .validate()
+    .then(
+      function(err) {
+        if (err) {
+          res.render('session/editpass', {
+            user: req.user,
+            errors: err.errors
+          });
+          console.log('Aqui llego pass2');
         }
-      );
-  }
-  //Modificación en base de datos sobre su existencia.
+        else {
+          console.log('Aqui llego pass3');
+          req.user // save: guarda campos pregunta y respuesta en DB
+            .save({
+              fields: ["password"]
+            })
+            .then(function() {
+              res.redirect('/login');
+            });
+          console.log('Aqui llego pass4');
+        } // Redirecci�n HTTP a lista de preguntas (URL relativo)
+      }
+    );
+};
+//Modificación en base de datos sobre su existencia.
 exports.verify = function(req, res) {
   models.User.findOne({
     where: {
@@ -257,7 +249,6 @@ exports.verify = function(req, res) {
     }
     else {
       console.log("Usuario no encontrado");
-      err = new Error("Usuario no encontrado");
       res.render('error', {
         message: "Usuario no encontrado",
         error: {},
@@ -288,8 +279,7 @@ exports.edit = function(req, res) {
 };
 
 // PUT
-exports.update = function(req, res) {
-
+exports.update = function(req, res, next) {
   models.Student.findOne({
     where: {
       UserId: req.session.user.id
@@ -302,13 +292,12 @@ exports.update = function(req, res) {
     student.credits = req.body.credits_edit;
     student.year = req.body.year_edit;
     student.specialisation = req.body.specialisation_edit;
-
     student.validate().then(function(err) {
       if (err) {
         res.render('student/edit', {
           student: student,
           errors: err.errors
-        })
+        });
       }
       else {
         student.save({
@@ -321,12 +310,9 @@ exports.update = function(req, res) {
         });
       }
     }).catch(function(error) {
-      next(error)
+      next(error);
     });
-
-
   });
-
 };
 
 /*
@@ -390,14 +376,14 @@ exports.courses = function(req, res) {
       total: [],
       errors: error
     });
-
   });
-}
+};
 
 /*
  * POST /students/manageCourses
  * Edit student course preferences
  */
+
 exports.manageCourses = function(req, res) {
   models.Student.findOne({
     where: {
@@ -463,5 +449,4 @@ exports.manageCourses = function(req, res) {
     req.session.error = "error manageCourses cath2= " + error;
     res.redirect('/students/courses');
   });
-
-}
+};

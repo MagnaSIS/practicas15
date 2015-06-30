@@ -19,8 +19,9 @@
 /*
  * Required Variables
  */
- 
+
 require('dotenv').load(); //Carga variables de entorno desde ficheros .env
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -31,6 +32,7 @@ var session = require('express-session');
 var partials = require('express-partials');
 var methodOverride = require ('method-override');
 var routes = require('./routes/index');
+
 
 
 
@@ -101,6 +103,7 @@ console.log(app.get('env'));
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
+  require('dotenv').load();
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {

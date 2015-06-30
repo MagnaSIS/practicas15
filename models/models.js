@@ -41,7 +41,7 @@ var Sequelize = require('sequelize');
 
 // Usar BBDD SQLite o Postgres
 var sequelize = new Sequelize(DB_name, user, pwd, {
-    dialect: protocol,
+    dialect: dialect,
     protocol: protocol,
     port: port,
     host: host,
@@ -54,6 +54,7 @@ var User = sequelize.import(path.join(__dirname, 'user'));
 var Student = sequelize.import(path.join(__dirname, 'student'));
 var Course = sequelize.import(path.join(__dirname, 'course'));
 var StudentCourse = sequelize.import(path.join(__dirname, 'student_course'));
+var Logs = sequelize.import(path.join(__dirname, 'logs'));
 
 // Relaciones
 Student.belongsTo(User, {
@@ -67,6 +68,7 @@ Course.belongsToMany(Student, {
     through: StudentCourse
 });
 
+
 StudentCourse.belongsTo(Student, {
     onDelete: 'cascade'
 });
@@ -78,6 +80,7 @@ exports.User = User;
 exports.Student = Student;
 exports.Course = Course;
 exports.StudentCourse = StudentCourse;
+exports.Logs = Logs;
 exports.Sequelize = sequelize;
 
 sequelize.sync().then(function() {
@@ -92,9 +95,10 @@ sequelize.sync().then(function() {
                 email: 'admin@magnasis.com',
                 password: require('../libs/utilities').encrypt('admin'),
                 role: 'ADMIN',
+                locked: false,
                 isValidate: true,
             });
         }
-    })
+    });
     console.log('Base de datos abierta');
 });

@@ -16,105 +16,131 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var models=require("../models/models.js");
-var util=require("../libs/utilities.js");
-
-
+var models = require("../models/models.js");
+var util = require("../libs/utilities.js");
 
 
 
 //Check if user is login
-exports.loginRequired = function (req,res,next){
-		if (req.session.user){
-			next();
-		}else{
-			res.redirect('login');
-		}
+exports.loginRequired = function(req, res, next) {
+	if (req.session.user) {
+		next();
+	}
+	else {
+		res.redirect('login');
+	}
 };
 
 //Check if user is Student
-exports.isStudent = function (req,res,next){
-		if (req.session.user && req.session.user.role === "STUDENT"){
-			next();
-		}else{
-			next(new Error("Permiso denegado."));
-		}
+exports.isStudent = function(req, res, next) {
+	if (req.session.user && req.session.user.role === "STUDENT") {
+		next();
+	}
+	else {
+		next(new Error("Permiso denegado."));
+	}
 };
 
 //Check if user is Manager
-exports.isManager = function (req,res,next){
-		if (req.session.user && req.session.user.role === "MANAGER"){
-			next();
-		}else{
-			next(new Error("Permiso denegado."));
-		}
+exports.isManager = function(req, res, next) {
+	if (req.session.user && req.session.user.role === "MANAGER") {
+		next();
+	}
+	else {
+		next(new Error("Permiso denegado."));
+	}
 };
 
 //Check if user is Admin
-exports.isAdmin = function (req,res,next){
-		if (req.session.user && req.session.user.role === "ADMIN"){
-			next();
-		}else{
-			next(new Error("Permiso denegado."));
-		}
+exports.isAdmin = function(req, res, next) {
+	if (req.session.user && req.session.user.role === "ADMIN") {
+		next();
+	}
+	else {
+		next(new Error("Permiso denegado."));
+	}
 };
 
 //Check if user is Admin
-exports.isCourseAdmin = function (req,res,next){
-		if ( req.session.user && (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")){
-			next();
-		}else{
-			next(new Error("Permiso denegado."));
-		}
+exports.isCourseAdmin = function(req, res, next) {
+	if (req.session.user && (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")) {
+		next();
+	}
+	else {
+		next(new Error("Permiso denegado."));
+	}
 };
 
 //Get /login Login Form
-exports.new = function(req,res){
-		var errors=req.session.errors || {};
-		req.session.errors={};
-		res.render('session/login', {errors : errors});
+exports.new = function(req, res) {
+	var errors = req.session.errors || {};
+	req.session.errors = {};
+	res.render('session/login', {
+		errors: errors
+	});
 };
 
 //Post /login Login check
-exports.create = function(req,res){
-	models.User.find({where: {email: req.body.login, password: util.encrypt(req.body.password)}}).then(function(user) {
+exports.create = function(req, res) {
+	models.User.find({
+		where: {
+			email: req.body.login,
+			password: util.encrypt(req.body.password)
+		}
+	}).then(function(user) {
 		if (user) {
-			var error=false;
-			if (!user.isValidate){
-				error=true;
+			var error = false;
+			if (!user.isValidate) {
+				error = true;
 				console.log('Correo no validado');
-				req.session.errors =[{"message": 'Correo no validado'}];
+				req.session.errors = [{
+					"message": 'Correo no validado'
+				}];
 			}
 
-			if (user.locked){
-				error=true;
+			if (user.locked) {
+				error = true;
 				console.log('Usuario bloqueado');
-				req.session.errors =[{"message": 'Cuenta bloqueada'}];
+				req.session.errors = [{
+					"message": 'Cuenta bloqueada'
+				}];
 			}
-			if (!error){
-				req.session.user = {email: user.email, role: user.role, id: user.id};
+			if (!error) {
+				req.session.user = {
+					email: user.email,
+					role: user.role,
+					id: user.id
+				};
 			}
-		} else{
+		}
+		else {
 			console.log('Usuario o contraseña incorrectas');
-			req.session.errors =[{"message": 'Usuario o contraseña incorrectas'}];
+			req.session.errors = [{
+				"message": 'Usuario o contraseña incorrectas'
+			}];
 		}
 		res.redirect("/login");
-	}).catch(function(error){
-		req.session.errors =[{"message": 'Usuario o contraseña incorrectas'} , {"message":("error: " + error) || ""}];
+	}).catch(function(error) {
+		req.session.errors = [{
+			"message": 'Usuario o contraseña incorrectas'
+		}, {
+			"message": ("error: " + error) || ""
+		}];
 		res.redirect("/login");
 	});
 };
 
 //Delete /logout session destroy
-exports.destroy = function (req,res){
+exports.destroy = function(req, res) {
 	delete req.session.user;
 	res.redirect("/");
 };
 
-exports.isValidate = function (req,res,next){
-		if (req.session.user.role === "MANAGER"){
-			next();
-		}else{
-			next(new Error("Permiso denegado."));
-		}
+exports.isValidate = function(req, res, next) {
+	if (req.session.user.role === "MANAGER") {
+		next();
+	}
+	else {
+		next(new Error("Permiso denegado."));
+	}
 };

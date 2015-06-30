@@ -5,13 +5,14 @@
 	<title>placeForMe</title>
 	<link rel='stylesheet' href='/bootstrap-3.3.5-dist/css/bootstrap.css' />
 	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css"/>
-<!--	<script  src="scripts/myScriptEstudiante.js" type="text/javascript" >
-
-</script> -->
 
 </head>
 
 <body>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/js/bootstrap.min.js"></script>
+
 <div class="panel panel-default">
 	<div class="panel-body">
 		<h1 align="center">placeForMe</h1>
@@ -27,6 +28,7 @@
 			        				<% if (session.user) { %>
 										<% if ( session.user.role==="ADMIN") { %>
 											<li><a class="navbar-link" href="/manager">Gestión de usuarios</a></li>
+											<li><a class="navbar-link" href="/manager/viewAllLogs">Visualizar Logs</a></li>
 										<% } %>
 										<% if ( session.user.role==="STUDENT") { %>
 											<li><a class="navbar-link" href="/students/courses">Mis Asignaturas</a></li>
@@ -46,9 +48,7 @@
 			</div>
 			<div class="media-right">
 				<% if (!session.user) { %>
-					<form action="/login">
-						<button class="btn btn-default" type="submit">Login</button>
-					</form>
+					<a class="btn btn-default" href="/login" role="button">Login</a>
 				<% }else{ %>
 					<form method="post" action="/logout?_method=delete">
 						<button class="btn btn-default" type="submit">Logout</button>
@@ -127,21 +127,6 @@
 									<a target = "_blank" href="https://plus.google.com/+Magnasis"class="icon48 icon48-6">Google+</a>
 								</div>
 							</div>
-
-							<!--<ul class="social">
-								<li class="facebook">
-									<a target = "_blank" href="https://www.facebook.com/MagnaSIS" class="icon48 icon48-1">Facebook</a>
-								</li>
-								<li class="twitter">
-									<a target = "_blank" href="https://twitter.com/magnasis" class="icon48 icon48-2">Twitter</a>
-								</li>
-								<li class="linkedin">
-									<a target = "_blank" href="https://www.linkedin.com/company/2687083?trk=tyah&trkInfo=clickedVertical%3Acompany%2Cidx%3A1-2-2%2CtarId%3A1435046170463%2Ctas%3Amagna%20sis" class="icon48 icon48-4">LinkedIn</a>
-								</li>
-								<li class="googleplus">
-									<a target = "_blank" href="https://plus.google.com/+Magnasis"class="icon48 icon48-6">Google+</a>
-								</li>
-							</ul>-->
 						</div>
 					</div>
 				</div>
