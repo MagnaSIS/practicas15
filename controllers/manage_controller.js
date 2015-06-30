@@ -8,13 +8,13 @@ exports.new = function(req, res) {
     var errors = req.session.errors || {};
     models.User.findAll().then(function(user) {
         req.session.errors = {};
-
         var action = req.session.action || null;
         var userTmp = req.session.userTmp || null;
         //console.log("action= "+req.session.action + "userTmp= "+req.session.userTmp);
         req.session.action = null;
         req.session.userTmp = null;
 
+        req.session.where = 'users';
         res.render('manager/manage', {
             users: user,
             action: action,
@@ -22,6 +22,7 @@ exports.new = function(req, res) {
             errors: errors
         });
     }).catch(function(error) {
+        req.session.where = 'users';
         res.render('manager/manage', {
             users: {},
             action: "",
@@ -29,7 +30,6 @@ exports.new = function(req, res) {
             errors: errors
         });
     });
-
 };
 
 //POST /manager
@@ -84,6 +84,7 @@ exports.create = function(req, res) {
         req.session.errors = [{
             "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
         }];
+        req.session.where = 'users';
         res.redirect('/manager');
     }
 
@@ -100,6 +101,7 @@ exports.password = function(req, res, next) {
     }).then(function(user) {
         if (user) {
             console.log(" - Se va a renderizar la pagina de crear un password del usuario: " + user.email);
+            req.session.where = '';
             res.render('manager/password', {
                 token: req.param("token"),
                 email: user.email,
@@ -131,6 +133,7 @@ exports.putPassword = function(req, res, next) {
             user.validate().then(function(err) {
                 if (err) {
                     console.log(" - La validacion del usuario actualizado a dado ERROR");
+                    req.session.where = '';
                     res.render('manager/password', {
                         token: req.param("Id"),
                         email: user.email,
@@ -150,6 +153,7 @@ exports.putPassword = function(req, res, next) {
         }
         else {
             console.log(" - Error al elegir un usuario del modelo de datos (no se a podido sacar ninguno)");
+            req.session.where = '';
             res.render('manager/password', {
                 errors: [{
                     "message": 'Este usuario no esta a la espera de crear una contraseña'
@@ -182,6 +186,7 @@ exports.destroy = function(req, res) {
 };
 
 exports.edit = function(req, res) {
+    req.session.where = 'users';
     res.render('manager/edit', {
         user: req.user,
         errors: []
@@ -246,11 +251,13 @@ exports.changeLock = function(req, res) {
 //GET manager/viewAllLogs
 exports.viewLogs = function(req, res) {
     models.Logs.findAll().then(function(Logs) {
+        req.session.where = 'logs';
         res.render('manager/logs', {
             logs: Logs,
             errors: []
         });
     }).catch(function(error) {
+        req.session.where = 'logs';
         res.render('manager/logs', {
             logs: [],
             errors: error

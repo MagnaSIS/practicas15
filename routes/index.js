@@ -14,6 +14,7 @@ var userController = require('../controllers/user_controller');
 */
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    req.session.where = 'index';
     res.render('index', {
         title: 'placeForMe',
         errors: []
@@ -27,6 +28,7 @@ router.param('emailId', studentController.loadEmail);
 
 /*GET terms */
 router.get('/terms', function(req, res, next) {
+    req.session.where = '';
     res.render('terms');
 });
 
