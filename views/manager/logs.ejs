@@ -1,0 +1,23 @@
+<div class="panel panel-default">
+		<div class="panel-heading">Gentión de usuarios</div>
+		<div class="panel-body">
+			<table class="table table-striped">
+				<tr>
+					<th>User ID</th>
+					<th>Controller</th>
+					<th>Action</th>
+					<th>Details</th>
+					<th>Date</th>
+				</tr>
+				<% var i; for (i=0; i < logs.length; i++) { %>
+					<tr>
+						<td><%= logs[i].userID %></td>
+						<td><%= logs[i].controller %></td>
+						<td><%= logs[i].action %></td>
+						<td><%= logs[i].details %></td>
+						<td><%= logs[i].createdAt %></td>
+					</tr>
+				<% } %>
+			</table>
+		</div>
+	</div>

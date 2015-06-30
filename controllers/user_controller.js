@@ -13,3 +13,14 @@ exports.checkUserId = function(req, res, next, userId) {
   ).catch(function(error){next(error)});
 
 };
+
+exports.notExistUser = function(req,res,next){
+    var email = req.body.email;
+    models.User.find( { where:{ email: email } } ).then(function(user){
+        if(user){
+        	next(new Error("Ya existe el usuario"));
+        }else{
+            next();
+        }
+    });
+};

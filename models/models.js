@@ -20,21 +20,17 @@
 
 var path = require('path');
 
-// Postgres DATABASE_URL = postgres://user:passwd@host:port/database
-// SQLite   DATABASE_URL = sqlite://:@:/
 //Pruebas locales
-if (false){
-        DATABASE_URL = "sqlite://:@:/";
-        DATABASE_STORAGE = "placeForMe.sqlite";
-
-        var url = DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
-var storage = DATABASE_STORAGE;
-
+if (true){
+	DATABASE_URL = "sqlite://:@:/";
+	DATABASE_STORAGE = "../placeForMe.sqlite";
+	var url = DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+	var storage = DATABASE_STORAGE;
 }else{
-var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
-var storage = process.env.DATABASE_STORAGE;
-
+	var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+	var storage = process.env.DATABASE_STORAGE;
 }
+
 
 var DB_name = (url[6] || null);
 var user = (url[2] || null);
@@ -64,6 +60,7 @@ var User = sequelize.import(path.join(__dirname, 'user'));
 var Student = sequelize.import(path.join(__dirname, 'student'));
 var Course = sequelize.import(path.join(__dirname, 'course'));
 var StudentCourse = sequelize.import(path.join(__dirname, 'student_course'));
+var Logs = sequelize.import(path.join(__dirname, 'logs'));
 
 // Relaciones
 Student.belongsTo(User, {onDelete: 'cascade'});
@@ -82,7 +79,21 @@ exports.User = User;
 exports.Student = Student;
 exports.Course = Course;
 exports.StudentCourse = StudentCourse;
+exports.Logs = Logs;
 exports.Sequelize = sequelize;
+
+//Crear usuarios por defecto
+var utils= require('../includes/utilities.js')
+//ADMIN
+User.findOrCreate(
+		{where: {
+			email: 		"admin000@ikasle.ehu.eus",
+			password:	utils.encrypt("Admin1234*"),
+			role:		"ADMIN",
+			locked:		false,
+			isValidate:	true			
+			}});
+//STUDENT
 
 sequelize.sync().then(function() {
     console.log('Base de datos abierta');

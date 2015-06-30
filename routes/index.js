@@ -44,13 +44,13 @@ router.get('/modifipass//okpass', function(req, res, next) {
 }, studentController.formPassword);
 
 router.get('/modifipass/:Id/edit',		studentController.editPassword);
-router.put('/modifipass/:Id',		studentController.updatePassword);
+router.put('/modifipass/:Id',			studentController.updatePassword);
 
 /*
 *	Students Controller
 */
 router.get('/students',																studentController.new);
-router.post('/students',						managerController.notExistStudents, studentController.create);
+router.post('/students',						userController.notExistUser, 		studentController.create);
 router.get('/students/edit', 					sessionController.isStudent,		studentController.edit);
 router.put('/students/update',					sessionController.isStudent,		studentController.update);
 //router.get('/students/:studentId(\\d+)', 											studentController.edit);
@@ -63,14 +63,14 @@ router.post('/students/manageCourses',	sessionController.isStudent,	studentContr
 *	Manager Controller
 */
 router.get('/manager',						sessionController.isAdmin,										managerController.new);
-router.post('/manager',						sessionController.isAdmin,	managerController.notExistManager,  managerController.create);
+router.post('/manager',						sessionController.isAdmin,	userController.notExistUser,  		managerController.create);
 router.get('/manage/password/:token',																		managerController.password);
 router.put('/manage/createpassword',																		managerController.putPassword);
 router.delete('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.destroy);
 router.get('/manager/:userId(\\d+)/edit',	sessionController.isAdmin,										managerController.edit);
 router.put('/manager/:userId(\\d+)',		sessionController.isAdmin,										managerController.update);
-router.get('/manager/changelock/:userId', 		sessionController.isAdmin,										managerController.changeLock);
-
+router.get('/manager/changelock/:userId', 	sessionController.isAdmin,										managerController.changeLock);
+router.get('/manager/viewAllLogs',			sessionController.isAdmin,										managerController.viewLogs);		
 
 /*
  * Admin Controller

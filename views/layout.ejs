@@ -26,6 +26,7 @@
 			        				<% if (session.user) { %>
 										<% if ( session.user.role==="ADMIN") { %>
 											<li><a class="navbar-link" href="/manager">Gestión de usuarios</a></li>
+											<li><a class="navbar-link" href="/manager/viewAllLogs">Visualizar Logs</a></li>
 										<% } %>
 										<% if ( session.user.role==="STUDENT") { %>
 											<li><a class="navbar-link" href="/students/courses">Mis Asignaturas</a></li>

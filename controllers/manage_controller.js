@@ -19,9 +19,7 @@ exports.new = function(req,res){
         res.render('manager/manage', { users: user, action: action, userTmp: userTmp, errors: errors});
     }
   ).catch(function(error) {
-	  //no funciona correctamente
-	  console.log(error);
-	  next(new Error(error)); //Next no se utiliza cuando es el controlador final
+	  res.render('manager/manage', { users: {}, action: "", userTmp: "", errors: errors});
 	  });
 
 };
@@ -61,9 +59,17 @@ exports.create = function(req,res) {
             });
 
             //guardar en base de datos
-            user.save().then(function(){
+            user.save().then(function(newAdmin){
             	 req.session.action="creado";
             	 req.session.userTmp="administrador " +user.email;
+            	 
+         		//save log
+         		models.Logs.create({ 
+         							userID: req.session.user.id, 
+         							controller: "Manage", 
+         							action: "Create Admin",
+         							details: "newAdminID="+newAdmin.id+";email="+newAdmin.email
+         		});
                 res.redirect('/manager');
             });
     }
@@ -75,22 +81,20 @@ exports.create = function(req,res) {
 };
 
 exports.password = function(req,res){
-
-        var errors = req.session.errors || {};
-        req.session.errors = {};
-        req.session.token = req.param("Id");
-        console.log(" - El token se a agregado a la variable 'req.session.token' ("+req.session.token+")");
-        models.User.find({
+	var errors = req.session.errors || {};
+	req.session.errors = {};
+	req.session.token = req.param("Id");
+	models.User.find({
               where:{
                 confirmationToken: req.param("Id")
               }
-          }).then(function(user) {
+	}).then(function(user) {
               if (user) {
-                console.log(" - Se va a renderizar la pagina de crear un passworddel usuario: " + user.email);
+                console.log(" - Se va a renderizar la pagina de crear un password del usuario: " + user.email);
                 res.render('manager/password', {token: req.param("Id"), email: user.email, errors: errors});
               } else{next(new Error('No existe el Token= ' + Id))}
             }
-          )
+          );
 }
 
 exports.putPassword = function(req,res){
@@ -117,35 +121,40 @@ exports.putPassword = function(req,res){
                     res.redirect('/login');
                     });
               }
-            }).catch(function(error){next(error)});
+            }).catch(function(error){
+            	next(error);
+            });
         }
         else{
             console.log(" - Error al elegir un usuario del modelo de datos (no se a podido sacar ninguno)");
-            req.session.errors =[{"message": 'Este usuario no esta a la espera de crear una contraseña'}];
-            res.render('manager/password', {errors: req.session.errors});
-
+            res.render('manager/password', {errors: [{"message": 'Este usuario no esta a la espera de crear una contraseña'}]});
         }
     })
 
 }
 
 exports.destroy = function(req,res){
-
-	console.log(" - La id que se va a borrar: " + req.param("userId"));
-
-    req.user.destroy().then( function() {
-   	 req.session.action="eliminado";
-	 req.session.userTmp=req.user.email;
-        res.redirect('/manager');
-    }).catch(function(error){next(error)});
+	req.user.destroy().then( function() {
+	req.session.action="eliminado";
+	req.session.userTmp=req.user.email;	 
+	//save log
+	models.Logs.create({ 
+						userID: req.session.user.id, 
+						controller: "Manage", 
+						action: "Delete user",
+						details: "userID="+req.user.id+";email="+req.user.email
+	});
+		
+	res.redirect('/manager');
+    }).catch(function(error){
+    	req.session.errors =[{"message": 'Ha ocurrido un error al eliminar al usuario'}];
+    	res.redirect('/manager');
+    	});
 
 };
 
 exports.edit = function(req,res){
-
-    console.log(" - La id del usuaro que se va a editar: " + req.param("userId"));
     res.render('manager/edit', { user: req.user, errors: []});
-
 };
 
 exports.update = function(req,res){
@@ -153,8 +162,6 @@ exports.update = function(req,res){
     var email = req.body.email;
     var password = req.body.password;
     var encrypt_password = util.encrypt(password);
-
-    console.log(" - Email: " + email + " || Password: " + password + " || Encrypt_Password: " + encrypt_password);
 
     req.user.email = email;
     req.user.password = encrypt_password;
@@ -165,45 +172,16 @@ exports.update = function(req,res){
         req.user.save({fields: ["password"]});
     
     	req.session.action="editado";
-    	req.session.userTmp=req.user.email;
+    	req.session.userTmp=req.user.email;   	
+		//save log
+		models.Logs.create({ 
+							userID: req.session.user.id, 
+							controller: "Manage", 
+							action: "edit user",
+							details: "userID="+req.user.id+";email="+req.user.email
+		});
+		
     	res.redirect('/manager');
-
-};
-
-exports.notExistManager = function(req,res,next){
-
-    var email = req.body.email;
-
-    console.log(" - Correo: " + email);
-    models.User.find( { where:{ email: email } } ).then(function(user){
-        if(user){
-            console.log("TIENE QUE SALTAR EL ERROR");
-            req.session.errors =[{"message": 'Este usuario ya existe'}];
-            res.redirect('manager');
-        }
-        else{
-            console.log("NO TIENE QUE SALTAR");
-            next();
-        }
-    });
-};
-
-exports.notExistStudents = function(req,res,next){
-
-    var email = req.body.email;
-
-    console.log(" - Correo: " + email);
-    models.User.find( { where:{ email: email } } ).then(function(user){
-        if(user){
-            console.log("TIENE QUE SALTAR EL ERROR");
-            req.session.errors =[{"message": 'Este usuario ya existe'}];
-            res.redirect('students');
-        }
-        else{
-            console.log("NO TIENE QUE SALTAR");
-            next();
-        }
-    });
 };
 
 //GET /manager/changelock/:userId
@@ -215,8 +193,29 @@ exports.changeLock = function(req,res){
 			req.session.action="bloqueado";
 		}		
     	req.session.userTmp=req.user.email;
+    	
+    	//save log
+    	var action= (req.user.locked)?"locked":"unlocked";
+		models.Logs.create({ 
+							userID: req.session.user.id, 
+							controller: "Manage", 
+							action: "user "+action,
+							details: "userID="+req.user.id+";email="+req.user.email
+		});
+		
 		res.redirect('/manager');
 	}).catch(function(error){
 		//Throw error...
 	});
 }
+
+//GET manager/viewAllLogs
+exports.viewLogs = function(req, res) {
+	models.Logs.findAll().then(function(Logs) {
+		res.render('manager/logs', { logs: Logs, errors: []});
+	    }
+	  ).catch(function(error) { 
+		  res.render('manager/logs', { logs: [], errors: error});		  
+	  })
+	};
+	
