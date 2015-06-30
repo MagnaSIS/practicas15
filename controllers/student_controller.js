@@ -28,6 +28,7 @@ var uuid = require('node-uuid');
 exports.new = function(req, res) {
   var errors = req.session.errors || {};
   req.session.errors = {};
+  req.session.where = '';
   res.render('student/studentRegistration', {
     errors: errors
   });
@@ -115,6 +116,7 @@ exports.create = function(req, res) {
         "message": 'El apellido debe tener letras'
       }];
     }
+    req.session.where = '';
     res.render('student/studentRegistration', {
       errors: req.session.errors
     });
@@ -147,6 +149,7 @@ exports.formPassword = function(req, res) {
   var errors = req.session.errors || {};
   //    req.session.errors={};
   console.log('Mensaje de Formulario');
+  req.session.where = '';
   res.render('session/form', {
     errors: errors
   });
@@ -178,6 +181,7 @@ exports.mostrarOK = function(req, res) {
     console.log(user1.email);
     console.log(user1.confirmationToken);*/
   delete req.session.user;
+  req.session.where = '';
   res.render('session/okpass', {
     errors: []
   });
@@ -186,7 +190,10 @@ exports.mostrarOK = function(req, res) {
 exports.editPassword = function(req, res) {
   //console.log('Aqui llego 0');
   var user = req.user; // req.user: autoload de instancia de course
+
   //console.log(req.user);
+  req.session.where = '';
+
   res.render('session/editpass', {
     user: user,
     errors: []
@@ -196,34 +203,36 @@ exports.editPassword = function(req, res) {
 };
 
 exports.updatePassword = function(req, res, Id) {
-  var password = req.body.changepass;
-  var encrypt_password = util.encrypt(password);
 
-  console.log('Aqui llego pass0');
-  req.user.password = encrypt_password;
-  console.log('Aqui llego pass1');
-  req.user
-    .validate()
-    .then(
-      function(err) {
-        if (err) {
-          res.render('session/editpass', {
-            user: req.user,
-            errors: err.errors
-          });
-          console.log('Aqui llego pass2');
-        }
-        else {
-          console.log('Aqui llego pass3');
-          req.user // save: guarda campos pregunta y respuesta en DB
-            .save({
-              fields: ["password"]
-            })
-            .then(function() {
-              res.redirect('/login');
+    var password = req.body.changepass;
+    var encrypt_password = util.encrypt(password);
+
+    console.log('Aqui llego pass0');
+    req.user.password = encrypt_password;
+    console.log('Aqui llego pass1');
+    req.user
+      .validate()
+      .then(
+        function(err) {
+          if (err) {
+            req.session.where = '';
+            res.render('session/editpass', {
+              user: req.user,
+              errors: err.errors
             });
-          console.log('Aqui llego pass4');
-        } // Redirecci�n HTTP a lista de preguntas (URL relativo)
+            console.log('Aqui llego pass2');
+          }
+          else {
+            console.log('Aqui llego pass3');
+            req.user // save: guarda campos pregunta y respuesta en DB
+              .save({
+                fields: ["password"]
+              })
+              .then(function() {
+                res.redirect('/login');
+              });
+            console.log('Aqui llego pass4');
+          } // Redirecci�n HTTP a lista de preguntas (URL relativo)
       }
     );
 };
@@ -240,6 +249,7 @@ exports.verify = function(req, res) {
         res.redirect('/login');
       }).catch(function(error) {
         console.log("Error al actualizar usuario");
+        req.session.where = '';
         res.render('error', {
           message: "Error al actualizar usuario",
           error: {},
@@ -249,6 +259,7 @@ exports.verify = function(req, res) {
     }
     else {
       console.log("Usuario no encontrado");
+      req.session.where = '';
       res.render('error', {
         message: "Usuario no encontrado",
         error: {},
@@ -257,6 +268,7 @@ exports.verify = function(req, res) {
     }
   }).catch(function(err) {
     console.log("Error al actualizar usuario");
+    req.session.where = '';
     res.render('error', {
       message: "Error al actualizar usuario",
       error: {},
@@ -271,6 +283,7 @@ exports.edit = function(req, res) {
       UserId: req.session.user.id
     }
   }).then(function(student) {
+    req.session.where = 'account';
     res.render('student/edit', {
       student: student,
       errors: []
@@ -294,6 +307,7 @@ exports.update = function(req, res, next) {
     student.specialisation = req.body.specialisation_edit;
     student.validate().then(function(err) {
       if (err) {
+        req.session.where = 'users';
         res.render('student/edit', {
           student: student,
           errors: err.errors
@@ -303,6 +317,7 @@ exports.update = function(req, res, next) {
         student.save({
           fields: ["name", "surname", "specialisation", "year", "avgGrade", "credits"]
         }).then(function(student) {
+          req.session.where = 'users';
           res.render('student/edit', {
             student: student,
             errors: []
@@ -338,6 +353,7 @@ exports.courses = function(req, res) {
             }
           }).then(function(userInCourses) {
             if (userInCourses) {
+              req.session.where = 'my_courses';
               res.render('student/courses.ejs', {
                 courses: courses,
                 userCourses: userInCourses,
@@ -346,6 +362,7 @@ exports.courses = function(req, res) {
               });
             }
             else {
+              req.session.where = 'my_courses';
               res.render('student/courses.ejs', {
                 courses: courses,
                 userCourses: [],
@@ -353,6 +370,7 @@ exports.courses = function(req, res) {
               });
             }
           }).catch(function(error) {
+            req.session.where = 'my_courses';
             res.render('student/courses.ejs', {
               courses: [],
               userCourses: [],
@@ -362,6 +380,7 @@ exports.courses = function(req, res) {
         }
       }).catch(function(error) {
         console.log("error cach2");
+        req.session.where = 'my_courses';
         res.render('student/courses.ejs', {
           courses: [],
           userCourses: [],
@@ -371,6 +390,7 @@ exports.courses = function(req, res) {
     }
   }).catch(function(error) {
     console.log("error cach3");
+    req.session.where = 'my_courses';
     res.render('student/courses.ejs', {
       courses: [],
       total: [],

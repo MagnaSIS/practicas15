@@ -22,6 +22,7 @@ exports.load = function(req, res, next, courseId) {
 exports.index = function(req, res) {
   models.Course.findAll().then(
     function(course) {
+      req.session.where = 'all_courses';
       res.render('course', {
         course: course,
         errors: []
@@ -46,6 +47,7 @@ exports.show = function(req, res) {
   req.session.course = null;
 
   models.Course.findAll().then(function(courses) {
+    req.session.where = 'all_courses';
     res.render('course/allcourses.ejs', {
       course: courses,
       action: action,
@@ -53,6 +55,7 @@ exports.show = function(req, res) {
       errors: errors
     });
   }).catch(function(error) {
+    req.session.where = 'all_courses';
     res.render('course/allcourses.ejs', {
       course: {},
       action: "",
@@ -61,7 +64,6 @@ exports.show = function(req, res) {
     });
   });
 };
-
 
 // GET /course/new
 exports.new = function(req, res) {
@@ -74,6 +76,7 @@ exports.new = function(req, res) {
   });
   var newCourse = req.session.newCourse || null;
   req.session.newCourse = null;
+  req.session.where = 'all_courses';
   res.render('course/new', {
     course: course,
     newCourse: newCourse
@@ -86,6 +89,7 @@ exports.create = function(req, res) {
 
   course.validate().then(function(err) {
     if (err) {
+      req.session.where = 'all_courses';
       res.render('course/new', {
         course: course,
         errors: err.errors
@@ -114,6 +118,7 @@ exports.create = function(req, res) {
 
 // GET /course/:id/edit
 exports.edit = function(req, res) {
+  req.session.where = 'all_courses';
   res.render('course/edit', {
     course: req.course,
     errors: []
@@ -130,6 +135,7 @@ exports.update = function(req, res) {
 
   req.course.validate().then(function(err) {
     if (err) {
+      req.session.where = 'all_courses';
       res.render('course/edit', {
         course: req.course,
         errors: err.errors
@@ -155,7 +161,6 @@ exports.update = function(req, res) {
           ";credits=" + req.course.credits +
           ";vacancies=" + req.course.vacancies
       });
-
     }
   });
 };

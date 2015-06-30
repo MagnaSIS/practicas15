@@ -75,6 +75,7 @@ exports.isCourseAdmin = function(req, res, next) {
 exports.new = function(req, res) {
 	var errors = req.session.errors || {};
 	req.session.errors = {};
+	req.session.where = '';
 	res.render('session/login', {
 		errors: errors
 	});
