@@ -23,7 +23,7 @@ exports.notExistUser = function(req, res, next) {
   var email = req.body.email;
   models.User.find({
     where: {
-      email: email
+      email: email.toLowerCase()
     }
   }).then(function(user) {
     if (user) {

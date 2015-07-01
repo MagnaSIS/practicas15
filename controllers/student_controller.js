@@ -48,14 +48,16 @@ exports.create = function(req, res) {
   var tmpAvgGrade = 6.5; //idem
   var tmpCredits = 140; //idem
 
-  var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)/;
+  var allowedEmail = /^([a-zA-Z]+\d{3})\@(ikasle.ehu)\.(es|eus)$/;
   var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   /* TODO validar Student Y User antes de crearlos */
   if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
+    var emailMatch = email.match(allowedEmail);
     //guardar en base de datos
+    console.log((emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase());
     models.User.create({
-      email: req.body.email,
+      email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
       password: password,
       confirmationToken: uuid4
     }).then(function(newUser) {
