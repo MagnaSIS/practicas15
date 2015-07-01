@@ -9,6 +9,7 @@ var studentController = require('../controllers/student_controller');
 var managerController = require('../controllers/manage_controller');
 var courseController = require('../controllers/course_controller');
 var userController = require('../controllers/user_controller');
+var contactController = require('../controllers/contact_controller');
 /*var calcsController		=	require ('../controllers/course_controller');
 
 */
@@ -98,3 +99,13 @@ module.exports = router;
 
 router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcsController.new);
 */
+
+/*GET contact */
+router.get('/contact', function(req, res, next) {
+    req.session.where = 'contact';
+    res.render('contact');
+});
+/*
+ *  Contact Controller
+ */
+ router.post('/contact', sessionController.loginRequired, sessionController.isStudent, contactController.sendMail);
