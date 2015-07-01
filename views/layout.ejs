@@ -49,6 +49,7 @@
 									<% } %>
 									<% if ( session.user.role==="STUDENT") { %>
 										<li <% if(session.where==='account'){ %>class="active"<% } %>><a class="navbar-link" href="/students/edit">Editar mi cuenta</a></li>
+										<li <% if(session.where==='contact'){ %>class="active"<% } %>><a class="navbar-link" href="/contact">Contactanos</a></li>
 									<% } %>
 									<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
 										<li <% if(session.where==='all_courses'){ %>class="active"<% } %>><a class="navbar-link" href="/course">Gestión de asignaturas</a></li>
