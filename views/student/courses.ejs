@@ -1,12 +1,13 @@
 <table class="table">
 	<tr>
-		<th rowspan="2">Nombre del curso</th>
-		<th rowspan="2">Especialización</th>
-		<th rowspan="2">créditos</th>
-		<th rowspan="2">Plazas</th>
-		<th colspan="3">Alumnos inscritos</th>
-		<th rowspan="2">Detalles</th>
-		<th rowspan="2">Apuntarse</th>
+		<th>Nombre del curso</th>
+		<th>Especialización</th>
+		<th>créditos</th>
+		<th>Plazas</th>
+		<th>Nota mínima</th>
+		<th>Detalles</th>
+		<th>Preferencia</th>
+		<th>Aputarse</th>
 	</tr>
 	<tr>
 		<th>2º</th>
@@ -48,6 +49,14 @@
 	<td><%=inscritos[3]%></td>
 	<td><%=inscritos[4]%></td>
 	<td><%=courses[i].description%></td>
+
+	<td>
+	<% if (esta) {%>
+		<%=userCourses[pos].student_priority%>
+	<% }else { %>
+	0
+	<% } %>
+	</td>
 	<td><form action="/students/manageCourses" method="POST">
 		<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
 	<% if (esta) { %>
