@@ -15,6 +15,8 @@
 					<th>Créditos</th>
 					<th>Especialidad</th>
 					<th>Número de plazas</th>
+					<th>Curso</th>
+					<th>Cuatrimestre</th>
 					<th></th>
 					<th></th>
 				</tr>
@@ -31,6 +33,8 @@
 							<%}%>
 						</td>
 						<td><%= course[i].vacancies %></td>
+						<td><%= course[i].year %></td>
+						<td><%= course[i].semester %></td>
 						<td><a href="/course/<%= course[i].id %>/edit"><button class="btn btn-default">Modificar asignatura</button></a></td>
 						<td>
 							<form method="post" action="/course/<%= course[i].id %>?_method=delete">

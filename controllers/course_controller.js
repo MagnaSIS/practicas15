@@ -132,6 +132,8 @@ exports.update = function(req, res) {
   req.course.specialisation = req.body.course.specialisation;
   req.course.credits = req.body.course.credits;
   req.course.vacancies = req.body.course.vacancies;
+  req.course.year = req.body.course.year;
+  req.course.semester = req.body.course.semester;
 
   req.course.validate().then(function(err) {
     if (err) {
@@ -143,7 +145,7 @@ exports.update = function(req, res) {
     }
     else {
       req.course.save({
-        fields: ["name", "description", "specialisation", "credits", "vacancies"]
+        fields: ["name", "description", "specialisation", "credits", "vacancies", "year", "semester"]
       }).then(function() {
         req.session.action = "editado";
         req.session.course = req.course.name;
@@ -159,7 +161,9 @@ exports.update = function(req, res) {
           ";description=" + req.course.description +
           ";specialisation=" + req.course.specialisation +
           ";credits=" + req.course.credits +
-          ";vacancies=" + req.course.vacancies
+          ";vacancies=" + req.course.vacancies +
+            ";year=" + req.course.year +
+            ";semester=" + req.course.semester
       });
     }
   });

@@ -38,12 +38,12 @@ exports.create = function(req, res) {
     var uuid4 = uuid.v4();
 
     var user = models.User.build();
-    user.email = email;
+    user.email = email.toLowerCase();
     user.role = "MANAGER";
     user.confirmationToken = uuid4;
     user.password = "none";
 
-    var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)/;
+    var allowedEmail = /^(.*)\@(.*)\.(.*)$/;
 
     if (allowedEmail.test(email)) {
 
@@ -82,7 +82,7 @@ exports.create = function(req, res) {
     }
     else {
         req.session.errors = [{
-            "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
+            "message": 'Introduzca un correo válido.'
         }];
         req.session.where = 'users';
         res.redirect('/manager');
@@ -90,26 +90,29 @@ exports.create = function(req, res) {
 
 };
 
+//GET /manage/password/:token
+
 exports.password = function(req, res, next) {
     var errors = req.session.errors || {};
+    var token = req.param("token");
     req.session.errors = {};
-    req.session.token = req.param("token");
+    req.session.token = token;
     models.User.find({
         where: {
-            confirmationToken: req.param("token")
+            confirmationToken: token
         }
     }).then(function(user) {
         if (user) {
             console.log(" - Se va a renderizar la pagina de crear un password del usuario: " + user.email);
             req.session.where = '';
             res.render('manager/password', {
-                token: req.param("token"),
+                token: token,
                 email: user.email,
                 errors: errors
             });
         }
         else {
-            next(new Error('No existe el Token= ' + Id))
+            next(new Error('No existe el Token= ' + token))
         }
     });
 }
@@ -126,7 +129,7 @@ exports.putPassword = function(req, res, next) {
         }
     }).then(function(user) {
         if (user) {
-            console.log(" - Se a elegido el usuario del modelo de datos (" + user.email + ")");
+            console.log(" - Se ha elegido el usuario del modelo de datos (" + user.email + ")");
             user.isValidate = true;
             user.password = util.encrypt(req.body.put_password);
             user.locked = false;
@@ -135,7 +138,7 @@ exports.putPassword = function(req, res, next) {
                     console.log(" - La validacion del usuario actualizado a dado ERROR");
                     req.session.where = '';
                     res.render('manager/password', {
-                        token: req.param("Id"),
+                        token: token,
                         email: user.email,
                         errors: err.errors
                     });
@@ -199,7 +202,7 @@ exports.update = function(req, res) {
     var password = req.body.password;
     var encrypt_password = util.encrypt(password);
 
-    req.user.email = email;
+    req.user.email = email.toLowerCase();
     req.user.password = encrypt_password;
 
     if (email != '')
@@ -217,7 +220,7 @@ exports.update = function(req, res) {
         userID: req.session.user.id,
         controller: "Manage",
         action: "edit user",
-        details: "userID=" + req.user.id + ";email=" + req.user.email
+        details: "userID=" + req.user.id + ";email=" + req.user.email.toLowerCase()
     });
 
     res.redirect('/manager');
@@ -239,7 +242,7 @@ exports.changeLock = function(req, res) {
             userID: req.session.user.id,
             controller: "Manage",
             action: "user " + action,
-            details: "userID=" + req.user.id + ";email=" + req.user.email
+            details: "userID=" + req.user.id + ";email=" + req.user.email.toLowerCase()
         });
 
         res.redirect('/manager');

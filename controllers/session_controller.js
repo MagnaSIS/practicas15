@@ -27,7 +27,7 @@ exports.loginRequired = function(req, res, next) {
 		next();
 	}
 	else {
-		res.redirect('login');
+		res.redirect('/login');
 	}
 };
 
@@ -83,9 +83,15 @@ exports.new = function(req, res) {
 
 //Post /login Login check
 exports.create = function(req, res) {
+	var emailRegex = /^(.*)\@(.*)\.(.*)$/i;
+	var email = req.body.login;
+	var emailMatch = email.match(emailRegex)
+	if (emailMatch[2] === "ikasle.ehu") {
+		email = emailMatch[1] + '@' + emailMatch[2] + '.eus';
+	}
 	models.User.find({
 		where: {
-			email: req.body.login,
+			email: email.toLowerCase(),
 			password: util.encrypt(req.body.password)
 		}
 	}).then(function(user) {
