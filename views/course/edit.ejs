@@ -53,6 +53,30 @@
 					</div>
 					<hr>
 					<div class="row">
+						<div class="col-md-6">
+							<label for="curso">Curso:</label>
+						</div>
+						<div class="col-md-6">
+							<select class="form-control" id="year" name="course[year]">
+								<option value="3º" <% if (course.year === "3º") { %> selected <% } %> >3</option>
+								<option value="4º" <% if (course.year === "4º") { %> selected <% } %> >4</option>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="curso">Cuatrimestre:</label>
+						</div>
+						<div class="col-md-6">
+							<select class="form-control" id="semester" name="course[semester]">
+								<option value="1º" <% if (course.semester === "1º") { %> selected <% } %> >1</option>
+								<option value="2º" <% if (course.semester === "2º") { %> selected <% } %> >2</option>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
 						<input class="btn btn-default" type="submit" value="Guardar" id="submit" />
 					</div>
 				</form>

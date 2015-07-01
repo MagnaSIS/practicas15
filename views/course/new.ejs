@@ -1,94 +1,85 @@
 	<div class="panel panel-default">
-	<% if (typeof(newCourse)==="undefined" || newCourse===null) { %>
 		<div class="panel-heading">Crear asignatura</div>
-		<% }else{%>
-		<div class="alert alert-success" role="alert">Asignatura creada satisfactoriamente</div>
-		<%}%>
 		<div class="panel-body">
 			<div style="margin: 0% 30% 0% 30%">
-
-				<% if (typeof(newCourse)==="undefined" || newCourse===null) { %>				
-					<form method="post" action="/course/create">
-						<div class="row">
-							<div class="col-md-6">
-								<label for="name">Nombre Asignatura:<span class="required">*</span></label>
-							</div>
-							<div class="col-md-6">
-								<input class="form-control"type="text" id="name" name="course[name]" placeholder="Nombre" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" required="required" autofocus="autofocus"/>
-							</div>
+				<form method="post" action="/course/create">
+					<div class="row">
+						<div class="col-md-6">
+							<label for="name">Nombre Asignatura:<span class="required">*</span></label>
 						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-6">
-								<label for="creditos">Número Créditos:<span class="required">*</span></label>
-							</div>
-							<div class="col-md-6">
-								<input class="form-control" type="creditos" id="creditos" name="course[credits]" placeholder="Créditos" required="required"/>
-							</div>
+						<div class="col-md-6">
+							<input class="form-control"type="text" id="name" name="course[name]" placeholder="Nombre" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" required="required" autofocus="autofocus"/>
 						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-6">
-								<label for="especialidad">Especialidad:</label>
-							</div>
-							<div class="col-md-6">
-								<select class="form-control" id="especialidad" name="course[specialisation]">
-									<option value="C" <% if (course.specialisation === "C") { %> selected <% } %> >Computación</option>
-									<option value="IC" <% if (course.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
-									<option value="IS" <% if (course.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
-								</select>
-							</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="creditos">Número Créditos:<span class="required">*</span></label>
 						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-6">
-								<label for="plazas">Número plazas: <span class="required">*</span></label>
-							</div>
-							<div class="col-md-6">
-								<input class="form-control" type="text" id="plazas" name="course[vacancies]" placeholder="Número de plazas" required="required" autofocus="autofocus"/>
-							</div>
+						<div class="col-md-6">
+							<input class="form-control" type="creditos" id="creditos" name="course[credits]" placeholder="Creditos" required="required"/>
 						</div>
-						<hr>
-						<div class="row">
-							<div class="col-md-6">
-								<label for="descripcion">Descripción: <span class="required">*</span></label>
-							</div>
-							<div class="col-md-6">
-								<textarea class="form-control" id="message" name="course[description]" value="<%= course.description %>" placeholder="Escribe la descripción de la asignatura." required="required"></textarea>
-							</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="especialidad">Especialidad:</label>
 						</div>
-						<hr>
-						<div class="row">
-							<input class="btn btn-default" type="submit" value="Enviar" id="submit"/>
+						<div class="col-md-6">
+							<select class="form-control" id="especialidad" name="course[specialisation]">
+								<option value="C" <% if (course.specialisation === "C") { %> selected <% } %> >Computación</option>
+								<option value="IC" <% if (course.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
+								<option value="IS" <% if (course.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
+							</select>
 						</div>
-					</form>
-					<%}else{%>
-						<div align="center" class="alert alert-info" role="alert">
-							Se ha creado la siguiente asignatura:<br><br>
-							<div class="input-group input-group-lg">
-  								<span class="input-group-addon" id="sizing-addon1">Nombre</span>
-  								<span class="form-control" id="sizing-addon1"><%=newCourse.name%></span>
-							</div>
-							<div class="input-group input-group-lg">
-  								<span class="input-group-addon" id="sizing-addon1">Créditos</span>
-  								<span class="form-control" id="sizing-addon1"><%=newCourse.credits%></span>
-							</div>
-							<div class="input-group input-group-lg">
-  								<span class="input-group-addon" id="sizing-addon1">Especialidad</span>
-  								<span class="form-control" id="sizing-addon1"><%=newCourse.specialisation%></span>
-							</div>
-							<div class="input-group input-group-lg">
-  								<span class="input-group-addon" id="sizing-addon1">Número de plazas</span>
-  								<span class="form-control" id="sizing-addon1"><%=newCourse.vacancies%></span>
-							</div>
-							<div class="input-group input-group-lg">
-  								<span class="input-group-addon" id="sizing-addon1">Descripción</span>
-  								<span class="form-control" id="sizing-addon1"><%=newCourse.description%></span>
-							</div>
-							<br><br>
-							<a class="navbar-link" href="/course"> <button class="btn btn-default" type="button">Continuar</button></a>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="plazas">Número plazas: <span class="required">*</span></label>
 						</div>
-					<%}%>
+						<div class="col-md-6">
+							<input class="form-control" type="text" id="plazas" name="course[vacancies]" placeholder="Número de plazas" required="required" autofocus="autofocus"/>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="descripcion">Descripción: <span class="required">*</span></label>
+						</div>
+						<div class="col-md-6">
+							<textarea class="form-control" id="message" name="course[description]" value="<%= course.description %>" placeholder="Escribe la descripción de la asignatura." required="required"></textarea>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="curso">Curso:</label>
+						</div>
+						<div class="col-md-6">
+							<select class="form-control" id="year" name="course[year]">
+								<option value="3º" <% if (course.year === "3º") { %> selected <% } %> >3º</option>
+								<option value="4º" <% if (course.year === "4º") { %> selected <% } %> >4º</option>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<label for="curso">Cuatrimestre:</label>
+						</div>
+						<div class="col-md-6">
+							<select class="form-control" id="semester" name="course[semester]">
+								<option value="1º" <% if (course.semester === "1") { %> selected <% } %> >1</option>
+								<option value="2º" <% if (course.semester === "2") { %> selected <% } %> >2</option>
+							</select>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<input class="btn btn-default" type="submit" value="Enviar" id="submit"/>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

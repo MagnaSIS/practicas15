@@ -26,7 +26,7 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false,
             validate: {
                 notEmpty: {
-                    msg: "Falta escribir el correo electrÃ³nico"
+                    msg: "Falta escribir el correo electrónico"
                 }
             }
         },

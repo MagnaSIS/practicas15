@@ -30,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         description: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(5000),
             allowNull: false,
             validate: {
                 notEmpty: {
@@ -43,35 +43,53 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: true,
             values: ["IS", "IC", "C"],
         },
+        year: {
+            type: DataTypes.ENUM,
+            allowNull: true,
+            values: ["3º", "4º"],
+        },
+
+        semester: {
+            type: DataTypes.ENUM,
+            allowNull: true,
+            values: ["1º", "2º"],
+        },
         credits: {
             type: DataTypes.INTEGER,
             allowNull: false,
-			validate: {
-				isInt: {
-					msg: "El número de créditos debe ser un número entero"
-				},
-                min: {args: [0], msg: "El número de créditos no puede ser menor que 0"},
-			}
+            validate: {
+                isInt: {
+                    msg: "El número de créditos debe ser un número entero"
+                },
+                min: {
+                    args: [0],
+                    msg: "El número de créditos no puede ser menor que 0"
+                },
+            }
         },
         vacancies: {
             type: DataTypes.INTEGER,
             allowNull: false,
-			validate: {
-				isInt: {
-					msg: "El número de plazas debe ser un número entero"
-				},
-                min: {args: [0], msg: "El número de alumnos no puede ser menor que 0"},
+            validate: {
+                isInt: {
+                    msg: "El número de plazas debe ser un número entero"
+                },
+                min: {
+                    args: [0],
+                    msg: "El número de alumnos no puede ser menor que 0"
+                },
 
-			}
-        },MinimalGrade: {
-        	type: DataTypes.FLOAT,
-        	allowNull: false,
-        	defaultValue:0.0,
-        	validate: {
-        		isFloat: {
-        		  msg: "el grado minimo tiene que ser un float"
-        		}
-        	}
-        } 
+            }
+        },
+        MinimalGrade: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+            defaultValue: 0.0,
+            validate: {
+                isFloat: {
+                    msg: "el grado minimo tiene que ser un float"
+                }
+            }
+        }
     });
 }

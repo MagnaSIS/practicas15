@@ -14,6 +14,7 @@ var userController = require('../controllers/user_controller');
 */
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    req.session.where = 'index';
     res.render('index', {
         title: 'placeForMe',
         errors: []
@@ -27,6 +28,7 @@ router.param('emailId', studentController.loadEmail);
 
 /*GET terms */
 router.get('/terms', function(req, res, next) {
+    req.session.where = '';
     res.render('terms');
 });
 
@@ -49,6 +51,8 @@ router.get('/modifipass//okpass', function(req, res, next) {
 router.get('/modifipass/:Id/edit', studentController.editPassword);
 router.put('/modifipass/:Id', studentController.updatePassword);
 
+
+router.get('/user/confirm', userController.confirm);
 /*
  *	Students Controller
  */
@@ -74,6 +78,7 @@ router.get('/manager/:userId(\\d+)/edit', sessionController.loginRequired, sessi
 router.put('/manager/:userId(\\d+)', sessionController.loginRequired, sessionController.isAdmin, managerController.update);
 router.get('/manager/changelock/:userId', sessionController.loginRequired, sessionController.isAdmin, managerController.changeLock);
 router.get('/manager/viewAllLogs', sessionController.loginRequired, sessionController.isAdmin, managerController.viewLogs);
+router.post('/admin', sessionController.isAdmin, userController.create);
 
 /*
  * Admin Controller
