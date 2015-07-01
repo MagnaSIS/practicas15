@@ -8,7 +8,7 @@
 						<label for="name_edit">Nombre</label>
 					</div>
 					<div class="col-md-6">
-						<input autofocus name="name_edit" id="name_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.name %>">
+						<input autofocus name="name_edit" id="name_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.name %>" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos.">
 					</div>
 				</div>
 				<hr>
@@ -17,7 +17,7 @@
 						<label for="surname_edit">Apellido</label>
 					</div>
 					<div class="col-md-6">
-						<input name="surname_edit" id="surname_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.surname %>">
+						<input name="surname_edit" id="surname_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.surname %>" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos.">
 					</div>
 				</div>
 				<hr>
@@ -26,7 +26,7 @@
 						<label for="year">Año que voy a cursar</label>
 					</div>
 					<div class="col-md-6">
-						<input name="year_edit" id="year" class="form-control" type="text" value="<%= student.year %>">
+						<input name="year_edit" id="year" class="form-control" type="number" value="<%= student.year %>" data-toggle="tooltip" data-placement="right" title="Debe ser 3(tercer año) o 4(cuarto año).">
 					</div>
 				</div>
 				<hr>
@@ -35,7 +35,7 @@
 						<label for="avg_edit">Nota media</label>
 					</div>
 					<div class="col-md-6">
-						<input name="avg_edit" id="avg_edit" class="form-control" type="text" value="<%= student.avgGrade %>">
+						<input name="avg_edit" id="avg_edit" class="form-control" type="text" value="<%= student.avgGrade %>" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0 y 10.">
 					</div>
 				</div>
 				<hr>
@@ -44,7 +44,7 @@
 						<label for="credits_edit">Créditos</label>
 					</div>
 					<div class="col-md-6">
-						<input name="credits_edit" id="credits_edit" class="form-control" type="text" value="<%= student.credits %>">
+						<input name="credits_edit" id="credits_edit" class="form-control" type="text" value="<%= student.credits %>" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
 					</div>
 				</div>
 				<hr>

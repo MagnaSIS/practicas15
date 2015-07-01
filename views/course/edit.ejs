@@ -8,7 +8,7 @@
 							<label for="name">Nombre Asignatura: <span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
-							<input class="form-control" type="text" id="name" name="course[name]" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= course.name %>" required="required" autofocus="autofocus"/>
+							<input class="form-control" type="text" id="name" name="course[name]" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ. \d]+$)" value="<%= course.name %>" required="required" autofocus="autofocus" data-toggle="tooltip" data-placement="right" title="Solo letras, números y puntos."/>
 						</div>
 					</div>
 					<hr>
@@ -17,7 +17,7 @@
 							<label for="creditos">Número Créditos: <span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
-							<input class="form-control" type="creditos" id="creditos" name="course[credits]" value="<%= course.credits %>" required="required"/>
+							<input class="form-control" type="creditos" id="creditos" name="course[credits]" value="<%= course.credits %>" required="required" data-toggle="tooltip" data-placement="right" title="Debe ser un número entero"/>
 						</div>
 					</div>
 					<hr>
@@ -39,7 +39,7 @@
 							<label for="plazas">Número plazas: <span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
-							<input type="text" id="plazas" class="form-control" name="course[vacancies]" value="<%= course.vacancies %>" required="required" autofocus="autofocus"/>
+							<input type="text" id="plazas" class="form-control" name="course[vacancies]" value="<%= course.vacancies %>" required="required" autofocus="autofocus" data-toggle="tooltip" data-placement="right" title="Debe ser un número entero"/>
 						</div>
 					</div>
 					<hr>
@@ -48,7 +48,7 @@
 							<label for="descripcion">Descripción: <span class="required">*</span></label>
 						</div>
 						<div class="col-md-6">
-							<textarea id="descripcion" name="course[description]" class="form-control"  required="required"><%= course.description %></textarea>
+							<textarea id="descripcion" name="course[description]" class="form-control"  required="required" data-toggle="tooltip" data-placement="right" title="Se puede escribir hasta 255 caracteres"><%= course.description %></textarea>
 						</div>
 					</div>
 					<hr>

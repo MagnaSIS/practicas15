@@ -7,14 +7,14 @@
 		<div class="panel-body">
 			<div style="margin: 0% 30% 0% 30%">
 
-				<% if (typeof(newCourse)==="undefined" || newCourse===null) { %>				
+				<% if (typeof(newCourse)==="undefined" || newCourse===null) { %>
 					<form method="post" action="/course/create">
 						<div class="row">
 							<div class="col-md-6">
 								<label for="name">Nombre Asignatura:<span class="required">*</span></label>
 							</div>
 							<div class="col-md-6">
-								<input class="form-control"type="text" id="name" name="course[name]" placeholder="Nombre" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" required="required" autofocus="autofocus"/>
+								<input class="form-control"type="text" id="name" name="course[name]" placeholder="Nombre" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ. \d]+$)" required="required" autofocus="autofocus" data-toggle="tooltip" data-placement="right" title="Solo letras, números y puntos."/>
 							</div>
 						</div>
 						<hr>
@@ -23,7 +23,7 @@
 								<label for="creditos">Número Créditos:<span class="required">*</span></label>
 							</div>
 							<div class="col-md-6">
-								<input class="form-control" type="creditos" id="creditos" name="course[credits]" placeholder="Créditos" required="required"/>
+								<input class="form-control" type="creditos" id="creditos" name="course[credits]" placeholder="Créditos" required="required" data-toggle="tooltip" data-placement="right" title="Debe ser un número entero"/>
 							</div>
 						</div>
 						<hr>
@@ -45,7 +45,7 @@
 								<label for="plazas">Número plazas: <span class="required">*</span></label>
 							</div>
 							<div class="col-md-6">
-								<input class="form-control" type="text" id="plazas" name="course[vacancies]" placeholder="Número de plazas" required="required" autofocus="autofocus"/>
+								<input class="form-control" type="text" id="plazas" name="course[vacancies]" placeholder="Número de plazas" required="required" autofocus="autofocus" data-toggle="tooltip" data-placement="right" title="Debe ser un número entero"/>
 							</div>
 						</div>
 						<hr>
@@ -54,7 +54,7 @@
 								<label for="descripcion">Descripción: <span class="required">*</span></label>
 							</div>
 							<div class="col-md-6">
-								<textarea class="form-control" id="message" name="course[description]" value="<%= course.description %>" placeholder="Escribe la descripción de la asignatura." required="required"></textarea>
+								<textarea class="form-control" id="message" name="course[description]" value="<%= course.description %>" placeholder="Escribe la descripción de la asignatura." required="required" data-toggle="tooltip" data-placement="right" title="Se puede escribir hasta 255 caracteres"></textarea>
 							</div>
 						</div>
 						<hr>
