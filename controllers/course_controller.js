@@ -79,7 +79,8 @@ exports.new = function(req, res) {
   req.session.where = 'all_courses';
   res.render('course/new', {
     course: course,
-    newCourse: newCourse
+    newCourse: newCourse,
+    msg: [{message: "Asignatura creada correctamente."}]
   });
 };
 

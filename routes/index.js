@@ -16,14 +16,18 @@ var contactController = require('../controllers/contact_controller');
 /* GET home page. */
 router.get('/', function(req, res, next) {
     req.session.where = 'index';
+    mensaje = req.session.msg;
+    req.session.msg = {};
     res.render('index', {
         title: 'placeForMe',
-        errors: []
+        errors: [],
+        msg: mensaje
     });
 });
 
 router.param('courseId', courseController.load); // autoload :courseId
 router.param('userId', userController.checkUserId);
+router.param('token', userController.checkToken);
 router.param('emailId', studentController.loadEmail);
 
 
@@ -49,8 +53,8 @@ router.get('/modifipass//okpass', function(req, res, next) {
     next();
 }, studentController.formPassword);
 
-router.get('/modifipass/:Id/edit', studentController.editPassword);
-router.put('/modifipass/:Id', studentController.updatePassword);
+router.get('/modifipass/:token/edit', studentController.editPassword);
+router.put('/modifipass/:token', studentController.updatePassword);
 
 
 router.get('/user/confirm', userController.confirm);

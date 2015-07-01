@@ -27,6 +27,7 @@ exports.loginRequired = function(req, res, next) {
 		next();
 	}
 	else {
+		req.session.msg = [{message: "Necesitas iniciar sesión para acceder a esta página."}]
 		res.redirect('/login');
 	}
 };
@@ -74,10 +75,13 @@ exports.isCourseAdmin = function(req, res, next) {
 //Get /login Login Form
 exports.new = function(req, res) {
 	var errors = req.session.errors || {};
+	var msg = req.session.msg || {};
 	req.session.errors = {};
+	req.session.msg = {};
 	req.session.where = '';
 	res.render('session/login', {
-		errors: errors
+		errors: errors,
+		msg: msg
 	});
 };
 
@@ -85,9 +89,11 @@ exports.new = function(req, res) {
 exports.create = function(req, res) {
 	var emailRegex = /^(.*)\@(.*)\.(.*)$/i;
 	var email = req.body.login;
-	var emailMatch = email.match(emailRegex)
-	if (emailMatch[2] === "ikasle.ehu") {
-		email = emailMatch[1] + '@' + emailMatch[2] + '.eus';
+	var emailMatch = email.match(emailRegex);
+	if (emailMatch) {
+		if (emailMatch[2] === "ikasle.ehu") {
+			email = emailMatch[1] + '@' + emailMatch[2] + '.eus';
+		}
 	}
 	models.User.find({
 		where: {

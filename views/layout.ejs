@@ -58,7 +58,7 @@
 							</ul>
 
 							<% if (!session.user) { %>
-								<form class="navbar-form navbar-right" method="post" action="login">
+								<form class="navbar-form navbar-right" method="post" action="/login">
 									<div class="form-group">
 										<input name="login" type="text" placeholder="Correo" class="form-control">
 									</div>
@@ -84,14 +84,27 @@
 		<section  id="s1">
 			<div>
 				<% if ( !(typeof errors==="undefined") && errors.length) { %>
-					<div class="errors">
+				<div class="errors">
 					<% for (var i in errors) { %>
 						<div align="center" class="alert alert-danger alert-dismissible" role="alert">
 							<%= errors[i].message %>
 						</div>
 					<% } %>
 				<% } %>
+				</div>
 			</div>
+			<div>
+				<% if ( !(typeof msg==="undefined") && msg.length) { %>
+				<div class="msg">
+					<% for (var i in msg) { %>
+					<div align="center" class="alert alert-success alert-dismissible" role="alert">
+						<%= msg[i].message %>
+					</div>
+					<% } %>
+				<% } %>
+				</div>
+			</div>
+
 			<div align="center">
 				<%- body %>
 			</div>
