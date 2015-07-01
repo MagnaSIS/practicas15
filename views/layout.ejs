@@ -9,14 +9,7 @@
 </head>
 
 <body>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	});
-</script>
+
 
 <div class="panel panel-default">
 	<div class="panel-body">
@@ -90,8 +83,9 @@
 							<%= errors[i].message %>
 						</div>
 					<% } %>
-				<% } %>
 				</div>
+				<% } %>
+
 			</div>
 			<div>
 				<% if ( !(typeof msg==="undefined") && msg.length) { %>
@@ -101,8 +95,8 @@
 						<%= msg[i].message %>
 					</div>
 					<% } %>
-				<% } %>
 				</div>
+				<% } %>
 			</div>
 
 			<div align="center">
@@ -178,6 +172,15 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript" src="/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/js/bootstrap.min.js"></script>
+<script src="/scripts/myScriptEstudiante.js"></script>
+<script type="text/javascript">
+$(function () {
+	$('[data-toggle="tooltip"]').tooltip()
+});
+</script>
 
 </body>
 </html>
