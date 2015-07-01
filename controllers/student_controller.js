@@ -84,10 +84,10 @@ exports.create = function(req, res) {
         transporter.sendMail({
           from: 'magnanode@gmail.com',
           to: email,
-          subject: 'Por favor verifica tu cuenta de correo',
+          subject: 'placeForMe: verficación de correo',
           html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
         });
-
+        req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
         res.redirect('/login');
       }).catch(function(error) {
         console.log("Error al crear student" + error);
@@ -182,9 +182,8 @@ exports.mostrarOK = function(req, res) {
     console.log(user1.confirmationToken);*/
   delete req.session.user;
   req.session.where = '';
-  res.render('session/okpass', {
-    errors: []
-  });
+  req.session.msg = [{message: "Se te ha enviado un correo electrónico. Por favor, revisa tu bandeja de entrada."}];
+  res.redirect("/")
 };
 
 exports.editPassword = function(req, res) {
@@ -202,7 +201,7 @@ exports.editPassword = function(req, res) {
 
 };
 
-exports.updatePassword = function(req, res, Id) {
+exports.updatePassword = function(req, res, token) {
 
     var password = req.body.changepass;
     var encrypt_password = util.encrypt(password);
@@ -224,6 +223,7 @@ exports.updatePassword = function(req, res, Id) {
           }
           else {
             console.log('Aqui llego pass3');
+            req.session.msg = [{message: "Contraseña modificada correctamente"}]
             req.user // save: guarda campos pregunta y respuesta en DB
               .save({
                 fields: ["password"]
@@ -320,7 +320,8 @@ exports.update = function(req, res, next) {
           req.session.where = 'users';
           res.render('student/edit', {
             student: student,
-            errors: []
+            errors: [],
+            msg: [{message: "Cambios realizados correctamente."}]
           });
         });
       }

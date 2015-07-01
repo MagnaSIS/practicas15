@@ -27,6 +27,7 @@ exports.loginRequired = function(req, res, next) {
 		next();
 	}
 	else {
+		req.session.msg = [{message: "Necesitas iniciar sesión para acceder a esta página."}]
 		res.redirect('login');
 	}
 };
@@ -74,10 +75,13 @@ exports.isCourseAdmin = function(req, res, next) {
 //Get /login Login Form
 exports.new = function(req, res) {
 	var errors = req.session.errors || {};
+	var msg = req.session.msg || {};
 	req.session.errors = {};
+	req.session.msg = {};
 	req.session.where = '';
 	res.render('session/login', {
-		errors: errors
+		errors: errors,
+		msg: msg
 	});
 };
 

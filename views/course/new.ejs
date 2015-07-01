@@ -1,13 +1,8 @@
 	<div class="panel panel-default">
-	<% if (typeof(newCourse)==="undefined" || newCourse===null) { %>
-		<div class="panel-heading">Crear asignatura</div>
-		<% }else{%>
-		<div class="alert alert-success" role="alert">Asignatura creada satisfactoriamente</div>
-		<%}%>
 		<div class="panel-body">
 			<div style="margin: 0% 30% 0% 30%">
 
-				<% if (typeof(newCourse)==="undefined" || newCourse===null) { %>				
+				<% if (typeof(newCourse)==="undefined" || newCourse===null) { %>
 					<form method="post" action="/course/create">
 						<div class="row">
 							<div class="col-md-6">

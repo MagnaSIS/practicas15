@@ -34,3 +34,24 @@ exports.notExistUser = function(req, res, next) {
     }
   });
 };
+
+exports.checkToken = function(req,res, next, token) {
+
+  models.User.find({
+    where:{
+      confirmationToken: token
+    }
+  }).then(function(user) {
+        if (user) {
+          req.user = user;
+          console.log("Verificado correctamente");
+          //res.write("Verificado correctamente");
+          next();
+        } else{next(new Error('No existe el Token= ' + token))}
+      }
+  ).catch(function(error){next(error)});
+
+  //console.log(req.protocol+":/"+req.get('host'));
+  //res.redirect('/login');
+
+};
