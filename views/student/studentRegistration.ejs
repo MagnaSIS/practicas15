@@ -1,34 +1,66 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Registrarse</div>
 		<div class="panel-body">
-			<div style="margin: 0% 40% 0% 40%">
-				<form method='post' action='students' >
+			<div style="margin: 0% 30% 0% 30%">
+				<form class="contact_form" method='post' action='students' >
 			<!--	<form method='post' action='students' onsubmit="return check()"> -->
-					<div class="form-group">
+				<ul>
+					<li>
+						<label for="name">Nombre: </label>
 						<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
-					</div>
+					</li>
 					<hr>
-					<div class="form-group">
+					<li>
+						<label for="lastname">Apellido: </label>
 						<input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
-					</div>
+					</li>
 					<hr>
-					<div class="form-group">
+					<li>
+						<label for="email">Correo Electrónico: </label>
 						<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" placeholder="tuCorreo@ikasle.ehu.eus" name="email" id="email" data-toggle="tooltip" data-placement="right" title="Debe ser un correo válido de la UPV/EHU."/>
-					</div>
+					</li>
 					<hr>
-					<div class="form-group">
-						<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Contraseña" name="password" id="password" data-toggle="tooltip" data-placement="right" title="Longitud mínima de 8 caracteres, debe contener al menos una mayúscula, una minúscula y un número."/>
+					<li>
+						<label for="pass">Contraseña: </label>
+						<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Contraseña" name="password" id="password" data-toggle="tooltip" data-placement="right" title="Longitud mínima de 8 caracteres, debe contener al menos una mayúscula, una minúscula y un número."/></br>
+						<label for="pass2">Repetir Contraseña: </label>
 						<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Repite Contraseña" name="password1" id="password1" data-toggle="tooltip" data-placement="right" title="Debe ser igual a la anterior."/>
-					</div>
-					<div class="form-group">
-					</div>
+					</li>
 					<hr>
-					<div class="checkbox">
+					<li>
+							<label for="year1">Año que voy a cursar: </label>
+							<select class="form-control" id="year" name="year">
+								<option value="3">3</option>
+								<option value="4">4</option>
+							</select>
+					</li>
+					<hr>
+					<li>
+						<label for="nota">Nota media: </label>
+						<input required name="avg" id="avg" class="form-control" type="text" pattern="(^((\d\.\d[\d]?)|(10)(\.0)[0]?)$)" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0.">
+					</li>
+					<hr>
+					<li>
+						<label for="credito">Créditos: </label>
+						<input required name="credits" id="credits" class="form-control" type="number" min="0" max="240" placeholder="Créditos" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
+					</li>
+					<hr>
+					<li>
+						<label for="esp">Especialización: </label>
+						<select class="form-control" id="specialisation" name="specialisation">
+							<option value="C">Computación</option>
+							<option value="IC">Ingeniería de Computadores</option>
+							<option value="IS">Ingeniería del Software</option>
+						</select>
+					</li>
+				</ul>
+					<hr>
+					<div class="checkbox>
        					<label for="condiciones">
        						<input type="checkbox" id="condiciones" name="condiciones" value="aceptado" required />
        						He leído y acepto los <a href="/terms">términos y condiciones de uso</a>.
    						</label>
-					</div>
+					</div></br>
 					<div class="row">
 						<input class="btn btn-default" type="submit"  value="Registrarse" />
 					</div>

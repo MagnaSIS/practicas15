@@ -45,15 +45,22 @@ exports.create = function(req, res) {
   password = util.encrypt(password);
 
   //asignacion de valores al student
-  var tmpYear = 3; //falta que lo coja del ejs
-  var tmpAvgGrade = 6.5; //idem
-  var tmpCredits = 140; //idem
+  var tmpYear = req.body.year;
+  var tmpAvgGrade = req.body.avg; //idem
+  var tmpCredits = req.body.credits; //idem
+  var tmpSpecialisation = req.body.specialisation;
 
   var allowedEmail = /^([a-zA-Z]+\d{3})\@(ikasle.ehu)\.(es|eus)$/;
   var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
+//  var allowYear= /^([34])$/;
+//  var allowAvgGrade= /^([\d+(\.\d+)?])$/;
+  var allowAvgGrade= /^((\d\.\d[\d]?)|(10)(\.0)[0]?)$/;
+//  var allowCredits= /^(([1]\d\d)|\d\d|([2][0-3]\d)|(240))$/;
+//  var allowSpecialisation= /^(IS|IC|C)$/;
   /* TODO validar Student Y User antes de crearlos */
-  if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
+  if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos) &&
+      allowAvgGrade.test(tmpAvgGrade) ) {
     var emailMatch = email.match(allowedEmail);
     //guardar en base de datos
     console.log((emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase());
@@ -67,7 +74,8 @@ exports.create = function(req, res) {
         surname: req.body.lastname,
         year: tmpYear,
         avgGrade: tmpAvgGrade,
-        credits: tmpCredits
+        credits: tmpCredits,
+        specialisation: tmpSpecialisation
       }).then(function(newStudent) {
         newStudent.setUser(newUser).then(function(newStudent) {
 
@@ -89,6 +97,7 @@ exports.create = function(req, res) {
           subject: 'placeForMe: verficación de correo',
           html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
         });
+        req.session.errors = {};
         req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
         res.redirect('/login');
       }).catch(function(error) {
@@ -116,6 +125,11 @@ exports.create = function(req, res) {
     if (!allowedLastName.test(apellidos)) {
       req.session.errors = [{
         "message": 'El apellido debe tener letras'
+      }];
+    }
+    if (!allowAvgGrade.test(tmpAvgGrade)) {
+      req.session.errors = [{
+        "message": 'La nota media debe ser entre 0.0 y 10.0'
       }];
     }
     req.session.where = '';
