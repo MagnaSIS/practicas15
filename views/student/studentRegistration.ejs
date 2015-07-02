@@ -7,7 +7,7 @@
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-6">
-								<label for="name">Nombre</label>
+								<label for="name">Nombre: </label>
 							</div>
 							<div class="col-md-6">
 								<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
@@ -42,7 +42,7 @@
 								<label for="pass2">Repetir Contraseña: </label>
 							</div>
 							<div class="col-md-6">
-								<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Repite Contraseña" name="password1" id="password1" data-toggle="tooltip" data-placement="right" title="Debe ser igual a la anterior."/>
+								<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Repite Contraseña" name="password1" id="password1" data-toggle="tooltip" data-placement="right" title="Las contraseñas deben ser iguales."/>
 							</div>
 						</div>
 						<div class="row">
@@ -61,7 +61,7 @@
 								<label for="nota">Nota media: </label>
 							</div>
 							<div class="col-md-6">
-								<input required name="avg" id="avg" class="form-control" type="text" pattern="(^((\d\.\d[\d]?)|(10)(\.0)[0]?)$)" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0.">
+								<input required name="avg" id="avg" class="form-control" type="text" pattern="(^((\d\.\d[\d]?)|(10)(\.0)[0]?)$)" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0">
 							</div>
 						</div>
 						<div class="row">
@@ -69,7 +69,7 @@
 								<label for="credito">Créditos: </label>
 							</div>
 							<div class="col-md-6">
-								<input required name="credits" id="credits" class="form-control" type="number" min="0" max="240" placeholder="Créditos" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
+								<input required name="credits" id="credits" class="form-control" type="number" min="0" max="240" placeholder="Créditos" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240">
 							</div>
 						</div>
 						<div class="row">
