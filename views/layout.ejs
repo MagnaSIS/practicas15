@@ -15,7 +15,7 @@
 
 <div class="panel panel-default">
 	<div class="panel-body">
-		<div class="container" style="background-image: url(http://demo.rockettheme.com/live/joomla/crystalline/templates/rt_crystalline/images/overlays/headers/header-2.png);  border: 1px solid black;">
+		<div class="container" style="border: 1px solid black;">
     		<h1 align="center" style="font-family: 'Ubuntu', sans-serif;">placeForMe</h1> 
     			<p align="center" style="font-family: 'Ubuntu', sans-serif;">Cálculo de demanda de optativas</p> 
 		</div>
@@ -63,9 +63,17 @@
 									<div class="form-group">
 										<input name="password" type="password" placeholder="Contraseña" class="form-control">
 									</div>
+									<div class="form-group center">
 									<button type="submit" class="btn btn-default">Iniciar sesión</button>
+									</div>
+
+									<div class="form-group center">
 									<a href="/students">Registrarse</a>
+									</div>
+									
+									<div class="form-group center">
 									<a href="/modifipass"> ¿Olvidaste tu contraseña?</a>
+									</div>
 								</form>
 							<% }else{ %>
 								<form method="post" action="/logout?_method=delete" class="navbar-form navbar-right">
