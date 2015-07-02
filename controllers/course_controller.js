@@ -79,8 +79,7 @@ exports.new = function(req, res) {
   req.session.where = 'all_courses';
   res.render('course/new', {
     course: course,
-    newCourse: newCourse,
-    msg: [{message: "Asignatura creada correctamente."}]
+    newCourse: newCourse
   });
 };
 
@@ -107,6 +106,7 @@ exports.create = function(req, res) {
           action: "Create",
           details: "courseID=" + newCourse.id + ";name=" + newCourse.name
         });
+        req.session.msg = [{message: "Asignatura creada correctamente."}];
         res.redirect('/course/new');
       });
     } // res.redirect: Redirecci�n HTTP a lista de preguntas
