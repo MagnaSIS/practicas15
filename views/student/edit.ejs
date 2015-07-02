@@ -26,7 +26,10 @@
 						<label for="year">Año que voy a cursar</label>
 					</div>
 					<div class="col-md-6">
-						<input name="year_edit" id="year" class="form-control" type="number" value="<%= student.year %>" data-toggle="tooltip" data-placement="right" title="Debe ser 3(tercer año) o 4(cuarto año).">
+						<select class="form-control" id="year" name="year_edit">
+							<option value="3" <% if (student.year === "3") { %> selected <% } %> >3</option>
+							<option value="4" <% if (student.year === "4") { %> selected <% } %> >4</option>
+						</select>
 					</div>
 				</div>
 				<hr>

@@ -88,7 +88,6 @@ router.post('/admin', sessionController.isAdmin, userController.create);
 /*
  * Admin Controller
  */
-router.get('/course', sessionController.loginRequired, sessionController.isCourseAdmin, courseController.index);
 router.get('/course/new', sessionController.loginRequired, sessionController.isCourseAdmin, courseController.new);
 router.post('/course/create', sessionController.loginRequired, sessionController.isCourseAdmin, courseController.create);
 router.get('/course/allcourses', sessionController.loginRequired, sessionController.isCourseAdmin, courseController.show);
