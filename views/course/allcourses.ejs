@@ -5,46 +5,50 @@
   });
 </script>
 <% } %>
-
 	<div class="panel panel-default">
 		<div class="panel-heading">Lista de asignaturas</div>
 		<div class="panel-body">
-			<table class="table tabel-striped">
-				<tr>
-					<th>Nombre</th>
-					<th>Créditos</th>
-					<th>Especialidad</th>
-					<th>Número de plazas</th>
-					<th>Curso</th>
-					<th>Cuatrimestre</th>
-					<th></th>
-					<th></th>
-				</tr>
-				<% var i; for (i=0; i < course.length; i++) { %>
+			<div class="row">
+				<a href="/course/new"><button class="btn btn-default" type="button">Crear asignatura</button></a>
+			</div><br>
+			<div class="table-responsive">
+				<table class="table tabel-striped">
 					<tr>
-						<td><%= course[i].name %></td>
-						<td><%= course[i].credits %></td>
-						<td><% if (course[i].specialisation=="IS") { %>
-								Ingeniería del software
-							<% }else if (course[i].specialisation=="IC") { %>
-								Ingeniería de computación
-							<% }else if (course[i].specialisation=="C") { %>
-								Computación
-							<%}%>
-						</td>
-						<td><%= course[i].vacancies %></td>
-						<td><%= course[i].year %></td>
-						<td><%= course[i].semester %></td>
-						<td><a href="/course/<%= course[i].id %>/edit"><button class="btn btn-default">Modificar asignatura</button></a></td>
-						<td>
-							<form method="post" action="/course/<%= course[i].id %>?_method=delete">
-								<button class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= course[i].name %>');">
-								Borrar
-								</button>
-							</form>
-						</td>
+						<th>Nombre</th>
+						<th>Créditos</th>
+						<th>Especialidad</th>
+						<th>Número de plazas</th>
+						<th>Curso</th>
+						<th>Cuatrimestre</th>
+						<th></th>
+						<th></th>
 					</tr>
-				<% } %>
-			</table>
+					<% var i; for (i=0; i < course.length; i++) { %>
+						<tr>
+							<td><%= course[i].name %></td>
+							<td><%= course[i].credits %></td>
+							<td><% if (course[i].specialisation=="IS") { %>
+									Ingeniería del software
+								<% }else if (course[i].specialisation=="IC") { %>
+									Ingeniería de computación
+								<% }else if (course[i].specialisation=="C") { %>
+									Computación
+								<%}%>
+							</td>
+							<td><%= course[i].vacancies %></td>
+							<td><%= course[i].year %></td>
+							<td><%= course[i].semester %></td>
+							<td><a href="/course/<%= course[i].id %>/edit"><button class="btn btn-default">Modificar asignatura</button></a></td>
+							<td>
+								<form method="post" action="/course/<%= course[i].id %>?_method=delete">
+									<button class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= course[i].name %>');">
+									Borrar
+									</button>
+								</form>
+							</td>
+						</tr>
+					<% } %>
+				</table>
+			</div>
 		</div>
 	</div>

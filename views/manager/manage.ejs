@@ -1,4 +1,12 @@
-<% if (action) { %>
+<%var admin=0; var manager=0; var student=0;
+	var i; for (i=0; i < users.length; i++) {
+if (users[i].role === "ADMIN") {admin++}
+if (users[i].role === "MANAGER") {manager++}
+if (users[i].role === "STUDENT") {student++}
+}
+%>
+
+<%if (action) { %>
 <script>
   $(document).ready(function(){
     alert('Se ha <%=action%> satisfactoriamente el/la administrador/a: <%=userTmp%>');
@@ -8,6 +16,12 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Gentión de usuarios</div>
 		<div class="panel-body">
+			<div>
+				<p>Número de usuarios registrados: <%=users.length%></p>
+				<p>Estudiantes: <%=student%></p>
+				<p>Gestores académicos: <%=manager%></p>
+				<p>Administradores: <%=admin%></p>
+			</div>
 			<div>
 				<form method="post" action="/admin">
 					<input type="hidden" name="role" value="ADMIN" />
@@ -28,45 +42,47 @@
 				</form>
 			</div>
 			<br>
-			<table class="table table-striped">
-				<tr>
-					<th>ID</th>
-					<th>Email</th>
-					<th>Tipo</th>
-					<th>Validado</th>
-					<th>Activado</th>
-					<th>Fecha de creación</th>
-					<th></th>
-					<th></th>
-				</tr>
-				<% var i; for (i=0; i < users.length; i++) { %>
+			<div class="table-responsive">
+				<table class="table table-striped">
 					<tr>
-						<td><%= users[i].id %></td>
-						<td><%= users[i].email %></td>
-						<td>
-							<% if (users[i].role === "ADMIN") { %> Administrador <% } %>
-							<% if (users[i].role === "MANAGER") { %> Gestor <% } %>
-							<% if (users[i].role === "STUDENT") { %> Estudiante <% } %>
-						</td>
-						<td><% if(users[i].isValidate){ %>Si<% }else{ %>No<% } %></td>
-						<td>
-							<input <% if (users[i].role === "ADMIN") { %> disabled <% } %> 
-							<% if (!users[i].locked) { %> checked <% } %>
-							onclick="window.location='/manager/changelock/<%= users[i].id %>';" type="checkbox"/>
-						</td>
-						<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
-						<td>
-							<form method="post" action="/manager/<%= users[i].id %>/edit?_method=get">
-								<button class="btn btn-default" type="submit">Editar</button>
-							</form>
-						</td>
-						<td>
-							<form method="post" action="/manager/<%= users[i].id %>?_method=delete">
-								<button <% if (users[i].role === "ADMIN") { %> disabled <% } %> class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
-							</form>
-						</td>
+						<th>ID</th>
+						<th>Email</th>
+						<th>Tipo</th>
+						<th>Validado</th>
+						<th>Activado</th>
+						<th>Fecha de creación</th>
+						<th></th>
+						<th></th>
 					</tr>
-				<% } %>
-			</table>
+					<% var i; for (i=0; i < users.length; i++) { %>
+						<tr>
+							<td><%= users[i].id %></td>
+							<td><%= users[i].email %></td>
+							<td>
+								<% if (users[i].role === "ADMIN") { %> Administrador <% } %>
+								<% if (users[i].role === "MANAGER") { %> Gestor <% } %>
+								<% if (users[i].role === "STUDENT") { %> Estudiante <% } %>
+							</td>
+							<td><% if(users[i].isValidate){ %>Si<% }else{ %>No<% } %></td>
+							<td>
+								<input <% if (users[i].role === "ADMIN") { %> disabled <% } %> 
+								<% if (!users[i].locked) { %> checked <% } %>
+								onclick="window.location='/manager/changelock/<%= users[i].id %>';" type="checkbox"/>
+							</td>
+							<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
+							<td>
+								<form method="post" action="/manager/<%= users[i].id %>/edit?_method=get">
+									<button class="btn btn-default" type="submit">Editar</button>
+								</form>
+							</td>
+							<td>
+								<form method="post" action="/manager/<%= users[i].id %>?_method=delete">
+									<button <% if (users[i].role === "ADMIN") { %> disabled <% } %> class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
+								</form>
+							</td>
+						</tr>
+					<% } %>
+				</table>
+			</div>
 		</div>
 	</div>

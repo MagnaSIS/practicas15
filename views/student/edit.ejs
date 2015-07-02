@@ -26,7 +26,10 @@
 						<label for="year">Año que voy a cursar</label>
 					</div>
 					<div class="col-md-6">
-						<input name="year_edit" id="year" class="form-control" type="number" value="<%= student.year %>" data-toggle="tooltip" data-placement="right" title="Debe ser 3(tercer año) o 4(cuarto año).">
+						<select class="form-control" id="year" name="year_edit">
+							<option value="3" <% if (student.year === "3") { %> selected <% } %> >3</option>
+							<option value="4" <% if (student.year === "4") { %> selected <% } %> >4</option>
+						</select>
 					</div>
 				</div>
 				<hr>
@@ -44,7 +47,7 @@
 						<label for="credits_edit">Créditos</label>
 					</div>
 					<div class="col-md-6">
-						<input name="credits_edit" id="credits_edit" class="form-control" type="text" value="<%= student.credits %>" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
+						<input name="credits_edit" id="credits_edit" class="form-control" type="number" value="<%= student.credits %>" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
 					</div>
 				</div>
 				<hr>
@@ -62,7 +65,7 @@
 				</div>
 				<hr>
 				<div class="row">
-					<input class="btn btn-default" type="submit" vale="Editar">
+					<input class="btn btn-default" type="submit" vale="Guardar cambios">
 				</div>
 			</form>
 		</div>

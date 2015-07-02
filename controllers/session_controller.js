@@ -27,7 +27,7 @@ exports.loginRequired = function(req, res, next) {
 		next();
 	}
 	else {
-		req.session.msg = [{message: "Necesitas iniciar sesión para acceder a esta página."}]
+		req.session.errors = [{message: "Necesitas iniciar sesión para acceder a esta página."}]
 		res.redirect('/login');
 	}
 };
@@ -119,23 +119,24 @@ exports.create = function(req, res) {
 				}];
 			}
 			if (!error) {
+				req.session.msg = [{message: "Has iniciado sesión como " + user.email + " ¡Bienvenido!"}];
 				req.session.user = {
 					email: user.email,
 					role: user.role,
 					id: user.id
 				};
+				res.redirect("/");
 			}
 		}
 		else {
-			console.log('Usuario o contraseña incorrectas');
 			req.session.errors = [{
-				"message": 'Usuario o contraseña incorrectas'
+				"message": 'Correo o contraseña incorrectos'
 			}];
 		}
 		res.redirect("/login");
 	}).catch(function(error) {
 		req.session.errors = [{
-			"message": 'Usuario o contraseña incorrectas'
+			"message": 'Correo o contraseña incorrectos'
 		}, {
 			"message": ("error: " + error) || ""
 		}];

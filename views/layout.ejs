@@ -2,22 +2,16 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>placeForMe</title>
 	<link rel='stylesheet' href='/bootstrap-3.3.5-dist/css/bootstrap.css' />
 	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css"/>
 	<link href='//fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
+	<link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
 
 </head>
 
 <body>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="/js/bootstrap.min.js"></script>
-<script type="text/javascript">
-	$(function () {
-		$('[data-toggle="tooltip"]').tooltip()
-	});
-</script>
 
 <div class="panel panel-default">
 	<div class="panel-body">
@@ -56,7 +50,7 @@
 										<li <% if(session.where==='contact'){ %>class="active"<% } %>><a class="navbar-link" href="/contact">Contactanos</a></li>
 									<% } %>
 									<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
-										<li <% if(session.where==='all_courses'){ %>class="active"<% } %>><a class="navbar-link" href="/course">Gestión de asignaturas</a></li>
+										<li <% if(session.where==='all_courses'){ %>class="active"<% } %>><a class="navbar-link" href="/course/allcourses">Gestión de asignaturas</a></li>
 									<% } %>
 								<% } %>
 							</ul>
@@ -71,6 +65,7 @@
 									</div>
 									<button type="submit" class="btn btn-default">Iniciar sesión</button>
 									<a href="/students">Registrarse</a>
+									<a href="/modifipass"> ¿Olvidaste tu contraseña?</a>
 								</form>
 							<% }else{ %>
 								<form method="post" action="/logout?_method=delete" class="navbar-form navbar-right">
@@ -96,7 +91,7 @@
 					<% } %>
 				</div>
 				<% } %>
-				
+
 			</div>
 			<div>
 				<% if ( !(typeof msg==="undefined") && msg.length) { %>
@@ -147,7 +142,7 @@
 						<div class="row">
 							<h2>Redes Sociales</h2>
 						</div>
-						<div class="row social">
+						<div class="row social centered">
 							<div class="col-md-4">
 								<div class="facebook">
 									<a target = "_blank" href="https://www.facebook.com/MagnaSIS" class="icon48 icon48-1">Facebook</a>
@@ -183,6 +178,11 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript" src="/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
-
+<script src="/scripts/myScriptEstudiante.js"></script>
+<script type="text/javascript">
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	});
+</script>
 </body>
 </html>
