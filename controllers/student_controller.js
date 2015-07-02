@@ -46,13 +46,15 @@ exports.create = function(req, res) {
   password = util.encrypt(password);
 
   //asignacion de valores al student
-  var tmpYear = 3; //falta que lo coja del ejs
-  var tmpAvgGrade = 6.5; //idem
-  var tmpCredits = 140; //idem
+  var tmpYear = req.body.year;
+  var tmpAvgGrade = req.body.avg; //idem
+  var tmpCredits = req.body.credits; //idem
+  var tmpSpecialisation = req.body.specialisation;
 
   var allowedEmail = /^([a-zA-Z]+\d{3})\@(ikasle.ehu)\.(es|eus)$/;
   var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
+
   //Verificacion de coincidencia de passwords
   if (password!=password1) {
     req.session.errors = [{
@@ -63,6 +65,12 @@ exports.create = function(req, res) {
     });
   }else {
 
+//  var allowYear= /^([34])$/;
+//  var allowAvgGrade= /^([\d+(\.\d+)?])$/;
+  var allowAvgGrade= /^((\d\.\d[\d]?)|(10)(\.0)[0]?)$/;
+//  var allowCredits= /^(([1]\d\d)|\d\d|([2][0-3]\d)|(240))$/;
+//  var allowSpecialisation= /^(IS|IC|C)$/;
+  /* TODO validar Student Y User antes de crearlos */
     /* TODO validar Student Y User antes de crearlos */
     if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
       var emailMatch = email.match(allowedEmail);
@@ -103,16 +111,26 @@ exports.create = function(req, res) {
           req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
         }).catch(function(error) {
-          console.log("Error al crear student" + error);
-          req.session.errors = "ha ocurrido un error al crear el usuario" + error;
-          res.redirect('/login');
-        });
-      }).catch(function(error) {
-        console.log("Error al crear usuario" + error);
-        req.session.errors = "ha ocurrido un error al crear el usuario" + error;
+        req.session.errors = [{
+            "message": 'Ha ocurrido un error en el registro'
+          },
+          {
+          	"message": error.message
+          }];
+        newUser.destroy();
         res.redirect('/login');
       });
-    }
+    }).catch(function(error) {
+    	req.session.errors = [{
+            "message": 'Ha ocurrido un error en el registro'
+          },
+          {
+          	"message": error.message
+          }];
+      res.redirect('/login');
+    });
+  }
+
     else {
       if (!allowedEmail.test(email)) {
         req.session.errors = [{
@@ -134,6 +152,16 @@ exports.create = function(req, res) {
         errors: req.session.errors
       });
     }
+    if (!allowAvgGrade.test(tmpAvgGrade)) {
+      req.session.errors = [{
+        "message": 'La nota media debe ser entre 0.0 y 10.0'
+      }];
+    }
+    req.session.where = '';
+    res.render('student/studentRegistration', {
+      errors: req.session.errors
+    });
+
   }
 };
 
