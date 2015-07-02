@@ -45,6 +45,7 @@ exports.create = function(req, res) {
   var password1 = req.body.password1;
   var uuid4 = uuid.v4(); //id único para verificación del usuario
   password = util.encrypt(password);
+  password1 = util.encrypt(password1);
 
   //asignacion de valores al student
   var tmpYear = req.body.year;
