@@ -83,9 +83,9 @@ function login()
 
 function validar()
 {
-    var password = document.getElementById(password).value;
-    var password1 = document.getElementById(password1).value;
-    
+    var password = document.getElementById("password").value;
+    var password1 = document.getElementById("password1").value;
+
     if(password!=password1){
       alert("El correo no coincide");
       return false;

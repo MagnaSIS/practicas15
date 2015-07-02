@@ -2,8 +2,8 @@
 		<div class="panel-heading">Registrarse</div>
 		<div class="panel-body">
 			<div style="margin: 0% 40% 0% 40%">
-				<form method='post' name="registro" id="registro" action='students' >
-			<!--	<form method='post' action='students' onsubmit="return check()"> -->
+				<form method='post' name="registro" id="registro" action='students' onsubmit="return validar();" >
+
 					<div class="form-group">
 						<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
 					</div>
@@ -25,12 +25,12 @@
 					<hr>
 					<div class="checkbox">
        					<label for="condiciones">
-       						<input type="checkbox" id="condiciones" name="condiciones" value="aceptado" required   onclick="validar();" />
+       						<input type="checkbox" id="condiciones" name="condiciones" value="aceptado" required   />
        						He leído y acepto los <a href="/terms">términos y condiciones de uso</a>.
    						</label>
 					</div>
 					<div class="row">
-						<input class="btn btn-default" type="submit"  value="Registrarse" />
+						<input class="btn btn-default" type="submit"  value="Registrarse"  />
 					</div>
 				</form>
 			</div>
