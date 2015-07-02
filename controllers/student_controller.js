@@ -23,8 +23,9 @@ var util = require("../libs/utilities.js");
 var calcsController = require("../controllers/calcsController.js");
 var nodemailer = require('nodemailer');
 var uuid = require('node-uuid');
+var mailer = require('../libs/mailer.js');
 
-//GET /controllers/student
+// GET /students
 exports.new = function(req, res) {
   var errors = req.session.errors || {};
   req.session.errors = {};
@@ -35,7 +36,7 @@ exports.new = function(req, res) {
   //res.write("Hola");
 };
 
-//Post /controllers/student
+// POST /students
 exports.create = function(req, res) {
   var name = req.body.name;
   var apellidos = req.body.lastname;
@@ -60,7 +61,7 @@ exports.create = function(req, res) {
     models.User.create({
       email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
       password: password,
-      confirmationToken: uuid4
+      confirmationToken: null,
     }).then(function(newUser) {
       models.Student.create({
         name: req.body.name,
@@ -125,6 +126,7 @@ exports.create = function(req, res) {
   }
 };
 
+// Middleware Autoload User por Email de usuario
 exports.loadEmail = function(req, res, next, emailId) {
   var emailRegex = /^(.*)\@(.*)\.(.*)$/i;
 	var email = emailId;
@@ -140,14 +142,8 @@ exports.loadEmail = function(req, res, next, emailId) {
     }
   }).then(
     function(user) {
-      if (user) {
-        req.session.user = user;
-        console.log('Aqui llego:' + user);
-        next();
-      }
-      else {
-        next(new Error('No existe emailId=' + emailId));
-      }
+      req.user = user;
+      next();
     }
   ).catch(function(error) {
     next(error);
@@ -156,46 +152,43 @@ exports.loadEmail = function(req, res, next, emailId) {
 
 //GET /modifipass
 exports.formPassword = function(req, res) {
-  var errors = req.session.errors || {};
-  //    req.session.errors={};
-  console.log('Mensaje de Formulario');
+  var errors = req.session.errors || [];
+  req.session.errors=[];
+  //console.log('Mensaje de Formulario');
   req.session.where = '';
+  console.log(errors);
   res.render('session/form', {
     errors: errors
   });
   //res.write("Hola");
 };
 
+// GET /modifipass/:emailId/okpass
 exports.mostrarOK = function(req, res) {
-  var user1 = req.session.user; // req.course: autoload de instancia de course
-
-  //Envio del correo
-  var link = "http://" + req.get('host') + "/modifipass/" + user1.confirmationToken + "/edit";
-
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'magnanode@gmail.com',
-      pass: 'Magna1234.'
-    }
-  });
-
-  transporter.sendMail({
-    from: 'magnanode@gmail.com',
-    to: user1.email,
-    subject: 'placeForMe: Modificar Contraseña',
-    html: "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href=" + link + ">Presiona aquí para modificar el password</a>"
-  });
-  /*
-    console.log('Mensaje OKPASS');
-    console.log(user1.email);
-    console.log(user1.confirmationToken);*/
-  delete req.session.user;
-  req.session.where = '';
-  req.session.msg = [{message: "Se te ha enviado un correo electrónico. Por favor, revisa tu bandeja de entrada."}];
-  res.redirect("/")
+  var user = req.user;
+  if (user) {
+    user.confirmationToken = uuid.v4();
+    user.save({
+      fields: ['confirmationToken']
+    }).then(function(user) {
+      var link = "https://" + req.get('host') + "/modifipass/" + user.confirmationToken + "/edit";
+      //Envio del correo
+      mailer.sendResetPasswordMail(user.email, link);
+      req.session.where = '';
+      req.session.msg = [{
+        message: "Se te ha enviado un correo electrónico. Por favor, revisa tu bandeja de entrada."
+      }];
+      res.redirect("/");
+    });
+  }
+  else {
+    req.session.errors = [{message: "No existe un usuario con el correo introducido."}];
+    console.log(req.session.errors);
+    res.redirect('/modifipass');
+  }
 };
 
+// GET /modifipass/:token/edit
 exports.editPassword = function(req, res) {
   //console.log('Aqui llego 0');
   var user = req.user; // req.user: autoload de instancia de course
@@ -217,6 +210,7 @@ exports.updatePassword = function(req, res, token) {
     var encrypt_password = util.encrypt(password);
 
     req.user.password = encrypt_password;
+    req.user.confirmationToken = '';
     req.user
       .validate()
       .then(
@@ -227,23 +221,24 @@ exports.updatePassword = function(req, res, token) {
               user: req.user,
               errors: err.errors
             });
-            console.log('Aqui llego pass2');
+            //console.log('Aqui llego pass2');
           }
           else {
-            console.log('Aqui llego pass3');
-            req.session.msg = [{message: "Contraseña modificada correctamente"}]
+            //console.log('Aqui llego pass3');
+            req.session.msg = [{message: "Contraseña modificada correctamente"}];
             req.user // save: guarda campos pregunta y respuesta en DB
               .save({
-                fields: ["password"]
+                fields: ["password", "confirmationToken"]
               })
               .then(function() {
                 res.redirect('/login');
               });
-            console.log('Aqui llego pass4');
-          } // Redirecci�n HTTP a lista de preguntas (URL relativo)
+            //console.log('Aqui llego pass4');
+          }
       }
     );
 };
+
 //Modificación en base de datos sobre su existencia.
 exports.verify = function(req, res) {
   models.User.findOne({
