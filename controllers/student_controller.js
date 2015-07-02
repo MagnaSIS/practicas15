@@ -92,13 +92,22 @@ exports.create = function(req, res) {
         req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
         res.redirect('/login');
       }).catch(function(error) {
-        console.log("Error al crear student" + error);
-        req.session.errors = "ha ocurrido un error al crear el usuario" + error;
+        req.session.errors = [{
+            "message": 'Ha ocurrido un error en el registro'
+          },
+          {
+          	"message": error.message
+          }];
+        newUser.destroy();
         res.redirect('/login');
       });
     }).catch(function(error) {
-      console.log("Error al crear usuario" + error);
-      req.session.errors = "ha ocurrido un error al crear el usuario" + error;
+    	req.session.errors = [{
+            "message": 'Ha ocurrido un error en el registro'
+          },
+          {
+          	"message": error.message
+          }];
       res.redirect('/login');
     });
   }
