@@ -21,7 +21,6 @@
 var models = require("../models/models.js");
 var util = require("../libs/utilities.js");
 var calcsController = require("../controllers/calcsController.js");
-var nodemailer = require('nodemailer');
 var uuid = require('node-uuid');
 var mailer = require('../libs/mailer.js');
 
@@ -92,20 +91,7 @@ exports.create = function(req, res) {
           //Envio del correo
           var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
 
-          var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: 'magnanode@gmail.com',
-              pass: 'Magna1234.'
-            }
-          });
-
-          transporter.sendMail({
-            from: 'magnanode@gmail.com',
-            to: email,
-            subject: 'placeForMe: verficación de correo',
-            html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
-          });
+          mailer.sendUserConfirmationMail(newUser.email, link);
           req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
         }).catch(function(error) {

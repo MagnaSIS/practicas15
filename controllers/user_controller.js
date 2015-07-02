@@ -1,9 +1,8 @@
 // controllers/user_controller.js
 
 var models = require("../models/models.js");
-var util = require("../libs/utilities.js");
 var uuid = require('node-uuid');
-var nodemailer = require('nodemailer');
+var mailer = require('../libs/mailer.js');
 
 exports.notExistUser = function(req, res, next) {
   var email = req.body.email;
@@ -29,11 +28,11 @@ exports.checkUserId = function(req, res, next, userId) {
 				next();
 			}
 			else {
-				next(new Error("No existe el usuario"))
+				next(new Error("No existe el usuario"));
 			}
 		}
 	).catch(function(error) {
-		next(error)
+		next(error);
 	});
 
 };
@@ -55,23 +54,9 @@ exports.create = function(req, res, next) {
 	if (allowedEmail.test(email)) {
 
 		//Envio del correo
-		var host = req.get('host');
 		var link = "http://" + req.get('host') + "/user/confirm?token=" + uuid4;
 
-		var transporter = nodemailer.createTransport({
-			service: 'gmail',
-			auth: {
-				user: 'magnanode@gmail.com',
-				pass: 'Magna1234.'
-			}
-		});
-
-		transporter.sendMail({
-			from: 'magnanode@gmail.com',
-			to: email,
-			subject: 'Registro del gestor en placeForMe',
-			html: "Hola,<br>Un administrador de placeForMe te a elegido para que te registres como administrador de la plataforma.<br>Haz clic en este link para elegir una contraseña para tu usuario.<br><a href=" + link + ">Entrar</a>"
-		});
+		mailer.sendUserConfirmationMail(email, link);
 
 		//guardar en base de datos
 		user.save().then(function() {
@@ -125,7 +110,7 @@ exports.checkToken = function(req,res, next, token) {
   }).then(function(user) {
         if (user) {
           req.user = user;
-          console.log("Verificado correctamente");
+          //console.log("Verificado correctamente");
           //res.write("Verificado correctamente");
           next();
         } else{next(new Error('No existe el Token= ' + token))}

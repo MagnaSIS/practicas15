@@ -1,7 +1,7 @@
 var models = require("../models/models.js");
 var util = require("../libs/utilities.js");
 var uuid = require('node-uuid');
-var nodemailer = require('nodemailer');
+var mailer = require('../libs/mailer.js');
 
 //GET /manager
 exports.new = function(req, res) {
@@ -50,20 +50,7 @@ exports.create = function(req, res) {
         //Envio del correo
         var link = "http://" + req.get('host') + "/manage/password/" + uuid4;
 
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'magnanode@gmail.com',
-                pass: 'Magna1234.'
-            }
-        });
-
-        transporter.sendMail({
-            from: 'magnanode@gmail.com',
-            to: email,
-            subject: 'Registro del gestor en placeForMe',
-            html: "Hola,<br>Un administrador de placeForMe te a elegido para que te registres como gestor de la plataforma.<br>Haz clic en este link para elegir una contraseña para tu usuario.<br><a href=" + link + ">Entrar</a>"
-        });
+        mailer.sendUserConfirmationMail(email, link);
 
         //guardar en base de datos
         user.save().then(function(newAdmin) {
@@ -103,7 +90,7 @@ exports.password = function(req, res, next) {
         }
     }).then(function(user) {
         if (user) {
-            console.log(" - Se va a renderizar la pagina de crear un password del usuario: " + user.email);
+            //console.log(" - Se va a renderizar la pagina de crear un password del usuario: " + user.email);
             req.session.where = '';
             res.render('manager/password', {
                 token: token,
