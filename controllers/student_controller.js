@@ -41,6 +41,7 @@ exports.create = function(req, res) {
   var apellidos = req.body.lastname;
   var email = req.body.email;
   var password = req.body.password;
+  var password1 = req.body.password1;
   var uuid4 = uuid.v4(); //id único para verificación del usuario
   password = util.encrypt(password);
 
@@ -52,76 +53,87 @@ exports.create = function(req, res) {
   var allowedEmail = /^([a-zA-Z]+\d{3})\@(ikasle.ehu)\.(es|eus)$/;
   var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
-  /* TODO validar Student Y User antes de crearlos */
-  if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
-    var emailMatch = email.match(allowedEmail);
-    //guardar en base de datos
-    console.log((emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase());
-    models.User.create({
-      email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
-      password: password,
-      confirmationToken: uuid4
-    }).then(function(newUser) {
-      models.Student.create({
-        name: req.body.name,
-        surname: req.body.lastname,
-        year: tmpYear,
-        avgGrade: tmpAvgGrade,
-        credits: tmpCredits
-      }).then(function(newStudent) {
-        newStudent.setUser(newUser).then(function(newStudent) {
-
-        });
-        //Envio del correo
-        var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
-
-        var transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'magnanode@gmail.com',
-            pass: 'Magna1234.'
-          }
-        });
-
-        transporter.sendMail({
-          from: 'magnanode@gmail.com',
-          to: email,
-          subject: 'placeForMe: verficación de correo',
-          html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
-        });
-        req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
-        res.redirect('/login');
-      }).catch(function(error) {
-        console.log("Error al crear student" + error);
-        req.session.errors = "ha ocurrido un error al crear el usuario" + error;
-        res.redirect('/login');
-      });
-    }).catch(function(error) {
-      console.log("Error al crear usuario" + error);
-      req.session.errors = "ha ocurrido un error al crear el usuario" + error;
-      res.redirect('/login');
-    });
-  }
-  else {
-    if (!allowedEmail.test(email)) {
-      req.session.errors = [{
-        "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
-      }];
-    }
-    if (!allowedName.test(name)) {
-      req.session.errors = [{
-        "message": 'El nombre debe tener letras'
-      }];
-    }
-    if (!allowedLastName.test(apellidos)) {
-      req.session.errors = [{
-        "message": 'El apellido debe tener letras'
-      }];
-    }
-    req.session.where = '';
+  //Verificacion de coincidencia de passwords
+  if (password!=password1) {
+    req.session.errors = [{
+      "message": 'Las contraseñas deben ser iguales'
+    }];
     res.render('student/studentRegistration', {
       errors: req.session.errors
     });
+  }else {
+
+    /* TODO validar Student Y User antes de crearlos */
+    if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
+      var emailMatch = email.match(allowedEmail);
+      //guardar en base de datos
+      console.log((emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase());
+      models.User.create({
+        email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
+        password: password,
+        confirmationToken: uuid4
+      }).then(function(newUser) {
+        models.Student.create({
+          name: req.body.name,
+          surname: req.body.lastname,
+          year: tmpYear,
+          avgGrade: tmpAvgGrade,
+          credits: tmpCredits
+        }).then(function(newStudent) {
+          newStudent.setUser(newUser).then(function(newStudent) {
+
+          });
+          //Envio del correo
+          var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
+
+          var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'magnanode@gmail.com',
+              pass: 'Magna1234.'
+            }
+          });
+
+          transporter.sendMail({
+            from: 'magnanode@gmail.com',
+            to: email,
+            subject: 'placeForMe: verficación de correo',
+            html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
+          });
+          req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
+          res.redirect('/login');
+        }).catch(function(error) {
+          console.log("Error al crear student" + error);
+          req.session.errors = "ha ocurrido un error al crear el usuario" + error;
+          res.redirect('/login');
+        });
+      }).catch(function(error) {
+        console.log("Error al crear usuario" + error);
+        req.session.errors = "ha ocurrido un error al crear el usuario" + error;
+        res.redirect('/login');
+      });
+    }
+    else {
+      if (!allowedEmail.test(email)) {
+        req.session.errors = [{
+          "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
+        }];
+      }
+      if (!allowedName.test(name)) {
+        req.session.errors = [{
+          "message": 'El nombre debe tener letras'
+        }];
+      }
+      if (!allowedLastName.test(apellidos)) {
+        req.session.errors = [{
+          "message": 'El apellido debe tener letras'
+        }];
+      }
+      req.session.where = '';
+      res.render('student/studentRegistration', {
+        errors: req.session.errors
+      });
+    }
   }
 };
 
