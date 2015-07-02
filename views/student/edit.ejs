@@ -47,7 +47,7 @@
 						<label for="credits_edit">Créditos</label>
 					</div>
 					<div class="col-md-6">
-						<input name="credits_edit" id="credits_edit" class="form-control" type="text" value="<%= student.credits %>" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
+						<input name="credits_edit" id="credits_edit" class="form-control" type="number" value="<%= student.credits %>" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
 					</div>
 				</div>
 				<hr>
@@ -65,7 +65,7 @@
 				</div>
 				<hr>
 				<div class="row">
-					<input class="btn btn-default" type="submit" vale="Editar">
+					<input class="btn btn-default" type="submit" vale="Guardar cambios">
 				</div>
 			</form>
 		</div>

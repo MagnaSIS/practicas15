@@ -1,10 +1,21 @@
+
+<div class="row">
+<div class="bg-info"><br>
+	<p>Aquí puedes seleccionar las asignaturas que pretendes cursar el próximo año academico.</p>
+	<p>Una vez seleccionadas, cambiarán de color: verde, si hay plazas libres, o rojo, si el número de alumnos inscritos es superior al número de plazas.</p>
+	<p>De esta manera, podrás hacerte una idea de la demanda que hay para cada asignatura.</p>
+	<p>Cuantos más alumnos participen, mejor será la información que recibamos todos.</p><br>
+</div>
+</div>
+<div class="table-responsive">
+
 <table class="table">
 	<tr>
 		<th rowspan="2">Nombre del curso</th>
 		<th rowspan="2">Curso</th>
 		<th rowspan="2">Cuatrimestre</th>
 		<th rowspan="2">Especialización</th>
-		<th rowspan="2">créditos</th>
+		<th rowspan="2">Créditos</th>
 		<th rowspan="2">Plazas</th>
 		<th colspan="3">Alumnos inscritos</th>
 		<th rowspan="2">Detalles</th>
@@ -57,10 +68,10 @@
 				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
 			<% if (esta) { %>
 				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Desapuntarse</button>
+				<button class="btn btn-default" type="submit">Quitar</button>
 			<% }else{ %>
 				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Apuntarse</button>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
 			<% } %>
 			</form></td>
 		</tr>
@@ -218,3 +229,4 @@
 	<% } %>
 <% } %>
 </table>
+</div>
