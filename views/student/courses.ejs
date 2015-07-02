@@ -27,8 +27,9 @@
 		<th>4º</th>
 	</tr>
 
+<tr><td colspan="4"><hr></td><td colspan="2">3º - 1 cuatrimestre - Ingeniería del Software</td><td colspan="5"><hr></td></tr>
 <% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "1º"){ %>
+	<% if(courses[i].year == "3º" && courses[i].semester == "1º" && courses[i].specialisation == "IS"){ %>
 			<% 	var inscritos=[0, 0, 0, 0, 0];
 				for (var k=0; k<courses[i].Students.length; k++) {
 					inscritos[courses[i].Students[k].year]++;
@@ -77,9 +78,9 @@
 		</tr>
 	<% } %>
 <% } %>
-<tr><td colspan="11"><hr></td></tr>
+<tr><td colspan="4"><hr></td><td colspan="2">3º - 1 cuatrimestre - Ingeniería de Computadores</td><td colspan="5"><hr></td></tr>
 <% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "2º"){ %>
+	<% if(courses[i].year == "3º" && courses[i].semester == "1º" && courses[i].specialisation == "IC"){ %>
 			<% 	var inscritos=[0, 0, 0, 0, 0];
 				for (var k=0; k<courses[i].Students.length; k++) {
 					inscritos[courses[i].Students[k].year]++;
@@ -119,16 +120,220 @@
 				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
 			<% if (esta) { %>
 				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Desapuntarse</button>
+				<button class="btn btn-default" type="submit">Descartar</button>
 			<% }else{ %>
 				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Apuntarse</button>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
 			<% } %>
 			</form></td>
 		</tr>
 	<% } %>
 <% } %>
-<tr><td colspan="11"><hr></td></tr>
+<tr><td colspan="4"><hr></td><td colspan="2">3º - 1 cuatrimestre - Computación</td><td colspan="5"><hr></td></tr>
+<% var i; for (i=0; i<courses.length; i++) { %>
+	<% if(courses[i].year == "3º" && courses[i].semester == "1º" && courses[i].specialisation == "C"){ %>
+			<% 	var inscritos=[0, 0, 0, 0, 0];
+				for (var k=0; k<courses[i].Students.length; k++) {
+					inscritos[courses[i].Students[k].year]++;
+				}
+				var esta=false;
+
+				var pos=0;
+		 		var c; for (c=0; c< userCourses.length; c++) {
+				if (userCourses[c].CourseId== courses[i].id) {
+					esta=true;
+					pos=c;
+				 }
+			 }
+
+			 if (esta) {
+			 	if (courses[i].Students.length > courses[i].vacancies){ %>
+					<tr class="alert alert-danger">
+				<% }else  {%>
+					<tr class="alert alert-success">
+				<% } %>
+			<% }else{ %>
+				<tr class="alert alert-info">
+			<% } %>
+
+
+			<td><%=courses[i].name%></td>
+			<td><%=courses[i].year%></td>
+			<td><%=courses[i].semester%></td>
+			<td><%=courses[i].specialisation%></td>
+			<td><%=courses[i].credits%></td>
+			<td><%=courses[i].vacancies%></td>
+			<td><%=inscritos[2]%></td>
+			<td><%=inscritos[3]%></td>
+			<td><%=inscritos[4]%></td>
+			<td><%=courses[i].description%></td>
+			<td><form action="/students/manageCourses" method="POST">
+				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
+			<% if (esta) { %>
+				<input type="hidden" name="add" value="no"/>
+				<button class="btn btn-default" type="submit">Descartar</button>
+			<% }else{ %>
+				<input type="hidden" name="add" value="yes"/>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
+			<% } %>
+			</form></td>
+		</tr>
+	<% } %>
+<% } %>
+<tr><td colspan="4"><hr></td><td colspan="2">3º - 2 cuatrimestre - Ingeniería del Software</td><td colspan="5"><hr></td></tr>
+<% var i; for (i=0; i<courses.length; i++) { %>
+	<% if(courses[i].year == "3º" && courses[i].semester == "2º" && courses[i].specialisation == "IS"){ %>
+			<% 	var inscritos=[0, 0, 0, 0, 0];
+				for (var k=0; k<courses[i].Students.length; k++) {
+					inscritos[courses[i].Students[k].year]++;
+				}
+				var esta=false;
+
+				var pos=0;
+		 		var c; for (c=0; c< userCourses.length; c++) {
+				if (userCourses[c].CourseId== courses[i].id) {
+					esta=true;
+					pos=c;
+				 }
+			 }
+
+			 if (esta) {
+			 	if (courses[i].Students.length > courses[i].vacancies){ %>
+					<tr class="alert alert-danger">
+				<% }else  {%>
+					<tr class="alert alert-success">
+				<% } %>
+			<% }else{ %>
+				<tr class="alert alert-info">
+			<% } %>
+
+
+			<td><%=courses[i].name%></td>
+			<td><%=courses[i].year%></td>
+			<td><%=courses[i].semester%></td>
+			<td><%=courses[i].specialisation%></td>
+			<td><%=courses[i].credits%></td>
+			<td><%=courses[i].vacancies%></td>
+			<td><%=inscritos[2]%></td>
+			<td><%=inscritos[3]%></td>
+			<td><%=inscritos[4]%></td>
+			<td><%=courses[i].description%></td>
+			<td><form action="/students/manageCourses" method="POST">
+				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
+			<% if (esta) { %>
+				<input type="hidden" name="add" value="no"/>
+				<button class="btn btn-default" type="submit">Descartar</button>
+			<% }else{ %>
+				<input type="hidden" name="add" value="yes"/>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
+			<% } %>
+			</form></td>
+		</tr>
+	<% } %>
+<% } %>
+<tr><td colspan="4"><hr></td><td colspan="2">3º - 2 cuatrimestre - Ingeniería de Computadores</td><td colspan="5"><hr></td></tr>
+<% var i; for (i=0; i<courses.length; i++) { %>
+	<% if(courses[i].year == "3º" && courses[i].semester == "2º" && courses[i].specialisation == "IC"){ %>
+			<% 	var inscritos=[0, 0, 0, 0, 0];
+				for (var k=0; k<courses[i].Students.length; k++) {
+					inscritos[courses[i].Students[k].year]++;
+				}
+				var esta=false;
+
+				var pos=0;
+		 		var c; for (c=0; c< userCourses.length; c++) {
+				if (userCourses[c].CourseId== courses[i].id) {
+					esta=true;
+					pos=c;
+				 }
+			 }
+
+			 if (esta) {
+			 	if (courses[i].Students.length > courses[i].vacancies){ %>
+					<tr class="alert alert-danger">
+				<% }else  {%>
+					<tr class="alert alert-success">
+				<% } %>
+			<% }else{ %>
+				<tr class="alert alert-info">
+			<% } %>
+
+
+			<td><%=courses[i].name%></td>
+			<td><%=courses[i].year%></td>
+			<td><%=courses[i].semester%></td>
+			<td><%=courses[i].specialisation%></td>
+			<td><%=courses[i].credits%></td>
+			<td><%=courses[i].vacancies%></td>
+			<td><%=inscritos[2]%></td>
+			<td><%=inscritos[3]%></td>
+			<td><%=inscritos[4]%></td>
+			<td><%=courses[i].description%></td>
+			<td><form action="/students/manageCourses" method="POST">
+				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
+			<% if (esta) { %>
+				<input type="hidden" name="add" value="no"/>
+				<button class="btn btn-default" type="submit">Descartar</button>
+			<% }else{ %>
+				<input type="hidden" name="add" value="yes"/>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
+			<% } %>
+			</form></td>
+		</tr>
+	<% } %>
+<% } %>
+<tr><td colspan="4"><hr></td><td colspan="2">3º - 2 cuatrimestre - Computación</td><td colspan="5"><hr></td></tr>
+<% var i; for (i=0; i<courses.length; i++) { %>
+	<% if(courses[i].year == "3º" && courses[i].semester == "2º" && courses[i].specialisation == "C"){ %>
+			<% 	var inscritos=[0, 0, 0, 0, 0];
+				for (var k=0; k<courses[i].Students.length; k++) {
+					inscritos[courses[i].Students[k].year]++;
+				}
+				var esta=false;
+
+				var pos=0;
+		 		var c; for (c=0; c< userCourses.length; c++) {
+				if (userCourses[c].CourseId== courses[i].id) {
+					esta=true;
+					pos=c;
+				 }
+			 }
+
+			 if (esta) {
+			 	if (courses[i].Students.length > courses[i].vacancies){ %>
+					<tr class="alert alert-danger">
+				<% }else  {%>
+					<tr class="alert alert-success">
+				<% } %>
+			<% }else{ %>
+				<tr class="alert alert-info">
+			<% } %>
+
+
+			<td><%=courses[i].name%></td>
+			<td><%=courses[i].year%></td>
+			<td><%=courses[i].semester%></td>
+			<td><%=courses[i].specialisation%></td>
+			<td><%=courses[i].credits%></td>
+			<td><%=courses[i].vacancies%></td>
+			<td><%=inscritos[2]%></td>
+			<td><%=inscritos[3]%></td>
+			<td><%=inscritos[4]%></td>
+			<td><%=courses[i].description%></td>
+			<td><form action="/students/manageCourses" method="POST">
+				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
+			<% if (esta) { %>
+				<input type="hidden" name="add" value="no"/>
+				<button class="btn btn-default" type="submit">Descartar</button>
+			<% }else{ %>
+				<input type="hidden" name="add" value="yes"/>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
+			<% } %>
+			</form></td>
+		</tr>
+	<% } %>
+<% } %>
+<tr><td colspan="4"><hr></td><td colspan="2">4º - 1 cuatrimestre</td><td colspan="5"><hr></td></tr>
 <% var i; for (i=0; i<courses.length; i++) { %>
 	<% if(courses[i].year == "4º" && courses[i].semester == "1º"){ %>
 			<% 	var inscritos=[0, 0, 0, 0, 0];
@@ -170,16 +375,16 @@
 				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
 			<% if (esta) { %>
 				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Desapuntarse</button>
+				<button class="btn btn-default" type="submit">Descartar</button>
 			<% }else{ %>
 				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Apuntarse</button>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
 			<% } %>
 			</form></td>
 		</tr>
 	<% } %>
 <% } %>
-<tr><td colspan="11"><hr></td></tr>
+<tr><td colspan="4"><hr></td><td colspan="2">4º - 2 cuatrimestre</td><td colspan="5"><hr></td></tr>
 <% var i; for (i=0; i<courses.length; i++) { %>
 	<% if(courses[i].year == "4º" && courses[i].semester == "2º"){ %>
 			<% 	var inscritos=[0, 0, 0, 0, 0];
@@ -205,6 +410,8 @@
 			<% }else{ %>
 				<tr class="alert alert-info">
 			<% } %>
+
+
 			<td><%=courses[i].name%></td>
 			<td><%=courses[i].year%></td>
 			<td><%=courses[i].semester%></td>
@@ -219,14 +426,15 @@
 				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
 			<% if (esta) { %>
 				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Desapuntarse</button>
+				<button class="btn btn-default" type="submit">Descartar</button>
 			<% }else{ %>
 				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Apuntarse</button>
+				<button class="btn btn-default" type="submit">Seleccionar</button>
 			<% } %>
 			</form></td>
 		</tr>
 	<% } %>
 <% } %>
+
 </table>
 </div>
