@@ -2,8 +2,8 @@
 		<div class="panel-heading">Registrarse</div>
 		<div class="panel-body">
 			<div style="margin: 0% 40% 0% 40%">
-				<form method='post' action='students' >
-			<!--	<form method='post' action='students' onsubmit="return check()"> -->
+				<form method='post' name="registro" id="registro" action='students' onsubmit="return validar();" >
+
 					<div class="form-group">
 						<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
 					</div>
@@ -18,19 +18,19 @@
 					<hr>
 					<div class="form-group">
 						<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Contraseña" name="password" id="password" data-toggle="tooltip" data-placement="right" title="Longitud mínima de 8 caracteres, debe contener al menos una mayúscula, una minúscula y un número."/>
-						<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Repite Contraseña" name="password1" id="password1" data-toggle="tooltip" data-placement="right" title="Debe ser igual a la anterior."/>
+						<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Repite Contraseña" name="password1" id="password1" data-toggle="tooltip" data-placement="right" title="Debe ser igual a la anterior." />
 					</div>
 					<div class="form-group">
 					</div>
 					<hr>
 					<div class="checkbox">
        					<label for="condiciones">
-       						<input type="checkbox" id="condiciones" name="condiciones" value="aceptado" required />
+       						<input type="checkbox" id="condiciones" name="condiciones" value="aceptado" required   />
        						He leído y acepto los <a href="/terms">términos y condiciones de uso</a>.
    						</label>
 					</div>
 					<div class="row">
-						<input class="btn btn-default" type="submit"  value="Registrarse" />
+						<input class="btn btn-default" type="submit"  value="Registrarse"  />
 					</div>
 				</form>
 			</div>
