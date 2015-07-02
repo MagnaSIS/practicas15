@@ -38,6 +38,7 @@ var host = (url[4] || null);
 
 // Cargar Modelo ORM
 var Sequelize = require('sequelize');
+var util = require("../libs/utilities.js");
 
 // Usar BBDD SQLite o Postgres
 var sequelize = new Sequelize(DB_name, user, pwd, {
@@ -100,5 +101,11 @@ sequelize.sync().then(function() {
             });
         }
     });
+    Course.count().then(function(count){
+        //Si no hay asignaturas las crea
+        if(count < 1){
+            util.coursesLoader();
+        }
+    })
     console.log('Base de datos abierta');
 });
