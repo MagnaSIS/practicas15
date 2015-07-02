@@ -18,24 +18,6 @@ exports.load = function(req, res, next, courseId) {
   });
 };
 
-// GET /course
-exports.index = function(req, res) {
-  models.Course.findAll().then(
-    function(course) {
-      req.session.where = 'all_courses';
-      res.render('course', {
-        course: course,
-        errors: []
-      });
-    }
-  ).catch(function(error) {
-    res.render('course', {
-      course: [],
-      errors: error
-    });
-  });
-};
-
 // GET /course/allcourses
 exports.show = function(req, res) {
   var action = req.session.action || null;
