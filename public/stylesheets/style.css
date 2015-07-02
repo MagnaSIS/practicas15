@@ -32,6 +32,10 @@
     text-align: center;
 }
 
+.vertical_move {
+    resize: vertical;
+}
+
 .centered{
     display:inline-block;
     float:none;
