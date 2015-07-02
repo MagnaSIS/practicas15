@@ -32,6 +32,15 @@
     text-align: center;
 }
 
+.centered{
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+}
+
 .error {
     color: #D8000C;
     background-color: #FFBABA;
