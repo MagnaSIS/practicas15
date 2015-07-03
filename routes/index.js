@@ -6,7 +6,6 @@ var router = express.Router();
  */
 var sessionController = require('../controllers/session_controller');
 var studentController = require('../controllers/student_controller');
-var managerController = require('../controllers/manage_controller');
 var courseController = require('../controllers/course_controller');
 var userController = require('../controllers/user_controller');
 var contactController = require('../controllers/contact_controller');
@@ -56,7 +55,6 @@ router.get('/modifipass//okpass', function(req, res, next) {
 router.get('/modifipass/:token/edit', studentController.editPassword);
 router.put('/modifipass/:token', studentController.updatePassword);
 
-
 router.get('/user/confirm', userController.confirm);
 /*
  *	Students Controller
@@ -71,19 +69,6 @@ router.get('/students/verify/:verificationToken', studentController.verify);
 router.get('/students/courses', sessionController.loginRequired, sessionController.isStudent, studentController.courses);
 router.post('/students/manageCourses', sessionController.loginRequired, sessionController.isStudent, studentController.manageCourses);
 
-/*
- *	Manager Controller
- */
-router.get('/manager', sessionController.loginRequired, sessionController.isAdmin, managerController.new);
-router.post('/manager', sessionController.loginRequired, sessionController.isAdmin, userController.notExistUser, managerController.create);
-router.get('/manage/password/:token', managerController.password);
-router.put('/manage/createpassword', managerController.putPassword);
-router.delete('/manager/:userId(\\d+)', sessionController.loginRequired, sessionController.isAdmin, managerController.destroy);
-router.get('/manager/:userId(\\d+)/edit', sessionController.loginRequired, sessionController.isAdmin, managerController.edit);
-router.put('/manager/:userId(\\d+)', sessionController.loginRequired, sessionController.isAdmin, managerController.update);
-router.get('/manager/changelock/:userId', sessionController.loginRequired, sessionController.isAdmin, managerController.changeLock);
-router.get('/manager/viewAllLogs', sessionController.loginRequired, sessionController.isAdmin, managerController.viewLogs);
-router.post('/admin', sessionController.isAdmin, userController.create);
 
 /*
  * Admin Controller
@@ -94,6 +79,7 @@ router.get('/course/allcourses', sessionController.loginRequired, sessionControl
 router.get('/course/:courseId(\\d+)/edit', sessionController.loginRequired, sessionController.isCourseAdmin, courseController.edit);
 router.put('/course/:courseId(\\d+)', sessionController.loginRequired, sessionController.isCourseAdmin, courseController.update);
 router.delete('/course/:courseId(\\d+)', sessionController.loginRequired, sessionController.isCourseAdmin, courseController.destroy);
+
 
 module.exports = router;
 

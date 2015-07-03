@@ -29,6 +29,7 @@ exports.new = function(req, res) {
   var errors = req.session.errors || {};
   req.session.errors = {};
   req.session.where = '';
+  req.session.backurl='/students';
   res.render('student/studentRegistration', {
     errors: errors
   });
@@ -101,14 +102,16 @@ exports.create = function(req, res) {
         req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
         res.redirect('/login');
       }).catch(function(error) {
-        console.log("Error al crear student" + error);
-        req.session.errors = "ha ocurrido un error al crear el usuario" + error;
-        res.redirect('/login');
+    	  //catch en la creaccion del student
+          req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+                                {"message": error.message}];
+          newUser.destroy(); //borrar el usuario ya que no ha creado el student..
+          res.redirect('/login');
       });
     }).catch(function(error) {
-      console.log("Error al crear usuario" + error);
-      req.session.errors = "ha ocurrido un error al crear el usuario" + error;
-      res.redirect('/login');
+    	req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+    	                      {"message": error.message}];
+    	res.redirect('/login');
     });
   }
   else {
