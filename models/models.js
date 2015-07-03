@@ -83,7 +83,7 @@ exports.Sequelize = sequelize;
 
 
 sequelize.sync().then(function() {
-    User.count({{where: {role: 'ADMIN'}}).then(function(count) {
+    User.count({where: {role: 'ADMIN'}}).then(function(count) {
         // Si no hay ningun admin, crea uno.
        if (count < 1) {		
             User.create({
@@ -100,6 +100,6 @@ sequelize.sync().then(function() {
         if(count < 1){
             util.coursesLoader();
         }
-    })
+    });
     console.log('Base de datos abierta');
 });
