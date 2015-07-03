@@ -23,8 +23,16 @@ var path = require('path');
 // Postgres DATABASE_URL = postgres://user:passwd@host:port/database
 // SQLite   DATABASE_URL = sqlite://:@:/
 
-var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
-var storage = process.env.DATABASE_STORAGE;
+//Pruebas locales
+if (true){
+	DATABASE_URL = "sqlite://:@:/";
+	DATABASE_STORAGE = "../placeForMe.sqlite";
+	var url = DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+	var storage = DATABASE_STORAGE;
+}else{
+	var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
+	var storage = process.env.DATABASE_STORAGE;
+}
 
 var DB_name = (url[6] || null);
 var user = (url[2] || null);
@@ -84,23 +92,16 @@ exports.StudentCourse = StudentCourse;
 exports.Logs = Logs;
 exports.Sequelize = sequelize;
 
+
 sequelize.sync().then(function() {
-    User.count({
-        where: {
-            role: 'ADMIN'
-        }
-    }).then(function(count) {
-        // Si no hay ningun admin, crea uno.
-        if (count < 1) {
-            User.create({
-                email: 'admin@magnasis.com',
-                password: require('../libs/utilities').encrypt('admin'),
-                role: 'ADMIN',
-                locked: false,
-                isValidate: true,
-            });
-        }
-    });
+	User.findOrCreate( //crear admin por defecto
+			{where: {
+				email: 		"admin000@ikasle.ehu.eus",
+				password:	util.encrypt("Admin1234*"),
+				role:		"ADMIN",
+				locked:		false,
+				isValidate:	true			
+				}});
     Course.count().then(function(count){
         //Si no hay asignaturas las crea
         if(count < 1){

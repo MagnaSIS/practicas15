@@ -17,8 +17,8 @@ var https = require("https");
  * en windows ('../certs/quiz-2015-key.pem')
  */
 var options = {
-	    key: fs.readFileSync('certs/quiz-2015-key.pem').toString(),
-	    cert: fs.readFileSync('certs/quiz-2015-cert.pem').toString()
+	    key: fs.readFileSync('../certs/quiz-2015-key.pem').toString(),
+	    cert: fs.readFileSync('../certs/quiz-2015-cert.pem').toString()
 	};
 
 app.set('port', process.env.PORT || 3000);

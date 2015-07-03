@@ -12,7 +12,6 @@
 </head>
 
 <body>
-
 <div class="panel panel-default">
 	<div class="panel-body">
 		<div class="container" style="border: 1px solid black;">
@@ -87,7 +86,7 @@
 			</div>
 		</div>
 
-
+<!-- ERRORS MESSAGES -->
 		<section  id="s1">
 			<div>
 				<% if ( !(typeof errors==="undefined") && errors.length) { %>
@@ -101,6 +100,8 @@
 				<% } %>
 
 			</div>
+<!-- END ERRORS MESSAGES -->			
+<!-- SUCCESFULL MESSAGES -->			
 			<div>
 				<% if ( !(typeof msg==="undefined") && msg.length) { %>
 				<div class="msg">
@@ -112,10 +113,12 @@
 				</div>
 				<% } %>
 			</div>
+<!-- END SUCCESFULL MESSAGES -->	
 
 			<div align="center">
 				<%- body %>
 			</div>
+			
 		</section>
 	</div>
 	<div class="panel-footer center">
