@@ -506,10 +506,13 @@ exports.contact = function(req, res) {
       UserId: req.session.user.id
     }}).then(function(student) {
     req.session.where = 'contact';
+    mensaje = req.session.msg;
+    req.session.msg = {};
     res.render('contact', {
       student: student,
       email: req.session.user.email,
-      errors: []
+      errors: [],
+      msg: mensaje
     });
   });
 };

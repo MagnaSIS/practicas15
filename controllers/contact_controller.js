@@ -34,6 +34,7 @@ exports.sendMail = function(req, res) {
 
   if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
     mailer.sendCommentMail(email, text);
+    req.session.msg = [{message: "Comentario enviado correctamente."}];
     res.redirect('/contact');
   }
   else {
