@@ -1,28 +1,38 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Editar usuario (ID: <%= user.id %>)</div>
 		<div class="panel-body">
-			<div style="margin: 0% 30% 0% 30%">
-				<form method="post" action="/manager/<%= user.id %>/?_method=put">
-					<div class="row">
-						<div class="col-md-6">
-							<label for="email">Email</label>
+			<div>
+				<form method="post" action="/manager/editUser/<%= user.id %>?_method=put">
+					<div class="container">
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<div class="row">
+									<div class="col-md-6">
+										<label for="email">Email</label>
+									</div>
+									<div class="col-md-6">
+										<input autofocus class="form-control" name="email" id="name" type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" value="<%= user.email %>">
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-md-6">
+										<label for="password">Cambiar contraseña</label>
+									</div>
+									<div class="col-md-6">
+										<input class="form-control" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" id="password" type="password" placeholder="Contraseña">
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<input class="btn btn-default" type="submit" value="Editar"/>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+							</div>
 						</div>
-						<div class="col-md-6">
-							<input autofocus class="form-control" name="email" id="name" type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" value="<%= user.email %>">
-						</div>
-					</div>
-					<hr>
-					<div class="row">
-						<div class="col-md-6">
-							<label for="password">Cambiar contraseña</label>
-						</div>
-						<div class="col-md-6">
-							<input class="form-control" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" id="password" type="password" placeholder="Contraseña">
-						</div>
-					</div>
-					<hr>
-					<div class="row">
-						<input class="btn btn-default" type="submit" value="Editar"/>
 					</div>
 				</form>
 			</div>

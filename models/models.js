@@ -20,9 +20,6 @@
 
 var path = require('path');
 
-// Postgres DATABASE_URL = postgres://user:passwd@host:port/database
-// SQLite   DATABASE_URL = sqlite://:@:/
-
 var url = process.env.DATABASE_URL.match(/(.*)\:\/\/(.*?)\:(.*)@(.*)\:(.*)\/(.*)/);
 var storage = process.env.DATABASE_STORAGE;
 
@@ -38,6 +35,7 @@ var host = (url[4] || null);
 
 // Cargar Modelo ORM
 var Sequelize = require('sequelize');
+var util = require("../libs/utilities.js");
 
 // Usar BBDD SQLite o Postgres
 var sequelize = new Sequelize(DB_name, user, pwd, {
@@ -83,14 +81,11 @@ exports.StudentCourse = StudentCourse;
 exports.Logs = Logs;
 exports.Sequelize = sequelize;
 
+
 sequelize.sync().then(function() {
-    User.count({
-        where: {
-            role: 'ADMIN'
-        }
-    }).then(function(count) {
+    User.count({where: {role: 'ADMIN'}}).then(function(count) {
         // Si no hay ningun admin, crea uno.
-        if (count < 1) {
+       if (count < 1) {		
             User.create({
                 email: 'admin@magnasis.com',
                 password: require('../libs/utilities').encrypt('admin'),
@@ -98,6 +93,12 @@ sequelize.sync().then(function() {
                 locked: false,
                 isValidate: true,
             });
+        }
+    });
+    Course.count().then(function(count){
+        //Si no hay asignaturas las crea
+        if(count < 1){
+            util.coursesLoader();
         }
     });
     console.log('Base de datos abierta');

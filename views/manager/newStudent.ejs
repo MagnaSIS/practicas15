@@ -1,8 +1,8 @@
-	<div class="panel panel-default">
-		<div class="panel-heading">Registrarse</div>
+<div class="panel panel-default">
+		<div class="panel-heading">Crear nuevo estudiante</div>
 		<div class="panel-body">
-			<div>
-				<form method='post' name="registro" id="registro" action='students' onsubmit="return validar();" >
+			<div style="margin: 0% 30% 0% 30%">
+				<form method='post' action='/manager/createStudent/<%=user.id%>' onsubmit="return validar();" >
 					<div class="container">
 						<div class="row">
 							<div class="col-xs-12 col-sm-4">
@@ -17,7 +17,6 @@
 											<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
 										</div>
 									</div>
-									<hr>
 									<div class="row">
 										<div class="col-md-6">
 											<label for="lastname">Apellido: </label>
@@ -25,35 +24,7 @@
 										<div class="col-md-6">
 											<input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
 										</div>
-									</div>
-									<hr>
-									<div class="row">
-										<div class="col-md-6">
-											<label for="email">Correo Electrónico: </label>
-										</div>
-										<div class="col-md-6">
-											<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" placeholder="tuCorreo@ikasle.ehu.eus" name="email" id="email" data-toggle="tooltip" data-placement="right" title="Debe ser un correo válido de la UPV/EHU."/>
-										</div>
-									</div>
-									<hr>
-									<div class="row">
-										<div class="col-md-6">
-											<label for="pass">Contraseña: </label>
-										</div>
-										<div class="col-md-6">
-											<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Contraseña" name="password" id="password" data-toggle="tooltip" data-placement="right" title="Longitud mínima de 8 caracteres, debe contener al menos una mayúscula, una minúscula y un número."/>
-										</div>
-									</div>
-									<hr>
-									<div class="row">
-										<div class="col-md-6">
-											<label for="pass2">Repetir Contraseña: </label>
-										</div>
-										<div class="col-md-6">
-											<input class="form-control" required type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="text" placeholder="Repite Contraseña" name="password1" id="password1" data-toggle="tooltip" data-placement="right" title="Las contraseñas deben ser iguales."/>
-										</div>
-									</div>
-									<hr>
+									</div>						
 									<div class="row">
 										<div class="col-md-6">
 											<label for="year1">Año que voy a cursar: </label>
@@ -65,7 +36,6 @@
 											</select>
 										</div>
 									</div>
-									<hr>
 									<div class="row">
 										<div class="col-md-6">
 											<label for="nota">Nota media: </label>
@@ -74,7 +44,6 @@
 											<input required name="avg" id="avg" class="form-control" type="text" pattern="(^((\d\.\d[\d]?)|(10)(\.0)[0]?)$)" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0">
 										</div>
 									</div>
-									<hr>
 									<div class="row">
 										<div class="col-md-6">
 											<label for="credito">Créditos: </label>
@@ -83,7 +52,6 @@
 											<input required name="credits" id="credits" class="form-control" type="number" min="0" max="240" placeholder="Créditos" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240">
 										</div>
 									</div>
-									<hr>
 									<div class="row">
 										<div class="col-md-6">
 											<label for="esp">Especialización: </label>
@@ -96,7 +64,6 @@
 											</select>
 										</div>
 									</div>
-									<hr>
 									<div class="row">
 										<div class="checkbox>
 					       					<label for="condiciones">
@@ -105,9 +72,8 @@
 					   						</label>
 										</div>
 									</div>
-									<hr>
 									<div class="row">
-										<input class="btn btn-default" type="submit"  value="Registrarse"  />
+										<input class="btn btn-default" type="submit"  value="Crear"  />
 									</div>
 								</div>
 							</div>

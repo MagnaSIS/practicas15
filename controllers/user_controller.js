@@ -7,21 +7,25 @@ var hasher = require('../libs/utilities.js');
 
 // MW que asegura que no existe el usuario
 exports.notExistUser = function(req, res, next) {
-	var email = req.body.email;
-
-	models.User.find({
-		where: {
-			email: email.toLowerCase()
-		}
-	}).then(function(user) {
-		if (user) {
-			/* TODO cambiar el error devuelto */
-			next(new Error("Ya existe el usuario"));
-		}
-		else {
-			next();
-		}
-	});
+  /* TODO cambiar el email en caso de que sea 'ikasle.ehu.es' > 'ikasle.ehu.eus' */
+  var email = req.body.email;
+  models.User.find({
+    where: {
+      email: email.toLowerCase()
+    }
+  }).then(function(user) {
+    if (user) {
+    	req.session.errors = [{"message": 'Ya existe el usuario'}];
+    	var backUrl=req.session.backurl;
+    	req.session.backurl="";
+    	res.redirect(backUrl);
+      next(new Error("Ya existe el usuario"));
+    }
+    else {
+    	req.session.backurl=""
+      next();
+    }
+  });
 };
 
 // Autoload - carga el usuario con id userId
@@ -39,53 +43,6 @@ exports.checkUserId = function(req, res, next, userId) {
 	).catch(function(error) {
 		next(error);
 	});
-};
-
-// POST /user - Crea un usuario ADMIN o MANAGER
-exports.create = function(req, res, next) {
-
-	var email = req.body.email;
-	var uuid4 = uuid.v4();
-
-	var user = models.User.build();
-	user.email = email.toLowerCase();
-	user.role = req.body.role;
-	user.confirmationToken = uuid4;
-	user.password = "none";
-
-	var allowedEmail = /^((.)+\@(.)+\.(.)+$)/;
-
-	if (allowedEmail.test(email)) {
-
-		//Envio del correo
-		var link = "http://" + req.get('host') + "/user/confirm?token=" + uuid4;
-
-		mailer.sendUserConfirmationMail(email, link);
-
-		//guardar en base de datos
-		user.save().then(function(newUser) {
-			req.session.action = "creado";
-			req.session.userTmp = "administrador " + user.email;
-
-			//save log
-			models.Logs.create({
-				userID: req.session.user.id,
-				controller: "User",
-				action: "Create " + user.role,
-				details: "newUserID=" + newUser.id +
-					";newUserEmail=" + newUser.email
-			});
-			/* TODO mostrar mensaje de exito */
-			res.redirect('/manager');
-		});
-	}
-	else {
-		req.session.errors = [{
-			"message": 'El correo no es un correo válido.'
-		}];
-		req.session.where = 'users';
-		res.redirect('/manager');
-	}
 };
 
 // GET user/confirm

@@ -33,9 +33,8 @@ exports.sendMail = function(req, res) {
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
 
   if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
-        //Envio del correo
-        mailer.sendCommentMail(email, text);
-        res.redirect('/contact');
+    mailer.sendCommentMail(email, text);
+    res.redirect('/contact');
   }
   else {
     if (!allowedEmail.test(email)) {

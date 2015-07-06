@@ -119,8 +119,8 @@ exports.create = function(req, res) {
 			req.session.errors = [{
 				"message": 'Correo o contraseña incorrectos'
 			}];
+			res.redirect("/login");
 		}
-		res.redirect("/login");
 	}).catch(function(error) {
 		req.session.errors = [{
 			"message": 'Correo o contraseña incorrectos'

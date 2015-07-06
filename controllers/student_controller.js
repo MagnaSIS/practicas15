@@ -70,7 +70,7 @@ exports.create = function(req, res) {
 
   //asignacion de valores al student
   var tmpYear = req.body.year;
-  var tmpAvgGrade = req.body.avg; //idem
+  var tmpAvgGrade = parseFloat(req.body.avg); //idem
   var tmpCredits = req.body.credits; //idem
   var tmpSpecialisation = req.body.specialisation;
 
@@ -90,56 +90,53 @@ exports.create = function(req, res) {
   else {
     password = util.encrypt(password);
 
-    //  var allowYear= /^([34])$/;
-    //  var allowAvgGrade= /^([\d+(\.\d+)?])$/;
-    var allowAvgGrade = /^((\d\.\d[\d]?)|(10)(\.0)[0]?)$/;
-    //  var allowCredits= /^(([1]\d\d)|\d\d|([2][0-3]\d)|(240))$/;
-    //  var allowSpecialisation= /^(IS|IC|C)$/;
-    
-    /* TODO validar Student Y User antes de crearlos */
-    if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
-      var emailMatch = email.match(allowedEmail);
-      //guardar en base de datos
-      models.User.create({
-        email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
-        password: password,
-        confirmationToken: uuid4,
-      }).then(function(newUser) {
-        models.Student.create({
-          name: req.body.name,
-          surname: req.body.lastname,
-          year: tmpYear,
-          avgGrade: tmpAvgGrade,
-          credits: tmpCredits
-        }).then(function(newStudent) {
-          newStudent.setUser(newUser).then(function(newStudent) {});
+//  var allowYear= /^([34])$/;
+//  var allowAvgGrade= /^([\d+(\.\d+)?])$/;
+  var allowAvgGrade= /^((\d\.\d[\d]?)|(10)(\.0)[0]?)$/;
+//  var allowCredits= /^(([1]\d\d)|\d\d|([2][0-3]\d)|(240))$/;
+//  var allowSpecialisation= /^(IS|IC|C)$/;
+  /* TODO validar Student Y User antes de crearlos */
+  if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
+    var emailMatch = email.match(allowedEmail);
+    //guardar en base de datos
+    models.User.create({
+      email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
+      password: password,
+      confirmationToken: uuid4
+    }).then(function(newUser) {
+      models.Student.create({
+        name: req.body.name,
+        surname: req.body.lastname,
+        year: tmpYear,
+        avgGrade: tmpAvgGrade,
+        credits: tmpCredits,
+        specialisation: tmpSpecialisation
+      }).then(function(newStudent) {
+        newStudent.setUser(newUser).then(function(newStudent) {
+
+          });
           //Envio del correo
           var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
-
           mailer.sendUserConfirmationMail(newUser.email, link);
-          req.session.msg = [{
-            message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."
-          }];
+          
+          req.session.errors = {};
+          req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
         }).catch(function(error) {
-          req.session.errors = [{
-            "message": 'Ha ocurrido un error en el registro'
-          }, {
-            "message": error.message
-          }];
+    	  //catch en la creaccion del student
+          req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+                                {"message": error.message}];
           newUser.destroy().then(function() {
-            res.redirect('/login');
-          });
-        });
-      }).catch(function(error) {
-        req.session.errors = [{
-          "message": 'Ha ocurrido un error en el registro'
-        }, {
-          "message": error.message
-        }];
-        res.redirect('/login');
+          res.redirect('/login');
+        }); //borrar el usuario ya que no ha creado el student..
+          res.redirect('/login');
       });
-    }
+    }).catch(function(error) {
+    	req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+    	                      {"message": error.message}];
+    	res.redirect('/login');
+    });
+  }
 
     else {
       if (!allowedEmail.test(email)) {
@@ -166,8 +163,16 @@ exports.create = function(req, res) {
       res.render('student/studentRegistration', {
         errors: req.session.errors
       });
+      if (!allowAvgGrade.test(tmpAvgGrade)) {
+        req.session.errors = [{
+          "message": 'La nota media debe ser entre 0.0 y 10.0'
+        }];
+      }
+      req.session.where = '';
+      res.render('student/studentRegistration', {
+        errors: req.session.errors
+      });
     }
-
   }
 };
 
@@ -267,6 +272,7 @@ exports.verify = function(req, res) {
     }
   }).then(function(user) {
     if (user) {
+      /* TODO mostrar mensaje de exito */
       user.isValidate = true;
       user.save().then(function() {
         res.redirect('/login');
@@ -491,5 +497,19 @@ exports.manageCourses = function(req, res) {
   }).catch(function(error) {
     req.session.error = "error manageCourses cath2= " + error;
     res.redirect('/students/courses');
+  });
+};
+
+exports.contact = function(req, res) {
+  models.Student.findOne({
+    where: {
+      UserId: req.session.user.id
+    }}).then(function(student) {
+    req.session.where = 'contact';
+    res.render('contact', {
+      student: student,
+      email: req.session.user.email,
+      errors: []
+    });
   });
 };

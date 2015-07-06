@@ -6,7 +6,6 @@ var router = express.Router();
  */
 var sessionController = require('../controllers/session_controller');
 var studentController = require('../controllers/student_controller');
-var managerController = require('../controllers/manage_controller');
 var courseController = require('../controllers/course_controller');
 var userController = require('../controllers/user_controller');
 var contactController = require('../controllers/contact_controller');
@@ -55,10 +54,8 @@ router.get('/modifipass//okpass', function(req, res, next) {
 router.get('/modifipass/:token/edit', studentController.editPassword);
 router.put('/modifipass/:token', studentController.updatePassword);
 
-router.post('/user', sessionController.loginRequired, sessionController.roleRequired("ADMIN"), userController.notExistUser, userController.create);
 router.get('/user/confirm', sessionController.anonRequired, userController.confirm);
 router.post('/user/confirm', sessionController.anonRequired, userController.setPassword);
-
 
 /*
  *	Students Controller
@@ -73,15 +70,6 @@ router.get('/students/verify/:verificationToken', studentController.verify);
 router.get('/students/courses', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.courses);
 router.post('/students/manageCourses', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.manageCourses);
 
-/*
- *	Manager Controller
- */
-router.get('/manager', sessionController.loginRequired, sessionController.roleRequired("ADMIN"), managerController.new);
-router.delete('/manager/:userId(\\d+)', sessionController.loginRequired, sessionController.roleRequired("ADMIN"), managerController.destroy);
-router.get('/manager/:userId(\\d+)/edit', sessionController.loginRequired, sessionController.roleRequired("ADMIN"), managerController.edit);
-router.put('/manager/:userId(\\d+)', sessionController.loginRequired, sessionController.roleRequired("ADMIN"), managerController.update);
-router.get('/manager/changelock/:userId', sessionController.loginRequired, sessionController.roleRequired("ADMIN"), managerController.changeLock);
-router.get('/manager/viewAllLogs', sessionController.loginRequired, sessionController.roleRequired("ADMIN"), managerController.viewLogs);
 
 /*
  * User Controller
@@ -93,6 +81,7 @@ router.get('/course/:courseId(\\d+)/edit', sessionController.loginRequired, sess
 router.put('/course/:courseId(\\d+)', sessionController.loginRequired, sessionController.roleRequired("ADMIN", "MANAGER"), courseController.update);
 router.delete('/course/:courseId(\\d+)', sessionController.loginRequired, sessionController.roleRequired("ADMIN", "MANAGER"), courseController.destroy);
 
+
 module.exports = router;
 
 /*
@@ -102,10 +91,7 @@ router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcs
 */
 
 /*GET contact */
-router.get('/contact', function(req, res, next) {
-    req.session.where = 'contact';
-    res.render('contact');
-});
+router.get('/contact', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.contact);
 /*
  *  Contact Controller
  */
