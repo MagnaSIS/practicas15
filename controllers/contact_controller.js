@@ -18,7 +18,7 @@
 
 // controllers/contact_controller.js
 
-var mailer = require('.../lib/mailer.js');
+var mailer = require('../libs/mailer.js');
 
 // POST /contact
 exports.sendMail = function(req, res) {

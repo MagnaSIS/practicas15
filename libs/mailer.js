@@ -14,9 +14,11 @@ exports.sendResetPasswordMail = function(receiver, link) {
     transporter.sendMail({
         from: 'magnanode@gmail.com',
         to: receiver,
-        subject: 'placeForMe: Modificar Contraseña',
-        html: "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href=" +
-            link + ">Presiona aquí para modificar el password</a>"
+        subject: 'placeForMe: Modificar contraseña',
+        html: "Estimado usuario," +
+            "<br/> Hemos recibido una petición para recuperar la contraseña de la cuenta asociada a este correo." +
+            "<br/> Por favor, vaya a este <a href=" + link + ">enlace</a> para restablecer su contraseña." +
+            "<br/> El equipo de placeForMe."
     });
 };
 
@@ -24,8 +26,11 @@ exports.sendUserConfirmationMail = function(receiver, link) {
     transporter.sendMail({
             from: 'magnanode@gmail.com',
             to: receiver,
-            subject: 'Registro del gestor en placeForMe',
-            html: "Hola,<br>Un administrador de placeForMe te a elegido para que te registres como gestor de la plataforma.<br>Haz clic en este link para elegir una contraseña para tu usuario.<br><a href=" + link + ">Entrar</a>"
+            subject: 'placeForme: Confirmación de cuenta',
+            html: "Estimado usuario," +
+            "<br/> Hemos recibido una petición de registro" +
+            "<br/> Por favor, vaya a este <a href=" + link + ">enlace</a> para activar su cuenta." +
+            "<br/> El equipo de placeForMe."
         });
 };
 

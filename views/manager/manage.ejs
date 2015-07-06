@@ -9,7 +9,7 @@
 		<div class="panel-heading">Gentión de usuarios</div>
 		<div class="panel-body">
 			<div>
-				<form method="post" action="/admin">
+				<form method="post" action="/user">
 					<input type="hidden" name="role" value="ADMIN" />
 					<div class="row" style="margin: 0% 25% 0% 25%">
 						<div class="col-md-3"><label>Nuevo administrador:</label></div>
@@ -19,7 +19,8 @@
 				</form>
 			</div>
 			<div>
-				<form method="post" action="manager">
+				<form method="post" action="/user">
+					<input type="hidden" name="role" value="MANAGER" />
 					<div class="row" style="margin: 0% 25% 0% 25%">
 						<div class="col-md-3"><label>Nuevo manager:</label></div>
 						<div class="col-md-3"><input required autofocus class="form-control" type="text" placeholder="Email" name="email"/></div>

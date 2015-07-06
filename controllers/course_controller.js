@@ -110,6 +110,7 @@ exports.edit = function(req, res) {
 
 // PUT /course/:id
 exports.update = function(req, res) {
+  /*
   req.course.name = req.body.course.name;
   req.course.description = req.body.course.description;
   req.course.specialisation = req.body.course.specialisation;
@@ -117,6 +118,8 @@ exports.update = function(req, res) {
   req.course.vacancies = req.body.course.vacancies;
   req.course.year = req.body.course.year;
   req.course.semester = req.body.course.semester;
+  */
+  req.course = req.body.course;
 
   req.course.validate().then(function(err) {
     if (err) {
