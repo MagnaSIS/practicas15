@@ -1,7 +1,7 @@
 var models = require("../models/models.js");
 var util = require("../libs/utilities.js");
 var uuid = require('node-uuid');
-var nodemailer = require('nodemailer');
+var mailer = require('../libs/mailer.js');
 
 //GET /manager
 exports.index = function(req, res) {
@@ -22,115 +22,52 @@ exports.index = function(req, res) {
     });
 };
 
+/* movidas funciones create y password al controlador user */
+
 //POST /manager/createUser
 exports.createUser = function(req, res) {
-    var email = req.body.email;
-    var uuid4 = uuid.v4();
+	var email = req.body.email;
+	var uuid4 = uuid.v4();
 
-    var user = models.User.build();
-    user.email = email.toLowerCase();
-    user.role = req.body.role;
-    user.confirmationToken = uuid4;
-    user.password = "none";
+	var user = models.User.build();
+	user.email = email.toLowerCase();
+	user.role = req.body.role;
+	user.confirmationToken = uuid4;
+	user.password = "none";
 
-    var allowedEmail = /^(.*)\@(.*)\.(.*)$/;
+	var allowedEmail = /^((.)+\@(.)+\.(.)+$)/;
 
-    if (allowedEmail.test(email)) {
+	if (allowedEmail.test(email)) {
 
-        //Envio del correo
-        var link = "http://" + req.get('host') + "/manage/password/" + uuid4;
+		//Envio del correo
+		var link = "http://" + req.get('host') + "/user/confirm?token=" + uuid4;
 
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'magnanode@gmail.com',
-                pass: 'Magna1234.'
-            }
-        });
+		mailer.sendUserConfirmationMail(email, link);
 
-        transporter.sendMail({
-            from: 'magnanode@gmail.com',
-            to: email,
-            subject: 'Registro del gestor en placeForMe',
-            html: "Hola,<br>Un administrador de placeForMe te a elegido para que te registres como gestor de la plataforma.<br>Haz clic en este link para elegir una contraseña para tu usuario.<br><a href=" + link + ">Entrar</a>"
-        });
+		//guardar en base de datos
+		user.save().then(function(newUser) {
+			req.session.action = "creado";
+			req.session.userTmp = "administrador " + user.email;
 
-        //guardar en base de datos
-        user.save().then(function(newAdmin) {
-        	req.session.msg = [{"message": "se ha creado satisfactoriamente el usuario "+ user.email +" Con el rol: "+ req.body.role}];
-        	
-            //save log
-            models.Logs.create({
-                userID: req.session.user.id,
-                controller: "Manage",
-                action: "Create"+req.body.role,
-                details: "newAdminID=" + newAdmin.id + ";email=" + newAdmin.email
-            });
-            res.redirect('/manager');
-        });
-    }else {
-        req.session.errors = [{"message": 'Introduzca un correo válido.'}];
-        req.session.where = 'users';
-        res.redirect('/manager');
-    }
-
-};
-
-//GET /manage/password/:token
-
-exports.password = function(req, res, next) {
-    var errors = req.session.errors || {};
-    var token = req.param("token");
-    req.session.errors = {};
-    req.session.token = token;
-    models.User.find({where: {confirmationToken: token}}).then(function(user) {
-        if (user) {
-            req.session.where = '';
-            res.render('manager/password', {token: token,email: user.email,errors: errors});
-        }else {
-            next(new Error('No existe el Token= ' + token))
-        }
-    });
-}
-
-exports.putPassword = function(req, res, next) {
-
-    console.log(" - La edicion de la contraseña de un usuario se a iniciado");
-    var token = req.session.token;
-    console.log(" - Dato que se recive desde token: " + token);
-
-    models.User.find({where: {confirmationToken: token}}).then(function(user) {
-        if (user) {
-            console.log(" - Se ha elegido el usuario del modelo de datos (" + user.email + ")");
-            user.isValidate = true;
-            user.password = util.encrypt(req.body.put_password);
-            user.locked = false;
-            user.validate().then(function(err) {
-                if (err) {
-                    console.log(" - La validacion del usuario actualizado a dado ERROR");
-                    req.session.where = '';
-                    res.render('manager/password', {token: token,email: user.email,errors: err.errors});
-                }
-                else {
-                    console.log(" - La validacion del usuario actualizado sin errores");
-                    user.save().then(function() {
-                        console.log(" - Usuario guardado correctamente, redireccionar a '/login'");
-                        res.redirect('/login');
-                    });
-                }
-            }).catch(function(error) {
-                next(error);
-            });
-        }else {
-            console.log(" - Error al elegir un usuario del modelo de datos (no se a podido sacar ninguno)");
-            req.session.where = '';
-            res.render('manager/password', {
-                errors: [{
-                    "message": 'Este usuario no esta a la espera de crear una contraseña'
-                }]
-            });
-        }
-    });
+			//save log
+			models.Logs.create({
+				userID: req.session.user.id,
+				controller: "User",
+				action: "Create " + user.role,
+				details: "newUserID=" + newUser.id +
+					";newUserEmail=" + newUser.email
+			});
+			/* TODO mostrar mensaje de exito */
+			res.redirect('/manager');
+		});
+	}
+	else {
+		req.session.errors = [{
+			"message": 'El correo no es un correo válido.'
+		}];
+		req.session.where = 'users';
+		res.redirect('/manager');
+	}
 };
 
 //Delete /manager/deleteUser/:userId
@@ -173,7 +110,7 @@ exports.updateUser = function(req, res) {
         req.session.msg = [{"message": 'Se ha editado el usuario '+req.user.email+' satisfactoriamente'}];
         res.redirect('/manager');
     	
-    }).catch (function (err){
+    }).catch (function (error){
     	req.session.errors = [{"message": 'Ha ocurrido un error al editar el usuario'},
                               {"message": error.message}];
 		res.redirect('/manager');
@@ -186,9 +123,9 @@ exports.updateUser = function(req, res) {
 //GET /manager/changelock/:userId
 exports.changeLock = function(req, res) {
     req.user.locked = !req.user.locked;
+    var action = (req.user.locked) ? "locked" : "unlocked";
     req.user.save().then(function() {
            //save log
-        var action = (req.user.locked) ? "locked" : "unlocked";
         models.Logs.create({
             userID: req.session.user.id,
             controller: "Manage",
@@ -197,7 +134,7 @@ exports.changeLock = function(req, res) {
         });
         req.session.msg = [{"message": 'Se ha '+((req.user.locked) ? "bloqueado" : "desbloqueado")+ ' el usuario '+req.user.email+' satisfactoriamente'}];
         res.redirect('/manager');
-    }).catch(function(err) {
+    }).catch(function(error) {
     	req.session.errors = [{"message": 'Ha ocurrido un error al '+action+ ' el usuario '+req.user.email},
                               {"message": error.message}];
     });
@@ -248,7 +185,7 @@ exports.changeUserRole = function(req,res){
 		req.session.errors = [{"message": 'Rol incorrecto...'}];
         res.redirect('/manager');
 	}
-}
+};
 
 //POST '/manager/createStudent/:userId'
 exports.createStudentFromUser = function(req,res){
@@ -275,4 +212,4 @@ exports.createStudentFromUser = function(req,res){
 	                              {"message": error.message}];
 			res.redirect('/manager');
 		}); 
-}
+};

@@ -1,6 +1,5 @@
 var models = require('../models/models.js');
 
-
 // Autoload :id
 exports.load = function(req, res, next, courseId) {
   models.Course.findById(courseId).then(
@@ -110,6 +109,7 @@ exports.edit = function(req, res) {
 
 // PUT /course/:id
 exports.update = function(req, res) {
+  // Es necesario ponerlas uno a uno porque son modificaciones
   req.course.name = req.body.course.name;
   req.course.description = req.body.course.description;
   req.course.specialisation = req.body.course.specialisation;
@@ -145,8 +145,8 @@ exports.update = function(req, res) {
           ";specialisation=" + req.course.specialisation +
           ";credits=" + req.course.credits +
           ";vacancies=" + req.course.vacancies +
-            ";year=" + req.course.year +
-            ";semester=" + req.course.semester
+          ";year=" + req.course.year +
+          ";semester=" + req.course.semester
       });
     }
   });

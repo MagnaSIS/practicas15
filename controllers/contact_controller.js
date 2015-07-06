@@ -16,9 +16,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//Post /controllers/contact
+// controllers/contact_controller.js
 
-var nodemailer = require('nodemailer');
+var mailer = require('../libs/mailer.js');
+
+// POST /contact
 exports.sendMail = function(req, res) {
 
   var name = req.body.name;
@@ -31,27 +33,9 @@ exports.sendMail = function(req, res) {
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
 
   if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
-
-        //Envio del correo
-        var link = text;
-
-        var transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'magnanode@gmail.com',
-            pass: 'Magna1234.'
-          }
-        });
-        transporter.sendMail({
-          from: email,
-          to: 'magnanode@gmail.com',
-          subject: 'El usuario ' +email + " te ha enviado un comentario",
-          html: "Nombre: "+name+" "+apellidos+"<br><br>" +link
-        });
-        req.session.msg = [{message: "Comentario enviado correctamente."}]
-        res.redirect('/contact');
-
-
+    mailer.sendCommentMail(email, text);
+    req.session.msg = [{message: "Comentario enviado correctamente."}];
+    res.redirect('/contact');
   }
   else {
     if (!allowedEmail.test(email)) {
