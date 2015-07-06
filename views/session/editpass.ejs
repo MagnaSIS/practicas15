@@ -2,19 +2,30 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">Modificar password del usuario</div>
 		<div class="panel-body">
-			<div style="margin: 0% 30% 0% 30%">
-			<form method="post" action="/modifipass/<%= user.confirmationToken %>?_method=put">
-				<div class="row">
-					<div class="col-md-6">
-						<label>Password</label>
+			<div>
+				<form method="post" action="/modifipass/<%= user.confirmationToken %>?_method=put">
+					<div class="container">
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<div class="row">
+									<div class="col-md-6">
+										<label>Password</label>
+									</div>
+									<div class="col-md-6">
+										<input class="form-control" type="password" name="changepass" required="required" size="30" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Nueva contraseña" data-toggle="tooltip" data-placement="right" title="Longitud mínima de 8 caracteres, debe contener al menos una mayúscula, una minúscula y un número." />
+									</div>
+								</div>
+								<div class="row">
+									<input class="btn btn-default" type="submit" value="Confirmar el cambio" id="submit" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+							</div>
+						</div>
 					</div>
-					<div class="col-md-6">
-						<input class="form-control" type="password" name="changepass" required="required" size="30" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Nueva contraseña" data-toggle="tooltip" data-placement="right" title="Longitud mínima de 8 caracteres, debe contener al menos una mayúscula, una minúscula y un número." />
-					</div>
-				</div>
-				<br/>
-				<input class="btn btn-default" type="submit" value="Confirmar el cambio" id="submit" />
-			</form>
+				</form>
 			</div>
 		</div>
 	</div>
