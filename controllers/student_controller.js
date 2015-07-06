@@ -49,7 +49,7 @@ exports.create = function(req, res) {
 
   //asignacion de valores al student
   var tmpYear = req.body.year;
-  var tmpAvgGrade = parseFloat(req.body.avg); //idem
+  var tmpAvgGrade = req.body.avg; //idem
   var tmpCredits = req.body.credits; //idem
   var tmpSpecialisation = req.body.specialisation;
 

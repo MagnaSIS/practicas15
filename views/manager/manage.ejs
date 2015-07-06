@@ -6,24 +6,18 @@ if (users[i].role === "STUDENT") {student++}
 }
 %>
 
-<%if (action) { %>
-<script>
-  $(document).ready(function(){
-    alert('Se ha <%=action%> satisfactoriamente el/la administrador/a: <%=userTmp%>');
-  });
-</script>
-<% } %>
 	<div class="panel panel-default">
 		<div class="panel-heading">Gentión de usuarios</div>
 		<div class="panel-body">
 			<div>
+
 				<p>Número de usuarios registrados: <%=users.length%></p>
 				<p>Estudiantes: <%=student%></p>
 				<p>Gestores académicos: <%=manager%></p>
 				<p>Administradores: <%=admin%></p>
 			</div>
 			<div>
-				<form method="post" action="/admin">
+				<form method="post" action="/manager/createUser">
 					<input type="hidden" name="role" value="ADMIN" />
 					<div class="row" style="margin: 0% 25% 0% 25%">
 						<div class="col-md-3"><label>Nuevo administrador:</label></div>
@@ -33,7 +27,8 @@ if (users[i].role === "STUDENT") {student++}
 				</form>
 			</div>
 			<div>
-				<form method="post" action="manager">
+				<form method="post" action="/manager/createUser">
+				<input type="hidden" name="role" value="MANAGER" />
 					<div class="row" style="margin: 0% 25% 0% 25%">
 						<div class="col-md-3"><label>Nuevo manager:</label></div>
 						<div class="col-md-3"><input required autofocus class="form-control" type="text" placeholder="Email" name="email"/></div>
@@ -59,9 +54,24 @@ if (users[i].role === "STUDENT") {student++}
 							<td><%= users[i].id %></td>
 							<td><%= users[i].email %></td>
 							<td>
-								<% if (users[i].role === "ADMIN") { %> Administrador <% } %>
-								<% if (users[i].role === "MANAGER") { %> Gestor <% } %>
-								<% if (users[i].role === "STUDENT") { %> Estudiante <% } %>
+								<% if (users[i].role === "ADMIN") { %> 
+									Administrador 
+								<% } else{ %>
+								<form method="post" action="/manager/changeUserRole/<%= users[i].id %>">
+									<select name="role"  onchange="this.form.submit()">
+									<% if (users[i].role === "MANAGER") { %> 
+										<option selected value="MANAGER">Gestor</option>  
+									<% }else{ %>
+										<option value="MANAGER">Gestor</option> 
+									<% } %>
+									<% if (users[i].role === "STUDENT") { %> 
+										<option selected value="STUDENT">Estudiante</option>  
+									<% }else{ %>
+										<option value="STUDENT">Estudiante</option> 
+									<% } %>
+									</select>
+								</form>
+								<% } %>
 							</td>
 							<td><% if(users[i].isValidate){ %>Si<% }else{ %>No<% } %></td>
 							<td>
@@ -71,12 +81,12 @@ if (users[i].role === "STUDENT") {student++}
 							</td>
 							<td><%= users[i].createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, '') %></td>
 							<td>
-								<form method="post" action="/manager/<%= users[i].id %>/edit?_method=get">
+								<a href="/manager/editUser/<%= users[i].id %>">
 									<button class="btn btn-default" type="submit">Editar</button>
-								</form>
+								</a>
 							</td>
 							<td>
-								<form method="post" action="/manager/<%= users[i].id %>?_method=delete">
+								<form method="post" action="/manager/deleteUser/<%= users[i].id %>?_method=delete">
 									<button <% if (users[i].role === "ADMIN") { %> disabled <% } %> class="btn btn-default" type="submit" onClick="return confirm('Borrar: <%= users[i].email %>');">X</button>
 								</form>
 							</td>
