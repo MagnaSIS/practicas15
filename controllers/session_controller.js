@@ -94,7 +94,7 @@ exports.create = function(req, res) {
 				error = true;
 				//console.log('Correo no validado');
 				req.session.errors = [{
-					"message": 'Correo no validado'
+					"message": 'Correo no validado. Revisa tu bandeja de correo electrónico.'
 				}];
 			}
 
@@ -102,7 +102,7 @@ exports.create = function(req, res) {
 				error = true;
 				//console.log('Usuario bloqueado');
 				req.session.errors = [{
-					"message": 'Cuenta bloqueada'
+					"message": 'Cuenta bloqueada. Ponte en contacto con un administrador.'
 				}];
 			}
 			if (!error) {
@@ -112,8 +112,8 @@ exports.create = function(req, res) {
 					role: user.role,
 					id: user.id
 				};
-				res.redirect("/");
 			}
+			res.redirect("/");
 		}
 		else {
 			req.session.errors = [{

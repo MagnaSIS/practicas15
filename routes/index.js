@@ -16,9 +16,11 @@ router.get('/', function(req, res, next) {
     req.session.where = 'index';
     var mensaje = req.session.msg;
     req.session.msg = [];
+    var errores = req.session.errors;
+    req.session.errors = [];
     res.render('index', {
         title: 'placeForMe',
-        errors: [],
+        errors: errores,
         msg: mensaje
     });
 });
