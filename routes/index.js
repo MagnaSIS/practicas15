@@ -90,10 +90,7 @@ router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcs
 */
 
 /*GET contact */
-router.get('/contact', function(req, res, next) {
-    req.session.where = 'contact';
-    res.render('contact');
-});
+router.get('/contact', sessionController.loginRequired, sessionController.isStudent, studentController.contact);
 /*
  *  Contact Controller
  */

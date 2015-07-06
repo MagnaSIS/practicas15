@@ -123,3 +123,13 @@ div.social div.googleplus:hover {
 .footer-logo {
     width: 200px;
 }
+
+.heading {
+    opacity: 1.0;
+    filter: alpha(opacity=40); /* For IE8 and earlier */
+}
+
+.heading:hover {
+    opacity: 0.7;
+    filter: alpha(opacity=100); /* For IE8 and earlier */
+}
