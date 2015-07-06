@@ -127,14 +127,14 @@ exports.create = function(req, res) {
           req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
                                 {"message": error.message}];
           newUser.destroy().then(function() {
-          res.redirect('/login');
+          res.redirect('/students');
         }); //borrar el usuario ya que no ha creado el student..
-          res.redirect('/login');
+          res.redirect('/students');
       });
     }).catch(function(error) {
     	req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
     	                      {"message": error.message}];
-    	res.redirect('/login');
+    	res.redirect('/students');
     });
   }
 
