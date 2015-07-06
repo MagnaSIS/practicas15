@@ -79,16 +79,19 @@ exports.create = function(req, res) {
     models.User.create({
       email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
       password: password,
-      confirmationToken: null,
+      confirmationToken: uuid4
     }).then(function(newUser) {
       models.Student.create({
         name: req.body.name,
         surname: req.body.lastname,
         year: tmpYear,
         avgGrade: tmpAvgGrade,
-        credits: tmpCredits
+        credits: tmpCredits,
+        specialisation: tmpSpecialisation
       }).then(function(newStudent) {
         newStudent.setUser(newUser).then(function(newStudent) {
+
+          });
           //Envio del correo
           var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
 
@@ -106,30 +109,22 @@ exports.create = function(req, res) {
             subject: 'placeForMe: verficación de correo',
             html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
           });
+          req.session.errors = {};
           req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
-          });
-
         }).catch(function(error) {
-        req.session.errors = [{
-            "message": 'Ha ocurrido un error en el registro'
-          },
-          {
-          	"message": error.message
-          }];
-        newUser.destroy().then(function() {
+    	  //catch en la creaccion del student
+          req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+                                {"message": error.message}];
+          newUser.destroy().then(function() {
           res.redirect('/login');
-        });
-
+        }); //borrar el usuario ya que no ha creado el student..
+          res.redirect('/login');
       });
     }).catch(function(error) {
-    	req.session.errors = [{
-            "message": 'Ha ocurrido un error en el registro'
-          },
-          {
-          	"message": error.message
-          }];
-      res.redirect('/login');
+    	req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+    	                      {"message": error.message}];
+    	res.redirect('/login');
     });
   }
 
@@ -153,18 +148,17 @@ exports.create = function(req, res) {
       res.render('student/studentRegistration', {
         errors: req.session.errors
       });
+      if (!allowAvgGrade.test(tmpAvgGrade)) {
+        req.session.errors = [{
+          "message": 'La nota media debe ser entre 0.0 y 10.0'
+        }];
+      }
+      req.session.where = '';
+      res.render('student/studentRegistration', {
+        errors: req.session.errors
+      });
     }
-    if (!allowAvgGrade.test(tmpAvgGrade)) {
-      req.session.errors = [{
-        "message": 'La nota media debe ser entre 0.0 y 10.0'
-      }];
-    }
-    req.session.where = '';
-    res.render('student/studentRegistration', {
-      errors: req.session.errors
-    });
-
-  }
+   }
 };
 
 // Middleware Autoload User por Email de usuario
@@ -183,8 +177,14 @@ exports.loadEmail = function(req, res, next, emailId) {
     }
   }).then(
     function(user) {
-      req.user = user;
-      next();
+      if (user) {
+        req.session.user = user;
+        console.log('Aqui llego:' + user);
+        next();
+      }
+      else {
+        next(new Error('No existe emailId=' + emailId));
+      }
     }
   ).catch(function(error) {
     next(error);
