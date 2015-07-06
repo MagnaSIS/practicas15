@@ -74,20 +74,19 @@
 										<input name="password" type="password" placeholder="Contraseña" class="form-control">
 									</div>
 									<div class="form-group center">
-									<button type="submit" class="btn btn-default">Iniciar sesión</button>
+										<button type="submit" class="btn btn-default">Iniciar sesión</button>
 									</div>
-
 									<div class="form-group center">
-									<a href="/students">Registrarse</a>
+										<a href="/students">Registrarse</a>
 									</div>
-									
-									<div class="form-group center">
-									<a href="/modifipass"> ¿Olvidaste tu contraseña?</a>
+									<div class="form-group center hidden-sm">
+										 | 
+										<a href="/modifipass">He olvidado mi contraseña</a>
 									</div>
 								</form>
 							<% }else{ %>
 								<form method="post" action="/logout?_method=delete" class="navbar-form navbar-right">
-									<label><%= session.user.email %></label>
+									<label class="hidden-sm"><%= session.user.email %></label>
 									<button class="btn btn-default" type="submit">Cerrar sesión</button>
 								</form>
 							<% } %>
