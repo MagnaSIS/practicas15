@@ -12,7 +12,6 @@
 </head>
 
 <body>
-
 <div class="panel panel-default">
 	<div class="panel-body">
 		<div class="container" style="background-image: url(header.jpg);  border: 1px solid black;">
@@ -63,9 +62,17 @@
 									<div class="form-group">
 										<input name="password" type="password" placeholder="Contraseña" class="form-control">
 									</div>
+									<div class="form-group center">
 									<button type="submit" class="btn btn-default">Iniciar sesión</button>
+									</div>
+
+									<div class="form-group center">
 									<a href="/students">Registrarse</a>
+									</div>
+									
+									<div class="form-group center">
 									<a href="/modifipass"> ¿Olvidaste tu contraseña?</a>
+									</div>
 								</form>
 							<% }else{ %>
 								<form method="post" action="/logout?_method=delete" class="navbar-form navbar-right">
@@ -79,7 +86,7 @@
 			</div>
 		</div>
 
-
+<!-- ERRORS MESSAGES -->
 		<section  id="s1">
 			<div>
 				<% if ( !(typeof errors==="undefined") && errors.length) { %>
@@ -93,6 +100,8 @@
 				<% } %>
 
 			</div>
+<!-- END ERRORS MESSAGES -->			
+<!-- SUCCESFULL MESSAGES -->			
 			<div>
 				<% if ( !(typeof msg==="undefined") && msg.length) { %>
 				<div class="msg">
@@ -104,10 +113,12 @@
 				</div>
 				<% } %>
 			</div>
+<!-- END SUCCESFULL MESSAGES -->	
 
 			<div align="center">
 				<%- body %>
 			</div>
+			
 		</section>
 	</div>
 	<div class="panel-footer center">

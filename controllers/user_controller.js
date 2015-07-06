@@ -13,9 +13,14 @@ exports.notExistUser = function(req, res, next) {
     }
   }).then(function(user) {
     if (user) {
+    	req.session.errors = [{"message": 'Ya existe el usuario'}];
+    	var backUrl=req.session.backurl;
+    	req.session.backurl="";
+    	res.redirect(backUrl);
       next(new Error("Ya existe el usuario"));
     }
     else {
+    	req.session.backurl=""
       next();
     }
   });

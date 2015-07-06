@@ -2,7 +2,7 @@
 		<div class="panel-heading">Editar usuario (ID: <%= user.id %>)</div>
 		<div class="panel-body">
 			<div style="margin: 0% 30% 0% 30%">
-				<form method="post" action="/manager/<%= user.id %>/?_method=put">
+				<form method="post" action="/manager/editUser/<%= user.id %>?_method=put">
 					<div class="row">
 						<div class="col-md-6">
 							<label for="email">Email</label>

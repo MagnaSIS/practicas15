@@ -31,8 +31,11 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var partials = require('express-partials');
 var methodOverride = require ('method-override');
+/*
+ * Define routes
+ */
 var routes = require('./routes/index');
-
+var managerRoutes = require('./routes/manager');
 
 
 
@@ -85,7 +88,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', routes);
-
+app.use('/manager', managerRoutes);
 
 
 

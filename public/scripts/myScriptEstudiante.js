@@ -87,7 +87,7 @@ function validar()
     var password1 = document.getElementById("password1").value;
 
     if(password!=password1){
-      alert("El correo no coincide");
+      alert("Las contraseñas no coinciden");
       return false;
 
    }else{
