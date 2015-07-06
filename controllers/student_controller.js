@@ -49,7 +49,7 @@ exports.create = function(req, res) {
 
   //asignacion de valores al student
   var tmpYear = req.body.year;
-  var tmpAvgGrade = req.body.avg; //idem
+  var tmpAvgGrade = parseFloat(req.body.avg); //idem
   var tmpCredits = req.body.credits; //idem
   var tmpSpecialisation = req.body.specialisation;
 
@@ -89,7 +89,6 @@ exports.create = function(req, res) {
         credits: tmpCredits
       }).then(function(newStudent) {
         newStudent.setUser(newUser).then(function(newStudent) {
-          });
           //Envio del correo
           var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
 
@@ -109,6 +108,8 @@ exports.create = function(req, res) {
           });
           req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
+          });
+
         }).catch(function(error) {
         req.session.errors = [{
             "message": 'Ha ocurrido un error en el registro'
@@ -116,8 +117,10 @@ exports.create = function(req, res) {
           {
           	"message": error.message
           }];
-        newUser.destroy();
-        res.redirect('/login');
+        newUser.destroy().then(function() {
+          res.redirect('/login');
+        });
+
       });
     }).catch(function(error) {
     	req.session.errors = [{
