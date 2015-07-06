@@ -46,9 +46,9 @@ exports.sendMail = function(req, res) {
           from: email,
           to: 'magnanode@gmail.com',
           subject: 'El usuario ' +email + " te ha enviado un comentario",
-          html: "Nombre: "+name+" con apellido: "+apellidos+" dice lo siguiente: <br>" +link + "<br> Gracias. "
+          html: "Nombre: "+name+" "+apellidos+"<br><br>" +link
         });
-
+        req.session.msg = [{message: "Comentario enviado correctamente."}]
         res.redirect('/contact');
 
 
