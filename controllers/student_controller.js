@@ -515,3 +515,17 @@ exports.manageCourses = function(req, res) {
     res.redirect('/students/courses');
   });
 };
+
+exports.contact = function(req, res) {
+  models.Student.findOne({
+    where: {
+      UserId: req.session.user.id
+    }}).then(function(student) {
+    req.session.where = 'contact';
+    res.render('contact', {
+      student: student,
+      email: req.session.user.email,
+      errors: []
+    });
+  });
+};

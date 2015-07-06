@@ -1,71 +1,81 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading">Editar mi perfil</div>
-		<div class="panel-body" style="margin: 0% 30% 0% 30%">
+		<div class="panel-body">
 			<form method="post" action="/students/update?_method=put">
-				<div class="row">
-					<div class="col-md-6">
-						<label for="name_edit">Nombre</label>
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12 col-sm-4">
+						</div>
+						<div class="col-xs-12 col-sm-4">
+							<div class="row">
+								<div class="col-md-6">
+									<label for="name_edit">Nombre</label>
+								</div>
+								<div class="col-md-6">
+									<input autofocus name="name_edit" id="name_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.name %>" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos.">
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-md-6">
+									<label for="surname_edit">Apellido</label>
+								</div>
+								<div class="col-md-6">
+									<input name="surname_edit" id="surname_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.surname %>" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos.">
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-md-6">
+									<label for="year">Año que voy a cursar</label>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" id="year" name="year_edit">
+										<option value="3" <% if (student.year === "3") { %> selected <% } %> >3</option>
+										<option value="4" <% if (student.year === "4") { %> selected <% } %> >4</option>
+									</select>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-md-6">
+									<label for="avg_edit">Nota media</label>
+								</div>
+								<div class="col-md-6">
+									<input name="avg_edit" id="avg_edit" class="form-control" type="text" value="<%= student.avgGrade %>" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0 y 10.">
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-md-6">
+									<label for="credits_edit">Créditos</label>
+								</div>
+								<div class="col-md-6">
+									<input name="credits_edit" id="credits_edit" class="form-control" type="number" value="<%= student.credits %>" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<div class="col-md-6">
+									<label for="specialisation_edit">Especialización</label>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" id="specialisation_edit" name="specialisation_edit">
+										<option value="C" <% if (student.specialisation === "C") { %> selected <% } %> >Computación</option>
+										<option value="IC" <% if (student.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
+										<option value="IS" <% if (student.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
+									</select>
+								</div>
+							</div>
+							<hr>
+							<div class="row">
+								<input class="btn btn-default" type="submit" vale="Guardar cambios">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-4">
+						</div>
 					</div>
-					<div class="col-md-6">
-						<input autofocus name="name_edit" id="name_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.name %>" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos.">
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-6">
-						<label for="surname_edit">Apellido</label>
-					</div>
-					<div class="col-md-6">
-						<input name="surname_edit" id="surname_edit" class="form-control" type="text" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" value="<%= student.surname %>" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos.">
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-6">
-						<label for="year">Año que voy a cursar</label>
-					</div>
-					<div class="col-md-6">
-						<select class="form-control" id="year" name="year_edit">
-							<option value="3" <% if (student.year === "3") { %> selected <% } %> >3</option>
-							<option value="4" <% if (student.year === "4") { %> selected <% } %> >4</option>
-						</select>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-6">
-						<label for="avg_edit">Nota media</label>
-					</div>
-					<div class="col-md-6">
-						<input name="avg_edit" id="avg_edit" class="form-control" type="text" value="<%= student.avgGrade %>" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0 y 10.">
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-6">
-						<label for="credits_edit">Créditos</label>
-					</div>
-					<div class="col-md-6">
-						<input name="credits_edit" id="credits_edit" class="form-control" type="number" value="<%= student.credits %>" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240.">
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-md-6">
-						<label for="specialisation_edit">Especialización</label>
-					</div>
-					<div class="col-md-6">
-						<select class="form-control" id="specialisation_edit" name="specialisation_edit">
-							<option value="C" <% if (student.specialisation === "C") { %> selected <% } %> >Computación</option>
-							<option value="IC" <% if (student.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
-							<option value="IS" <% if (student.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
-						</select>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<input class="btn btn-default" type="submit" vale="Guardar cambios">
 				</div>
 			</form>
 		</div>

@@ -14,9 +14,9 @@
 <body>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<div class="container" style="background-image: url(header.jpg);  border: 1px solid black;">
+		<div class="heading" style="background-image: url(/header.jpg);  border: 1px solid black;">
     		<h1 align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif;">placeForMe</h1> 
-    			<p align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif;">Cálculo de demanda de optativas</p> 
+    			<p align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif; ">Cálculo de demanda de optativas</p> 
 		</div>
 
 		<div class="media">
@@ -63,20 +63,19 @@
 										<input name="password" type="password" placeholder="Contraseña" class="form-control">
 									</div>
 									<div class="form-group center">
-									<button type="submit" class="btn btn-default">Iniciar sesión</button>
+										<button type="submit" class="btn btn-default">Iniciar sesión</button>
 									</div>
-
 									<div class="form-group center">
-									<a href="/students">Registrarse</a>
+										<a href="/students">Registrarse</a>
 									</div>
-									
-									<div class="form-group center">
-									<a href="/modifipass"> ¿Olvidaste tu contraseña?</a>
+									<div class="form-group center hidden-sm">
+										<span class="hidden-xs"> | </span>
+										<a href="/modifipass">He olvidado mi contraseña</a>
 									</div>
 								</form>
 							<% }else{ %>
 								<form method="post" action="/logout?_method=delete" class="navbar-form navbar-right">
-									<label><%= session.user.email %></label>
+									<label class="hidden-sm"><%= session.user.email %></label>
 									<button class="btn btn-default" type="submit">Cerrar sesión</button>
 								</form>
 							<% } %>
@@ -132,20 +131,10 @@
 						<p>
 							Paseo Manuel Lardizabal 1<br>
 							20018 San Sebastián (Gipuzkoa)<br>
+							</p><p>
+							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2903.414134795564!2d-2.0094019828033574!3d43.30558936630068!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0000000000000000%3A0x6b04b77ccb51f778!2sFacultad+de+Inform%C3%A1tica!5e0!3m2!1ses!2ses!4v1436171620512" width="300" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+							</p>
 						</p>
-					</div>
-					<div class="row">
-						<h3>Email</h3>
-					</div>
-					<div class="row">
-						<a href="mailto:magnasis@magnasis.com">magnasis@magnasis.com</a>
-					</div>
-					<div class="row">
-						<h3>Teléfono</h3>
-					</div>
-					<div class="row">
-						<p>(+34) 943015022</p>
-						<p>(+34) 688962462</p>
 					</div>
 				</div>
 				<div class="col-md-4">
@@ -170,6 +159,20 @@
 								</div>
 							</div>
 						</div>
+					</div>
+					
+						<div class="row">
+						<h3>Email</h3>
+					</div>
+					<div class="row">
+						<a href="mailto:magnasis@magnasis.com">magnasis@magnasis.com</a>
+					</div>
+					<div class="row">
+						<h3>Teléfono</h3>
+					</div>
+					<div class="row">
+						<p>(+34) 943015022</p>
+						<p>(+34) 688962462</p>
 					</div>
 				</div>
 				<div class="col-md-4">
