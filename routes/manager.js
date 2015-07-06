@@ -30,9 +30,6 @@ router.delete('/deleteUser/:userId(\\d+)', 		securityController.isAdmin, manager
 /*View logs*/
 router.get('/viewAllLogs', 						securityController.isAdmin, managerController.viewLogs);
 
-/*Others.....*/
-router.get('/manage/password/:token', 	managerController.password);
-router.put('/manage/createpassword', 	managerController.putPassword);
 
 
 

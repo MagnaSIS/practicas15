@@ -17,6 +17,7 @@
  */
 
 var util = require("../libs/utilities.js");
+var models = require('../models/models.js');
 
 
 exports.isAdmin = function(req, res, next) {

@@ -128,8 +128,3 @@ div.social div.googleplus:hover {
     opacity: 1.0;
     filter: alpha(opacity=40); /* For IE8 and earlier */
 }
-
-.heading:hover {
-    opacity: 0.7;
-    filter: alpha(opacity=100); /* For IE8 and earlier */
-}
