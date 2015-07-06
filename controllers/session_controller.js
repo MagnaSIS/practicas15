@@ -21,58 +21,45 @@ var util = require("../libs/utilities.js");
 
 
 
-//Check if user is login
+// MW - comprueba si el usuario está identificado
 exports.loginRequired = function(req, res, next) {
 	if (req.session.user) {
 		next();
 	}
 	else {
-		req.session.errors = [{message: "Necesitas iniciar sesión para acceder a esta página."}]
+		req.session.errors = [{
+			message: "Necesitas iniciar sesión para acceder a esta página."
+		}];
 		res.redirect('/login');
 	}
 };
 
-//Check if user is Student
-exports.isStudent = function(req, res, next) {
-	if (req.session.user && req.session.user.role === "STUDENT") {
-		next();
-	}
-	else {
-		next(new Error("Permiso denegado."));
-	}
+// MW - comprueba si el rol del usuario es uno de los propuestos (role1 ó role2 ó role3)
+exports.roleRequired = function(role1, role2, role3) {
+	return function(req, res, next) {
+		if (req.session.user) {
+			var role = req.session.user.role;
+			if (role === role1 || role === role2 || role === role3) {
+				next();
+			}
+		}
+		else {
+			/* TODO creo que no funciona*/
+			res.status(405).send("Acceso denegado.");
+		}
+	};
 };
 
-//Check if user is Manager
-exports.isManager = function(req, res, next) {
-	if (req.session.user && req.session.user.role === "MANAGER") {
-		next();
+// MW - si el usuario esta identificado, elimina su sesion.
+exports.anonRequired = function(req, res, next) {
+	if (req.session.user) {
+		/* TODO igual cambiar */
+		delete req.session.user;
 	}
-	else {
-		next(new Error("Permiso denegado."));
-	}
+	next();
 };
 
-//Check if user is Admin
-exports.isAdmin = function(req, res, next) {
-	if (req.session.user && req.session.user.role === "ADMIN") {
-		next();
-	}
-	else {
-		next(new Error("Permiso denegado."));
-	}
-};
-
-//Check if user is Admin
-exports.isCourseAdmin = function(req, res, next) {
-	if (req.session.user && (req.session.user.role === "ADMIN") || (req.session.user.role === "MANAGER")) {
-		next();
-	}
-	else {
-		next(new Error("Permiso denegado."));
-	}
-};
-
-//Get /login Login Form
+// GET /login - Login Form
 exports.new = function(req, res) {
 	var errors = req.session.errors || {};
 	var msg = req.session.msg || {};
@@ -85,13 +72,13 @@ exports.new = function(req, res) {
 	});
 };
 
-//Post /login Login check
+//POST /login - Login check
 exports.create = function(req, res) {
 	var emailRegex = /^(.*)\@(.*)\.(.*)$/i;
 	var email = req.body.login;
 	var emailMatch = email.match(emailRegex);
 	if (emailMatch) {
-		if (emailMatch[2] === "ikasle.ehu") {
+		if (emailMatch[2] === "ikasle.ehu" && emailMatch[3].match(/^(es|eus)$/)) {
 			email = emailMatch[1] + '@' + emailMatch[2] + '.eus';
 		}
 	}
@@ -105,17 +92,17 @@ exports.create = function(req, res) {
 			var error = false;
 			if (!user.isValidate) {
 				error = true;
-				console.log('Correo no validado');
+				//console.log('Correo no validado');
 				req.session.errors = [{
-					"message": 'Correo no validado'
+					"message": 'Correo no validado. Revisa tu bandeja de correo electrónico.'
 				}];
 			}
 
 			if (user.locked) {
 				error = true;
-				console.log('Usuario bloqueado');
+				//console.log('Usuario bloqueado');
 				req.session.errors = [{
-					"message": 'Cuenta bloqueada'
+					"message": 'Cuenta bloqueada. Ponte en contacto con un administrador.'
 				}];
 			}
 			if (!error) {
@@ -125,15 +112,15 @@ exports.create = function(req, res) {
 					role: user.role,
 					id: user.id
 				};
-				res.redirect("/");
 			}
+			res.redirect("/");
 		}
 		else {
 			req.session.errors = [{
 				"message": 'Correo o contraseña incorrectos'
 			}];
+			res.redirect("/login");
 		}
-		res.redirect("/login");
 	}).catch(function(error) {
 		req.session.errors = [{
 			"message": 'Correo o contraseña incorrectos'
@@ -144,17 +131,8 @@ exports.create = function(req, res) {
 	});
 };
 
-//Delete /logout session destroy
+// DELETE /logout - session destroy
 exports.destroy = function(req, res) {
 	delete req.session.user;
 	res.redirect("/");
-};
-
-exports.isValidate = function(req, res, next) {
-	if (req.session.user.role === "MANAGER") {
-		next();
-	}
-	else {
-		next(new Error("Permiso denegado."));
-	}
 };

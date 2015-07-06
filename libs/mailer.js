@@ -14,8 +14,31 @@ exports.sendResetPasswordMail = function(receiver, link) {
     transporter.sendMail({
         from: 'magnanode@gmail.com',
         to: receiver,
-        subject: 'placeForMe: Modificar Contraseña',
-        html: "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href=" +
-            link + ">Presiona aquí para modificar el password</a>"
+        subject: 'placeForMe: Modificar contraseña',
+        html: "Estimado usuario," +
+            "<br/> Hemos recibido una petición para recuperar la contraseña de la cuenta asociada a este correo." +
+            "<br/> Por favor, vaya a este <a href=" + link + ">enlace</a> para restablecer su contraseña." +
+            "<br/> El equipo de placeForMe."
     });
 };
+
+exports.sendUserConfirmationMail = function(receiver, link) {
+    transporter.sendMail({
+            from: 'magnanode@gmail.com',
+            to: receiver,
+            subject: 'placeForme: Confirmación de cuenta',
+            html: "Estimado usuario," +
+            "<br/> Hemos recibido una petición de registro" +
+            "<br/> Por favor, vaya a este <a href=" + link + ">enlace</a> para activar su cuenta." +
+            "<br/> El equipo de placeForMe."
+        });
+};
+
+exports.sendCommentMail = function(sender, text) {
+    transporter.sendMail({
+          from: sender,
+          to: 'magnanode@gmail.com',
+          subject: 'El usuario ' + sender + " te ha enviado un comentario",
+          html: text
+        });
+}
