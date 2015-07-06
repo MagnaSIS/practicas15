@@ -23,8 +23,9 @@ var util = require("../libs/utilities.js");
 var calcsController = require("../controllers/calcsController.js");
 var nodemailer = require('nodemailer');
 var uuid = require('node-uuid');
+var mailer = require('../libs/mailer.js');
 
-//GET /controllers/student
+// GET /students
 exports.new = function(req, res) {
   var errors = req.session.errors || {};
   req.session.errors = {};
@@ -35,14 +36,16 @@ exports.new = function(req, res) {
   //res.write("Hola");
 };
 
-//Post /controllers/student
+// POST /students
 exports.create = function(req, res) {
   var name = req.body.name;
   var apellidos = req.body.lastname;
   var email = req.body.email;
   var password = req.body.password;
+  var password1 = req.body.password1;
   var uuid4 = uuid.v4(); //id único para verificación del usuario
   password = util.encrypt(password);
+  password1 = util.encrypt(password1);
 
   //asignacion de valores al student
   var tmpYear = req.body.year;
@@ -53,79 +56,100 @@ exports.create = function(req, res) {
   var allowedEmail = /^([a-zA-Z]+\d{3})\@(ikasle.ehu)\.(es|eus)$/;
   var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
+
+  //Verificacion de coincidencia de passwords
+  if (password!=password1) {
+    req.session.errors = [{
+      "message": 'Las contraseñas deben ser iguales'
+    }];
+    res.render('student/studentRegistration', {
+      errors: req.session.errors
+    });
+  }else {
+
 //  var allowYear= /^([34])$/;
 //  var allowAvgGrade= /^([\d+(\.\d+)?])$/;
   var allowAvgGrade= /^((\d\.\d[\d]?)|(10)(\.0)[0]?)$/;
 //  var allowCredits= /^(([1]\d\d)|\d\d|([2][0-3]\d)|(240))$/;
 //  var allowSpecialisation= /^(IS|IC|C)$/;
   /* TODO validar Student Y User antes de crearlos */
-  if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos) &&
-      allowAvgGrade.test(tmpAvgGrade) ) {
+  if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
     var emailMatch = email.match(allowedEmail);
     //guardar en base de datos
-    console.log((emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase());
     models.User.create({
       email: (emailMatch[1] + '@' + emailMatch[2] + '.eus').toLowerCase(),
       password: password,
-      confirmationToken: uuid4
+      confirmationToken: null,
     }).then(function(newUser) {
       models.Student.create({
         name: req.body.name,
         surname: req.body.lastname,
         year: tmpYear,
         avgGrade: tmpAvgGrade,
-        credits: tmpCredits,
-        specialisation: tmpSpecialisation
+        credits: tmpCredits
       }).then(function(newStudent) {
         newStudent.setUser(newUser).then(function(newStudent) {
+          });
+          //Envio del correo
+          var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
 
-        });
-        //Envio del correo
-        var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
+          var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'magnanode@gmail.com',
+              pass: 'Magna1234.'
+            }
+          });
 
-        var transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: 'magnanode@gmail.com',
-            pass: 'Magna1234.'
-          }
-        });
-
-        transporter.sendMail({
-          from: 'magnanode@gmail.com',
-          to: email,
-          subject: 'placeForMe: verficación de correo',
-          html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
-        });
-        req.session.errors = {};
-        req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
-        res.redirect('/login');
-      }).catch(function(error) {
-        console.log("Error al crear student" + error);
-        req.session.errors = "ha ocurrido un error al crear el usuario" + error;
+          transporter.sendMail({
+            from: 'magnanode@gmail.com',
+            to: email,
+            subject: 'placeForMe: verficación de correo',
+            html: "Hola,<br> Por favor presiona el enlace para verificar tu correo.<br><a href=" + link + ">Presiona aquí para verificar</a>"
+          });
+          req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
+          res.redirect('/login');
+        }).catch(function(error) {
+        req.session.errors = [{
+            "message": 'Ha ocurrido un error en el registro'
+          },
+          {
+          	"message": error.message
+          }];
+        newUser.destroy();
         res.redirect('/login');
       });
     }).catch(function(error) {
-      console.log("Error al crear usuario" + error);
-      req.session.errors = "ha ocurrido un error al crear el usuario" + error;
+    	req.session.errors = [{
+            "message": 'Ha ocurrido un error en el registro'
+          },
+          {
+          	"message": error.message
+          }];
       res.redirect('/login');
     });
   }
-  else {
-    if (!allowedEmail.test(email)) {
-      req.session.errors = [{
-        "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
-      }];
-    }
-    if (!allowedName.test(name)) {
-      req.session.errors = [{
-        "message": 'El nombre debe tener letras'
-      }];
-    }
-    if (!allowedLastName.test(apellidos)) {
-      req.session.errors = [{
-        "message": 'El apellido debe tener letras'
-      }];
+
+    else {
+      if (!allowedEmail.test(email)) {
+        req.session.errors = [{
+          "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
+        }];
+      }
+      if (!allowedName.test(name)) {
+        req.session.errors = [{
+          "message": 'El nombre debe tener letras'
+        }];
+      }
+      if (!allowedLastName.test(apellidos)) {
+        req.session.errors = [{
+          "message": 'El apellido debe tener letras'
+        }];
+      }
+      req.session.where = '';
+      res.render('student/studentRegistration', {
+        errors: req.session.errors
+      });
     }
     if (!allowAvgGrade.test(tmpAvgGrade)) {
       req.session.errors = [{
@@ -136,9 +160,11 @@ exports.create = function(req, res) {
     res.render('student/studentRegistration', {
       errors: req.session.errors
     });
+
   }
 };
 
+// Middleware Autoload User por Email de usuario
 exports.loadEmail = function(req, res, next, emailId) {
   var emailRegex = /^(.*)\@(.*)\.(.*)$/i;
 	var email = emailId;
@@ -154,14 +180,8 @@ exports.loadEmail = function(req, res, next, emailId) {
     }
   }).then(
     function(user) {
-      if (user) {
-        req.session.user = user;
-        console.log('Aqui llego:' + user);
-        next();
-      }
-      else {
-        next(new Error('No existe emailId=' + emailId));
-      }
+      req.user = user;
+      next();
     }
   ).catch(function(error) {
     next(error);
@@ -170,46 +190,43 @@ exports.loadEmail = function(req, res, next, emailId) {
 
 //GET /modifipass
 exports.formPassword = function(req, res) {
-  var errors = req.session.errors || {};
-  //    req.session.errors={};
-  console.log('Mensaje de Formulario');
+  var errors = req.session.errors || [];
+  req.session.errors=[];
+  //console.log('Mensaje de Formulario');
   req.session.where = '';
+  console.log(errors);
   res.render('session/form', {
     errors: errors
   });
   //res.write("Hola");
 };
 
+// GET /modifipass/:emailId/okpass
 exports.mostrarOK = function(req, res) {
-  var user1 = req.session.user; // req.course: autoload de instancia de course
-
-  //Envio del correo
-  var link = "http://" + req.get('host') + "/modifipass/" + user1.confirmationToken + "/edit";
-
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'magnanode@gmail.com',
-      pass: 'Magna1234.'
-    }
-  });
-
-  transporter.sendMail({
-    from: 'magnanode@gmail.com',
-    to: user1.email,
-    subject: 'placeForMe: Modificar Contraseña',
-    html: "Hola,<br> Por favor presiona el enlace para modificar tu password.<br><a href=" + link + ">Presiona aquí para modificar el password</a>"
-  });
-  /*
-    console.log('Mensaje OKPASS');
-    console.log(user1.email);
-    console.log(user1.confirmationToken);*/
-  delete req.session.user;
-  req.session.where = '';
-  req.session.msg = [{message: "Se te ha enviado un correo electrónico. Por favor, revisa tu bandeja de entrada."}];
-  res.redirect("/")
+  var user = req.user;
+  if (user) {
+    user.confirmationToken = uuid.v4();
+    user.save({
+      fields: ['confirmationToken']
+    }).then(function(user) {
+      var link = "https://" + req.get('host') + "/modifipass/" + user.confirmationToken + "/edit";
+      //Envio del correo
+      mailer.sendResetPasswordMail(user.email, link);
+      req.session.where = '';
+      req.session.msg = [{
+        message: "Se te ha enviado un correo electrónico. Por favor, revisa tu bandeja de entrada."
+      }];
+      res.redirect("/");
+    });
+  }
+  else {
+    req.session.errors = [{message: "No existe un usuario con el correo introducido."}];
+    console.log(req.session.errors);
+    res.redirect('/modifipass');
+  }
 };
 
+// GET /modifipass/:token/edit
 exports.editPassword = function(req, res) {
   //console.log('Aqui llego 0');
   var user = req.user; // req.user: autoload de instancia de course
@@ -231,6 +248,7 @@ exports.updatePassword = function(req, res, token) {
     var encrypt_password = util.encrypt(password);
 
     req.user.password = encrypt_password;
+    req.user.confirmationToken = '';
     req.user
       .validate()
       .then(
@@ -241,23 +259,24 @@ exports.updatePassword = function(req, res, token) {
               user: req.user,
               errors: err.errors
             });
-            console.log('Aqui llego pass2');
+            //console.log('Aqui llego pass2');
           }
           else {
-            console.log('Aqui llego pass3');
-            req.session.msg = [{message: "Contraseña modificada correctamente"}]
+            //console.log('Aqui llego pass3');
+            req.session.msg = [{message: "Contraseña modificada correctamente"}];
             req.user // save: guarda campos pregunta y respuesta en DB
               .save({
-                fields: ["password"]
+                fields: ["password", "confirmationToken"]
               })
               .then(function() {
                 res.redirect('/login');
               });
-            console.log('Aqui llego pass4');
-          } // Redirecci�n HTTP a lista de preguntas (URL relativo)
+            //console.log('Aqui llego pass4');
+          }
       }
     );
 };
+
 //Modificación en base de datos sobre su existencia.
 exports.verify = function(req, res) {
   models.User.findOne({
