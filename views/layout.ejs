@@ -8,16 +8,17 @@
 	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css"/>
 	<link href='//fonts.googleapis.com/css?family=Ubuntu:700' rel='stylesheet' type='text/css'>
 	<link href="/assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<div id="fb-root"></div>
 
 </head>
 
 <body>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<div class="heading" style="background-image: url(/header.jpg);  border: 1px solid black;">
+		<span href="/"><div class="heading" style="background-image: url(/header.jpg);  border: 1px solid black;">
     		<h1 align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif;">placeForMe</h1> 
     			<p align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif; ">Cálculo de demanda de optativas</p> 
-		</div>
+		</div></span>
 
 		<div class="media">
 			<div class="media-body">
@@ -143,25 +144,30 @@
 							<h2>Redes Sociales</h2>
 						</div>
 						<div class="row social centered">
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<div class="facebook">
 									<a target = "_blank" href="https://www.facebook.com/MagnaSIS" class="icon48 icon48-1">Facebook</a>
 								</div>
 							</div>
-							<div class="col-md-4">
-								<div class="twitter">
-									<a target = "_blank" href="https://twitter.com/magnasis" class="icon48 icon48-2">Twitter</a>
-								</div>
-							</div>
-							<div class="col-md-4">
+							<div class="col-md-6">
 								<div class="linkedin">
 									<a target = "_blank" href="https://www.linkedin.com/company/2687083?trk=tyah&trkInfo=clickedVertical%3Acompany%2Cidx%3A1-2-2%2CtarId%3A1435046170463%2Ctas%3Amagna%20sis" class="icon48 icon48-4">LinkedIn</a>
 								</div>
 							</div>
 						</div>
 					</div>
+					<div class="row" >
+						<a class="twitter-timeline" href="https://twitter.com/MagnaSIS" data-widget-id="370627588135198720"></a>
+					</div>
 					
-						<div class="row">
+				</div>
+				<div class="col-md-4">
+					<div class="row">
+						<a target = "_blank" href="http://www.magnasis.com">
+							<img src="/img/magna.jpg" class="footer-logo"/>
+						</a>
+					</div>
+					<div class="row">
 						<h3>Email</h3>
 					</div>
 					<div class="row">
@@ -175,16 +181,11 @@
 						<p>(+34) 688962462</p>
 					</div>
 				</div>
-				<div class="col-md-4">
-					<div class="row">
-						<a target = "_blank" href="http://www.magnasis.com">
-							<img src="/img/magna.jpg" class="footer-logo"/>
-						</a>
-					</div>
-				</div>
 			</div>
+			<br>
+			<br>
 			<div class="row" align="center">
-	        	<p>placeForMe  Copyright (C) 2015 by Magna SIS</p>
+	        	<p><strong>placeForMe  Copyright (C) 2015 by Magna SIS</strong></p>
 	        </div>
 	    </div>
 	</div>
@@ -198,5 +199,6 @@
 		$('[data-toggle="tooltip"]').tooltip()
 	});
 </script>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 </body>
 </html>

@@ -9,15 +9,15 @@
 							</div>
 							<div class="col-xs-12 col-sm-4">
 								<div class="form-group">
-									<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
+									<input autofocus required class="form-control" type="text" name="name" value="<%= student.name %>" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
 								</div>
 								<hr>
 								<div class="form-group">
-									<input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
+									<input class="form-control" required type="text" name="lastname" id="lastname" value="<%= student.surname %>" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
 								</div>
 								<hr>
 								<div class="form-group">
-									<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" placeholder="tuCorreo001@ikasle.ehu.eus" name="email" id="email"/>
+									<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" value="<%= email %>" name="email" id="email"/>
 								</div>
 								<hr>
 								<div class="form-group">
