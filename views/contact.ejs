@@ -1,37 +1,45 @@
-  <div class="panel panel-default">
-    <div class="panel-heading">Formulario de contacto</div>
-    <div class="panel-body">
-      <div style="margin: 0% 40% 0% 40%">
-        <form method='post' action='contact' >
-
-          <div class="form-group">
-            <input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
-          </div>
-          <hr>
-          <div class="form-group">
-            <input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
-          </div>
-          <hr>
-          <div class="form-group">
-            <input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" placeholder="tuCorreo001@ikasle.ehu.eus" name="email" id="email"/>
-          </div>
-          <hr>
-          <div class="form-group">
-            <textarea class="form-control vertical_move" placeholder="Campo para escribir"  name="text" id="text"> </textarea>
-          </div>
-          <div class="form-group">
-          </div>
-          <hr>
-          <div class="checkbox">
-                 <label for="condiciones">
-                   <input type="checkbox" id="condiciones" name="condiciones" value="aceptado" required />
-                   He leído y acepto los <a href="/terms">términos y condiciones de uso</a>.
-               </label>
-          </div>
-          <div class="row">
-            <input class="btn btn-default" type="submit"  value="Enviar" />
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+<div class="panel panel-default">
+	<div class="panel-heading">Formulario de contacto</div>
+		<div class="panel-body">
+			<div>
+				<form method='post' action='contact'>
+					<div class="container">
+						<div class="row">
+							<div class="col-xs-12 col-sm-4">
+							</div>
+							<div class="col-xs-12 col-sm-4">
+								<div class="form-group">
+									<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
+								</div>
+								<hr>
+								<div class="form-group">
+									<input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)"/>
+								</div>
+								<hr>
+								<div class="form-group">
+									<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.eus$)" placeholder="tuCorreo001@ikasle.ehu.eus" name="email" id="email"/>
+								</div>
+								<hr>
+								<div class="form-group">
+									<textarea class="form-control vertical_move" placeholder="Campo para escribir"  name="text" id="text"> </textarea>
+								</div>
+								<hr>
+								<div class="checkbox">
+									<label for="condiciones">
+									<input type="checkbox" id="condiciones" name="condiciones" value="aceptado" required />
+									He leído y acepto los <a href="/terms">términos y condiciones de uso</a>.
+									</label>
+								</div>
+								<div class="row">
+									<input class="btn btn-default" type="submit"  value="Enviar" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4">
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
