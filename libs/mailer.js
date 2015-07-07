@@ -2,17 +2,18 @@
 
 var nodemailer = require('nodemailer');
 
+
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'magnanode@gmail.com',
-        pass: 'Magna1234.'
+        user: require('../config').gmailAccount,
+        pass: require('../config').gmailPassword
     }
 });
 
 exports.sendResetPasswordMail = function(receiver, link) {
     transporter.sendMail({
-        from: 'magnanode@gmail.com',
+        from: require('../config').gmailAccount,
         to: receiver,
         subject: 'placeForMe: Modificar contraseña',
         text: "Estimado usuario," +
@@ -24,7 +25,7 @@ exports.sendResetPasswordMail = function(receiver, link) {
 
 exports.sendUserConfirmationMail = function(receiver, link) {
     transporter.sendMail({
-            from: 'magnanode@gmail.com',
+            from: require('../config').gmailAccount,
             to: receiver,
             subject: 'placeForme: Confirmación de cuenta',
             text: "Estimado usuario," +
@@ -37,7 +38,7 @@ exports.sendUserConfirmationMail = function(receiver, link) {
 exports.sendCommentMail = function(sender, text) {
     transporter.sendMail({
           from: sender,
-          to: 'magnanode@gmail.com',
+          to: require('../config').gmailAccount,
           subject: 'El usuario ' + sender + " te ha enviado un comentario",
           text: text
         });

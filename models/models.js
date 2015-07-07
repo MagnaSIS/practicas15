@@ -81,14 +81,13 @@ exports.StudentCourse = StudentCourse;
 exports.Logs = Logs;
 exports.Sequelize = sequelize;
 
-
 sequelize.sync().then(function() {
     User.count({where: {role: 'ADMIN'}}).then(function(count) {
         // Si no hay ningun admin, crea uno.
        if (count < 1) {		
             User.create({
-                email: 'admin@magnasis.com',
-                password: require('../libs/utilities').encrypt('admin'),
+                email: require('../config').defaultAdminEmail,
+                password: require('../libs/utilities').encrypt(require('../config').defaultAdminPassword),
                 role: 'ADMIN',
                 locked: false,
                 isValidate: true,
