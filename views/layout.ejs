@@ -93,7 +93,7 @@
 				<div class="errors">
 					<% for (var i in errors) { %>
 						<div align="center" class="alert alert-danger alert-dismissible" role="alert">
-							<%= errors[i].message %>
+							<%- errors[i].message %>
 						</div>
 					<% } %>
 				</div>
@@ -107,7 +107,7 @@
 				<div class="msg">
 					<% for (var i in msg) { %>
 					<div align="center" class="alert alert-success alert-dismissible" role="alert">
-						<%= msg[i].message %>
+						<%- msg[i].message %>
 					</div>
 					<% } %>
 				</div>

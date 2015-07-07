@@ -58,6 +58,7 @@ router.put('/modifipass/:token', studentController.updatePassword);
 
 router.get('/user/confirm', sessionController.anonRequired, userController.confirm);
 router.post('/user/confirm', sessionController.anonRequired, userController.setPassword);
+router.get('/user/resend', sessionController.anonRequired, userController.resend);
 
 /*
  *	Students Controller

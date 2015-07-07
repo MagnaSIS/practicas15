@@ -1,7 +1,7 @@
 <div align="center" class="alert alert-danger alert-dismissible" role="alert">
 <h1><%= message %></h1>
 <h2><%= error.status %></h2>
-<% if (error.stack) { %>
+<% if (error.stack && process.env.NODE_ENV === "development") { %>
 	<pre><%= error.stack %></pre>
 <% } %>
 </div>
