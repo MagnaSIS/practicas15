@@ -128,3 +128,7 @@ div.social div.googleplus:hover {
     opacity: 1.0;
     filter: alpha(opacity=40); /* For IE8 and earlier */
 }
+
+.clickable_row:hover{
+    background: lightgrey;
+}
