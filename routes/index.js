@@ -29,7 +29,6 @@ router.get('/', function(req, res, next) {
 router.param('courseId', courseController.load); // autoload :courseId
 router.param('userId', userController.checkUserId);
 router.param('token', userController.checkToken);
-router.param('emailId', studentController.loadEmail);
 
 /* GET terms */
 router.get('/terms', function(req, res, next) {
@@ -45,13 +44,7 @@ router.post('/login', sessionController.create);
 router.delete('/logout', sessionController.loginRequired, sessionController.destroy);
 
 router.get('/modifipass', studentController.formPassword);
-router.get('/modifipass/:emailId/okpass', studentController.mostrarOK);
-router.get('/modifipass//okpass', function(req, res, next) {
-    req.session.errors = [{
-        "message": 'No has introducido ningun email'
-    }];
-    next();
-}, studentController.formPassword);
+router.post('/modifipass', studentController.mostrarOK);
 
 router.get('/modifipass/:token/edit', studentController.editPassword);
 router.put('/modifipass/:token', studentController.updatePassword);

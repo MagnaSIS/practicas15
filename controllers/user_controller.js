@@ -90,7 +90,6 @@ exports.setPassword = function(req, res, next) {
 			user.confirmationToken = '';
 			user.validate().then(function(err) {
 				if (err) {
-					console.log(user);
 					req.session.where = '';
 					res.render('manager/password', {
 						token: token,
