@@ -107,7 +107,7 @@ exports.create = function(req, res) {
           //Envio del correo
           var link = "http://" + req.get('host') + "/students/verify/" + uuid4;
           mailer.sendUserConfirmationMail(newUser.email, link);
-          
+
           req.session.errors = {};
           req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
@@ -533,18 +533,28 @@ exports.manageCourses = function(req, res) {
 };
 
 exports.contact = function(req, res) {
-  models.Student.findOne({
-    where: {
-      UserId: req.session.user.id
-    }}).then(function(student) {
+
     req.session.where = 'contact';
     mensaje = req.session.msg;
     req.session.msg = {};
-    res.render('contact', {
-      student: student,
-      email: req.session.user.email,
-      errors: [],
-      msg: mensaje
+    res.render('contact');
+
+};
+exports.contactStudent = function(req, res) {
+
+    models.Student.findOne({
+      where: {
+        UserId: req.session.user.id
+      }}).then(function(student) {
+      req.session.where = 'contact';
+      mensaje = req.session.msg;
+      req.session.msg = {};
+      console.log("ENTRA");
+      res.render('student/contactStudent', {
+        student: student,
+        email: req.session.user.email,
+        errors: [],
+        msg: mensaje
+      });
     });
-  });
 };

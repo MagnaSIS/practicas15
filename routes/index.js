@@ -87,8 +87,11 @@ router.get('/calcs/:idstudent/:idcourse',	sessionController.loginRequired,	calcs
 */
 
 /*GET contact */
-router.get('/contact', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.contact);
+router.get('/contactStudent', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.contactStudent);
+router.get('/contact', studentController.contact);
+
 /*
  *  Contact Controller
  */
- router.post('/contact', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), contactController.sendMail);
+ router.post('/contactStudent', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), contactController.sendMailStudent);
+ router.post('/contact', contactController.sendMail);

@@ -19,9 +19,60 @@
 // controllers/contact_controller.js
 
 var mailer = require('../libs/mailer.js');
+var recaptcha = require('nodejs-nocaptcha-recaptcha');
 
 // POST /contact
 exports.sendMail = function(req, res) {
+
+  var name = req.body.name;
+  var apellidos = req.body.lastname;
+  var email = req.body.email;
+  var text = req.body.text;
+  //  var g-recaptcha-response = req.body.g-recaptcha-response;
+  var allowedEmail = /^(([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)/;
+  var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
+  var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
+
+  recaptcha(req.body["g-recaptcha-response"], "6LdWbAkTAAAAABCuXsM4oQOviYH7G08pAeoJ2N4G", function(success) {
+
+    if (allowedEmail.test(email) &&
+      allowedName.test(name) &&
+      allowedLastName.test(apellidos) &&
+      success) {
+      mailer.sendCommentMail(email, text);
+      req.session.msg = [{
+        message: "Comentario enviado correctamente."
+      }];
+      res.redirect('/contact');
+    } else {
+      if (!success) {
+        req.session.errors = [{
+          "message": 'Error en el "Captcha"'
+        }];
+      }
+      if (!allowedEmail.test(email)) {
+        req.session.errors = [{
+          "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
+        }];
+      }
+      if (!allowedName.test(name)) {
+        req.session.errors = [{
+          "message": 'El nombre debe tener letras'
+        }];
+      }
+      if (!allowedLastName.test(apellidos)) {
+        req.session.errors = [{
+          "message": 'El apellido debe tener letras'
+        }];
+      }
+      req.session.where = '';
+      res.render('contact', {
+        errors: req.session.errors
+      });
+    }
+  });
+};
+exports.sendMailStudent = function(req, res) {
 
   var name = req.body.name;
   var apellidos = req.body.lastname;
@@ -34,10 +85,11 @@ exports.sendMail = function(req, res) {
 
   if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
     mailer.sendCommentMail(email, text);
-    req.session.msg = [{message: "Comentario enviado correctamente."}];
+    req.session.msg = [{
+      message: "Comentario enviado correctamente."
+    }];
     res.redirect('/contact');
-  }
-  else {
+  } else {
     if (!allowedEmail.test(email)) {
       req.session.errors = [{
         "message": 'El correo no es un correo de la UPV / EHU. Tiene que ser del tipo correo@ikasle.ehu.eus'
