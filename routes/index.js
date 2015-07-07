@@ -65,6 +65,8 @@ router.get('/students/verify/:verificationToken', studentController.verify);
 //router.delete('/students/:userId(\\d+)',	sessionController.roleRequired("STUDENT"),	studentController.destroy);
 router.get('/students/courses', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.courses);
 router.post('/students/manageCourses', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.manageCourses);
+router.post('/students/courses/select', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.select);
+router.post('/students/courses/remove', sessionController.loginRequired, sessionController.roleRequired("STUDENT"), studentController.remove);
 
 
 /*

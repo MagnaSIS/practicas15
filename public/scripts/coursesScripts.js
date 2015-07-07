@@ -19,3 +19,37 @@ function hide_show(id){
 	}
 	
 }
+
+function selectCourse(course_id) {
+	var id = '#' + course_id;
+	$.post('/students/courses/select', {
+		id: course_id
+	}, function(data) {
+		$(id).removeClass('alert-info');
+		$(id).children(id + '_2').text(data.inscritos[2]);
+		$(id).children(id + '_3').text(data.inscritos[3]);
+		$(id).children(id + '_4').text(data.inscritos[4]);
+		if (data.lleno) {
+			$(id).addClass('alert-danger');
+		} else {
+			$(id).addClass('alert-success');
+		}
+		$(id + '_button').text('Descartar');
+		$(id + '_button').attr("onclick", "removeCourse('"+course_id+"')");
+	});
+}
+
+function removeCourse(course_id) {
+	var id = '#' + course_id;
+	$.post('/students/courses/remove', {
+		id: course_id
+	}, function(data) {
+		$(id).removeClass('alert-danger alert-success');
+		$(id).children(id + '_2').text(data.inscritos[2]);
+		$(id).children(id + '_3').text(data.inscritos[3]);
+		$(id).children(id + '_4').text(data.inscritos[4]);
+		$(id).addClass('alert-info');
+		$(id + '_button').text("Seleccionar");
+		$(id + '_button').attr("onclick", "selectCourse('"+course_id+"')");
+	});
+}

@@ -532,6 +532,63 @@ exports.manageCourses = function(req, res) {
   });
 };
 
+// POST /students/courses/select -- via AJAX
+exports.select = function(req, res) {
+  var response = {};
+  models.Student.findOne({
+    where: {
+      UserId: req.session.user.id
+    }
+  }).then(function(student) {
+    models.Course.findById(req.body.id, {
+      include: {
+        model: models.Student
+      }
+    }).then(function(course) {
+      student.addCourse(course).then(function() {
+        response.lleno = (course.Students.length >= course.vacancies);
+        response.inscritos = [0, 0, 0, 0, 0];
+        for (var i = 0; i < course.Students.length; i++)
+          response.inscritos[course.Students[i].year]++;
+        response.inscritos[student.year]++;
+        res.send(response);
+      });
+    }).catch(function(error) {
+      res.send(null);
+    });
+  }).catch(function(error) {
+    res.send(null);
+  });
+};
+
+// POST /students/courses/remove -- via AJAX
+exports.remove = function(req, res) {
+  var response = {};
+  models.Student.findOne({
+    where: {
+      UserId: req.session.user.id
+    }
+  }).then(function(student) {
+    models.Course.findById(req.body.id, {
+      include: {
+        model: models.Student
+      }
+    }).then(function(course) {
+      student.removeCourse(course).then(function() {
+        response.inscritos = [0, 0, 0, 0, 0];
+        for (var i = 0; i < course.Students.length; i++)
+          response.inscritos[course.Students[i].year]++;
+        response.inscritos[student.year]--;
+        res.send(response);
+      });
+    }).catch(function(error) {
+      res.send(null);
+    });
+  }).catch(function(error) {
+    res.send(null);
+  });
+};
+
 exports.contact = function(req, res) {
 
     req.session.where = 'contact';

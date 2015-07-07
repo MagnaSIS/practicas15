@@ -80,38 +80,27 @@
 						if(userCourses[c].CourseId== courses[i].id){
 							esta = true;
 							pos = c;
-						}
-						if(esta){
-							if(courses[i].Students.length > courses[i].vacancies){
-					%>
-								<tr class="alert alert-danger collapse <%= id %>">
-							<% }else{ %>
-								<tr class="alert alert-success collapse <%= id %>">
-							<% } %>
-						<% }else{ %>
-							<tr class="alert alert-info collapse <%= id %>">
-						<% } %>
+						} %>
+					<tr id="<%= courses[i].id%>" class="<%= id %> collapse alert <% if(esta){ if(courses[i].Students.length > courses[i].vacancies) { %>alert-danger
+					<% } else { %>alert-success<% } } else { %>alert-info<% } %>">
 						<td><%= courses[i].name %></td>
 						<td><%= courses[i].year %></td>
 						<td><%= courses[i].semester %></td>
 						<td><%= courses[i].specialisation %></td>
 						<td><%= courses[i].credits %></td>
 						<td><%= courses[i].vacancies %></td>
-						<td><%= inscritos[2] %></td>
-						<td><%= inscritos[3] %></td>
-						<td><%= inscritos[4] %></td>
+						<td id="<%= courses[i].id%>_2"><%= inscritos[2] %></td>
+						<td id="<%= courses[i].id%>_3"><%= inscritos[3] %></td>
+						<td id="<%= courses[i].id%>_4"><%= inscritos[4] %></td>
 						<td><%= courses[i].description %></td>
 						<td>
-							<form action="/students/manageCourses" method="POST">
-								<input type="hidden" name="courseID" value="<%=courses[i].id %>"/>
-								<% if (esta) { %>
-									<input type="hidden" name="add" value="no"/>
-									<button class="btn btn-default" type="submit">Descartar</button>
-								<% }else{ %>
-									<input type="hidden" name="add" value="yes"/>
-									<button class="btn btn-default" type="submit">Seleccionar</button>
-								<% } %>
-							</form>
+							<button id="<%= courses[i].id%>_button" type="button" class="btn btn-default"
+							<% if (esta) { %>
+								 onclick="removeCourse('<%= courses[i].id %>')">Descartar
+							<% } else { %>
+								onclick="selectCourse('<%= courses[i].id %>')">Seleccionar
+							<% } %>
+							</button>
 						</td>
 					</tr>
 				<% } %>
