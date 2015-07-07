@@ -24,37 +24,26 @@ var calcsController = require("../controllers/calcsController.js");
 var uuid = require('node-uuid');
 var mailer = require('../libs/mailer.js');
 
-// Middleware Autoload User por Email de usuario
-exports.loadEmail = function(req, res, next, emailId) {
-  var emailRegex = /^(.*)\@(.*)\.(.*)$/i;
-	var email = emailId;
-	var emailMatch = email.match(emailRegex);
-	if (emailMatch) {
-		if (emailMatch[2] === "ikasle.ehu") {
-			email = emailMatch[1] + '@' + emailMatch[2] + '.eus';
-		}
-	}
-  models.User.find({
-    where: {
-      email: email
-    }
-  }).then(
-    function(user) {
-      req.user = user;
-      next();
-    }
-  ).catch(function(error) {
-    next(error);
-  });
-};
-
 // GET /students
 exports.new = function(req, res) {
   var errors = req.session.errors || {};
   req.session.errors = {};
   req.session.where = '';
+  var student = {
+    name: "",
+    surname: "",
+    year: "",
+    avgGrade: "",
+    credits: "",
+    specialisation: ""
+  };
+  var user = {
+    email: ""
+  };
   res.render('student/studentRegistration', {
-    errors: errors
+    errors: errors,
+    user: user,
+    student: student
   });
   //res.write("Hola");
 };
@@ -123,13 +112,37 @@ exports.create = function(req, res) {
           req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
         }).catch(function(error) {
-    	  //catch en la creaccion del student
-          req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+    	  //catch en la creacion del student
+          var errors = [{"message": 'Ha ocurrido un error en el registro'},
                                 {"message": error.message}];
           newUser.destroy().then(function() {
-          res.redirect('/students');
+            var student = {
+              name: req.body.name,
+              surname: req.body.lastname,
+              year: tmpYear,
+              avgGrade: tmpAvgGrade,
+              credits: tmpCredits,
+              specialisation: tmpSpecialisation
+            };
+            res.render('student/studentRegistration',{
+              errors: errors,
+              user: newUser,
+              student: student
+            });
         }); //borrar el usuario ya que no ha creado el student..
-          res.redirect('/students');
+        var student = {
+          name: req.body.name,
+          surname: req.body.lastname,
+          year: tmpYear,
+          avgGrade: tmpAvgGrade,
+          credits: tmpCredits,
+          specialisation: tmpSpecialisation
+        };
+        res.render('student/studentRegistration',{
+          errors: errors,
+          user: newUser,
+          student: student,
+        });
       });
     }).catch(function(error) {
     	req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
@@ -189,29 +202,47 @@ exports.formPassword = function(req, res) {
   //res.write("Hola");
 };
 
-// GET /modifipass/:emailId/okpass
-exports.mostrarOK = function(req, res) {
-  var user = req.user;
-  if (user) {
-    user.confirmationToken = uuid.v4();
-    user.save({
-      fields: ['confirmationToken']
-    }).then(function(user) {
-      var link = "https://" + req.get('host') + "/modifipass/" + user.confirmationToken + "/edit";
-      //Envio del correo
-      mailer.sendResetPasswordMail(user.email, link);
-      req.session.where = '';
-      req.session.msg = [{
-        message: "Se te ha enviado un correo electrónico. Por favor, revisa tu bandeja de entrada."
-      }];
-      res.redirect("/");
-    });
+// GET /modifipass/okpass
+exports.mostrarOK = function(req, res, next) {
+  var emailRegex = /^(.*)\@(.*)\.(.*)$/i;
+  var email = req.body.email;
+  var emailMatch = email.match(emailRegex);
+  if (emailMatch) {
+    if (emailMatch[2] === "ikasle.ehu") {
+      email = emailMatch[1] + '@' + emailMatch[2] + '.eus';
+    }
   }
-  else {
-    req.session.errors = [{message: "No existe un usuario con el correo introducido."}];
-    console.log(req.session.errors);
-    res.redirect('/modifipass');
-  }
+  models.User.find({
+    where: {
+      email: email
+    }
+  }).then(
+    function(user) {
+      if (user) {
+        user.confirmationToken = uuid.v4();
+        user.save({
+          fields: ['confirmationToken']
+        }).then(function(user) {
+          var link = "https://" + req.get('host') + "/modifipass/" + user.confirmationToken + "/edit";
+          //Envio del correo
+          mailer.sendResetPasswordMail(user.email, link);
+          req.session.where = '';
+          req.session.msg = [{
+            message: "Se te ha enviado un correo electrónico. Por favor, revisa tu bandeja de entrada."
+          }];
+          res.redirect("/");
+        });
+      }
+      else {
+        req.session.errors = [{
+          message: "No existe un usuario con el correo introducido."
+        }];
+        res.redirect('/modifipass');
+      }
+    }
+  ).catch(function(error) {
+    next(error);
+  });
 };
 
 // GET /modifipass/:token/edit

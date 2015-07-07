@@ -15,7 +15,7 @@
 <body>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<span href="/"><div class="heading" style="background-image: url(/header.jpg);  border: 1px solid black;">
+		<span href="/"><div class="heading" style="background-image: url(/header.jpg);  border: 1px solid #000000;">
     		<h1 align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif;">placeForMe</h1>
     			<p align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif; ">Cálculo de demanda de optativas</p>
 		</div></span>
@@ -96,7 +96,7 @@
 				<div class="errors">
 					<% for (var i in errors) { %>
 						<div align="center" class="alert alert-danger alert-dismissible" role="alert">
-							<%= errors[i].message %>
+							<%- errors[i].message %>
 						</div>
 					<% } %>
 				</div>
@@ -110,7 +110,7 @@
 				<div class="msg">
 					<% for (var i in msg) { %>
 					<div align="center" class="alert alert-success alert-dismissible" role="alert">
-						<%= msg[i].message %>
+						<%- msg[i].message %>
 					</div>
 					<% } %>
 				</div>
@@ -197,6 +197,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript" src="/bootstrap-3.3.5-dist/js/bootstrap.js"></script>
 <script src="/scripts/myScriptEstudiante.js"></script>
+<script src="/scripts/coursesScripts.js"></script>
 <script type="text/javascript">
 	$(function () {
 		$('[data-toggle="tooltip"]').tooltip()

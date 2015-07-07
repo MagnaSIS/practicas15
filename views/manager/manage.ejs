@@ -54,22 +54,11 @@ if (users[i].role === "STUDENT") {student++}
 							<td><%= users[i].email %></td>
 							<td>
 								<% if (users[i].role === "ADMIN") { %> 
-									Administrador 
-								<% } else{ %>
-								<form method="post" action="/manager/changeUserRole/<%= users[i].id %>">
-									<select name="role"  onchange="this.form.submit()">
-									<% if (users[i].role === "MANAGER") { %> 
-										<option selected value="MANAGER">Gestor</option>  
-									<% }else{ %>
-										<option value="MANAGER">Gestor</option> 
-									<% } %>
-									<% if (users[i].role === "STUDENT") { %> 
-										<option selected value="STUDENT">Estudiante</option>  
-									<% }else{ %>
-										<option value="STUDENT">Estudiante</option> 
-									<% } %>
-									</select>
-								</form>
+									Administrador
+								<% } else if (users[i].role === "MANAGER"){ %>
+									Gestor académico
+								<% } else if (users[i].role === "STUDENT"){ %>
+									Estudiante
 								<% } %>
 							</td>
 							<td><% if(users[i].isValidate){ %>Si<% }else{ %>No<% } %></td>

@@ -20,7 +20,7 @@ router.get('/', 								securityController.isAdmin, managerController.index);
 /*Users administration*/
 router.post('/createUser', 						securityController.isAdmin, userController.notExistUser, managerController.createUser);
 router.get('/changelock/:userId',				securityController.isAdmin, managerController.changeLock);
-router.post('/changeUserRole/:userId(\\d+)',	securityController.isAdmin, managerController.changeUserRole);
+//router.post('/changeUserRole/:userId(\\d+)',	securityController.isAdmin, managerController.changeUserRole);
 router.post('/createStudent/:userId(\\d+)',		securityController.isAdmin, managerController.createStudentFromUser);
 router.get('/editUser/:userId(\\d+)', 			securityController.isAdmin, managerController.editUser);
 router.put('/editUser/:userId(\\d+)', 			securityController.isAdmin, managerController.updateUser);

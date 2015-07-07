@@ -94,7 +94,8 @@ exports.create = function(req, res) {
 				error = true;
 				//console.log('Correo no validado');
 				req.session.errors = [{
-					"message": 'Correo no validado. Revisa tu bandeja de correo electrónico.'
+					"message": 'Su cuenta no está activada. Por favor revise su correo electrónico para activarla. ' 
+						+ 'Si no ha recibido un correo para activar su cuenta, haga click <a href="/user/resend?id=' + user.id + '">aquí</a> para volver a recibirlo.'
 				}];
 			}
 
@@ -106,14 +107,18 @@ exports.create = function(req, res) {
 				}];
 			}
 			if (!error) {
-				req.session.msg = [{message: "Has iniciado sesión como " + user.email + " ¡Bienvenido!"}];
+				req.session.msg = [{
+					message: "Has iniciado sesión como " + user.email + " ¡Bienvenido!"
+				}];
 				req.session.user = {
 					email: user.email,
 					role: user.role,
 					id: user.id
 				};
+				res.redirect("/");
+			} else {
+				res.redirect("/login");
 			}
-			res.redirect("/");
 		}
 		else {
 			req.session.errors = [{
