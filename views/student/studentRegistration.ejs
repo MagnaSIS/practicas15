@@ -59,7 +59,7 @@
 											<label for="year1">Año que voy a cursar: </label>
 										</div>
 										<div class="col-md-6">
-											<input required name="year" id="year" <%= student.year %>class="form-control" type="number" min="3" max="4" placeholder="Año" data-toggle="tooltip" data-placement="right" title="El año a cursar debe ser 3 o 4">
+											<input required name="year" id="year" value="<%= student.year %>" class="form-control" type="number" min="3" max="4" placeholder="Año" data-toggle="tooltip" data-placement="right" title="El año a cursar debe ser 3 o 4"/>
 										</div>
 									</div>
 									<hr>
@@ -68,7 +68,7 @@
 											<label for="nota">Nota media: </label>
 										</div>
 										<div class="col-md-6">
-											<input required name="avg" id="avg" value="<%= student.avgGrade %>" class="form-control" type="text" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0">
+											<input required name="avg" id="avg" value="<%= student.avgGrade %>" class="form-control" type="text" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0"/>
 										</div>
 									</div>
 									<hr>

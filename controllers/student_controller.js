@@ -130,6 +130,7 @@ exports.create = function(req, res) {
               student: student
             });
         }); //borrar el usuario ya que no ha creado el student..
+        if(isNaN(tmpAvgGrade)){ tmpAvgGrade = "";}
         var student = {
           name: req.body.name,
           surname: req.body.lastname,
