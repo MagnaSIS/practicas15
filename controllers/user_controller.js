@@ -90,7 +90,6 @@ exports.setPassword = function(req, res, next) {
 			user.confirmationToken = '';
 			user.validate().then(function(err) {
 				if (err) {
-					console.log(user);
 					req.session.where = '';
 					res.render('manager/password', {
 						token: token,
@@ -119,6 +118,40 @@ exports.setPassword = function(req, res, next) {
 				error: new Error('404: Página no encontrada.')
 			});
 		}
+	});
+};
+
+// GET /user/resend
+exports.resend = function(req, res, next) {
+	var userId = req.query.id;
+	models.User.findById(userId).then(function(user) {
+		if (user) {
+			if (user.isValidate) {
+				res.status(404).render('error', {
+					message: "404: Página no encontrada.",
+					error: new Error('404: Página no encontrada.')
+				});
+			}
+			else {
+				var link = "http://" + req.get('host') + "/students/verify/" + user.confirmationToken;
+				mailer.sendUserConfirmationMail(user.email, link);
+				req.session.msg = [{
+					'message': "Se ha enviado un mensaje a su correo para confirmar su cuenta."
+				}];
+				res.redirect('/login');
+			}
+		}
+		else {
+			res.status(404).render('error', {
+				message: "404: Página no encontrada.",
+				error: new Error('404: Página no encontrada.')
+			});
+		}
+	}).catch(function(error) {
+	    res.status(500).render('error', {
+	    	message: error.message,
+	    	error: error,
+	    });
 	});
 };
 

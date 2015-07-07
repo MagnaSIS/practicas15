@@ -13,7 +13,10 @@
 										<label for="email">Email</label>
 									</div>
 									<div class="col-md-6">
-										<input autofocus class="form-control" name="email" id="name" type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" value="<%= user.email %>">
+										<input autofocus class="form-control" name="email" id="name" type="email" 
+										<% if (user.role === "STUDENT") { %> 
+											pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" title="El correo debe ser @ikasle.ehu.e(u)s"
+										<% } %> value="<%= user.email %>" />
 									</div>
 								</div>
 								<hr>
