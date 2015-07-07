@@ -15,7 +15,7 @@
 <body>
 <div class="panel panel-default">
 	<div class="panel-body">
-		<span href="/"><div class="heading" style="background-image: url(/header.jpg);  border: 1px solid black;">
+		<span href="/"><div class="heading" style="background-image: url(/header.jpg);  border: 1px solid #000000;">
     		<h1 align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif;">placeForMe</h1> 
     			<p align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif; ">Cálculo de demanda de optativas</p> 
 		</div></span>
@@ -47,7 +47,7 @@
 									<% } %>
 									<% if ( session.user.role==="STUDENT") { %>
 										<li <% if(session.where==='account'){ %>class="active"<% } %>><a class="navbar-link" href="/students/edit">Editar mi cuenta</a></li>
-										<li <% if(session.where==='contact'){ %>class="active"<% } %>><a class="navbar-link" href="/contact">Contactanos</a></li>
+										<li <% if(session.where==='contact'){ %>class="active"<% } %>><a class="navbar-link" href="/contact">Contáctanos</a></li>
 									<% } %>
 									<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
 										<li <% if(session.where==='all_courses'){ %>class="active"<% } %>><a class="navbar-link" href="/course/allcourses">Gestión de asignaturas</a></li>

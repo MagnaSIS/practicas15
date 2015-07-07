@@ -14,7 +14,7 @@
 											<label for="name">Nombre: </label>
 										</div>
 										<div class="col-md-6">
-											<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
+											<input autofocus required class="form-control" type="text" name="name" placeholder="Nombre" id="name" value="<%= student.name %>" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
 										</div>
 									</div>
 									<hr>
@@ -23,7 +23,7 @@
 											<label for="lastname">Apellido: </label>
 										</div>
 										<div class="col-md-6">
-											<input class="form-control" required type="text" name="lastname" id="lastname" placeholder="Apellido" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
+											<input class="form-control" required type="text" name="lastname" id="lastname" value="<%= student.surname %>" placeholder="Apellido" pattern="(^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]{1,20}$)" data-toggle="tooltip" data-placement="right" title="Solo letras, no admite caracteres especiales ni numéricos."/>
 										</div>
 									</div>
 									<hr>
@@ -32,7 +32,7 @@
 											<label for="email">Correo Electrónico: </label>
 										</div>
 										<div class="col-md-6">
-											<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" placeholder="tuCorreo@ikasle.ehu.eus" name="email" id="email" data-toggle="tooltip" data-placement="right" title="Debe ser un correo válido de la UPV/EHU."/>
+											<input class="form-control" required type="text" pattern="(^([a-zA-Z])+(\d{3})+\@ikasle.ehu.e(u)?s$)" placeholder="tuCorreo@ikasle.ehu.eus" name="email" id="email" value="<%= user.email %>" data-toggle="tooltip" data-placement="right" title="Debe ser un correo válido de la UPV/EHU."/>
 										</div>
 									</div>
 									<hr>
@@ -59,10 +59,7 @@
 											<label for="year1">Año que voy a cursar: </label>
 										</div>
 										<div class="col-md-6">
-											<select class="form-control" id="year" name="year">
-												<option value="3">3</option>
-												<option value="4">4</option>
-											</select>
+											<input required name="year" id="year" <%= student.year %>class="form-control" type="number" min="3" max="4" placeholder="Año" data-toggle="tooltip" data-placement="right" title="El año a cursar debe ser 3 o 4">
 										</div>
 									</div>
 									<hr>
@@ -71,7 +68,7 @@
 											<label for="nota">Nota media: </label>
 										</div>
 										<div class="col-md-6">
-											<input required name="avg" id="avg" class="form-control" type="text" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0">
+											<input required name="avg" id="avg" value="<%= student.avgGrade %>" class="form-control" type="text" placeholder="Nota media" data-toggle="tooltip" data-placement="right" title="Debe ser un número entre 0.0 y 10.0">
 										</div>
 									</div>
 									<hr>
@@ -80,7 +77,7 @@
 											<label for="credito">Créditos: </label>
 										</div>
 										<div class="col-md-6">
-											<input required name="credits" id="credits" class="form-control" type="number" min="0" max="240" placeholder="Créditos" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240">
+											<input required name="credits" id="credits" value="<%= student.credits %>" class="form-control" type="number" min="0" max="240" placeholder="Créditos" data-toggle="tooltip" data-placement="right" title="El número de créditos debe ser entre 0 y 240">
 										</div>
 									</div>
 									<hr>
@@ -90,9 +87,9 @@
 										</div>
 										<div class="col-md-6">
 											<select class="form-control" id="specialisation" name="specialisation">
-												<option value="C">Computación</option>
-												<option value="IC">Ingeniería de Computadores</option>
-												<option value="IS">Ingeniería del Software</option>
+												<option value="C" <% if (student.specialisation === "C") { %> selected <% } %> >Computación</option>
+												<option value="IC" <% if (student.specialisation === "IC") { %> selected <% } %> >Ingeniería de Computadores</option>
+												<option value="IS" <% if (student.specialisation === "IS") { %> selected <% } %> >Ingeniería del Software</option>
 											</select>
 										</div>
 									</div>

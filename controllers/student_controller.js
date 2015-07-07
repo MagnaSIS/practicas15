@@ -53,8 +53,21 @@ exports.new = function(req, res) {
   var errors = req.session.errors || {};
   req.session.errors = {};
   req.session.where = '';
+  var student = {
+    name: "",
+    surname: "",
+    year: "",
+    avgGrade: "",
+    credits: "",
+    specialisation: ""
+  };
+  var user = {
+    email: ""
+  };
   res.render('student/studentRegistration', {
-    errors: errors
+    errors: errors,
+    user: user,
+    student: student
   });
   //res.write("Hola");
 };
@@ -123,13 +136,37 @@ exports.create = function(req, res) {
           req.session.msg = [{message: "Te has registrado correctamente. Por favor, revisa tu bandeja de entrada de correo para confirmar tu usuario."}];
           res.redirect('/login');
         }).catch(function(error) {
-    	  //catch en la creaccion del student
-          req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
+    	  //catch en la creacion del student
+          var errors = [{"message": 'Ha ocurrido un error en el registro'},
                                 {"message": error.message}];
           newUser.destroy().then(function() {
-          res.redirect('/students');
+            var student = {
+              name: req.body.name,
+              surname: req.body.lastname,
+              year: tmpYear,
+              avgGrade: tmpAvgGrade,
+              credits: tmpCredits,
+              specialisation: tmpSpecialisation
+            };
+            res.render('student/studentRegistration',{
+              errors: errors,
+              user: newUser,
+              student: student
+            });
         }); //borrar el usuario ya que no ha creado el student..
-          res.redirect('/students');
+        var student = {
+          name: req.body.name,
+          surname: req.body.lastname,
+          year: tmpYear,
+          avgGrade: tmpAvgGrade,
+          credits: tmpCredits,
+          specialisation: tmpSpecialisation
+        };
+        res.render('student/studentRegistration',{
+          errors: errors,
+          user: newUser,
+          student: student,
+        });
       });
     }).catch(function(error) {
     	req.session.errors = [{"message": 'Ha ocurrido un error en el registro'},
