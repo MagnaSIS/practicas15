@@ -16,8 +16,8 @@
 <div class="panel panel-default">
 	<div class="panel-body">
 		<span href="/"><div class="heading" style="background-image: url(/header.jpg);  border: 1px solid black;">
-    		<h1 align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif;">placeForMe</h1> 
-    			<p align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif; ">Cálculo de demanda de optativas</p> 
+    		<h1 align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif;">placeForMe</h1>
+    			<p align="center" style="color:#FFFFFF; font-family: 'Ubuntu', sans-serif; ">Cálculo de demanda de optativas</p>
 		</div></span>
 
 		<div class="media">
@@ -47,13 +47,16 @@
 									<% } %>
 									<% if ( session.user.role==="STUDENT") { %>
 										<li <% if(session.where==='account'){ %>class="active"<% } %>><a class="navbar-link" href="/students/edit">Editar mi cuenta</a></li>
-										<li <% if(session.where==='contact'){ %>class="active"<% } %>><a class="navbar-link" href="/contact">Contactanos</a></li>
+										<li <% if(session.where==='contact'){ %>class="active"<% } %>><a class="navbar-link" href="/contactStudent">Contactanos</a></li>
 									<% } %>
 									<% if ( session.user.role==="ADMIN" || session.user.role==="MANAGER") { %>
 										<li <% if(session.where==='all_courses'){ %>class="active"<% } %>><a class="navbar-link" href="/course/allcourses">Gestión de asignaturas</a></li>
 									<% } %>
 								<% } %>
-							</ul>
+								<% if (!session.user) { %>
+								<li <% if(session.where==='contact'){ %>class="active"<% } %>><a class="navbar-link" href="/contact">Contactanos</a></li>
+								<% } %>
+						</ul>
 
 							<% if (!session.user) { %>
 								<form class="navbar-form navbar-right" method="post" action="/login">
@@ -100,8 +103,8 @@
 				<% } %>
 
 			</div>
-<!-- END ERRORS MESSAGES -->			
-<!-- SUCCESFULL MESSAGES -->			
+<!-- END ERRORS MESSAGES -->
+<!-- SUCCESFULL MESSAGES -->
 			<div>
 				<% if ( !(typeof msg==="undefined") && msg.length) { %>
 				<div class="msg">
@@ -113,12 +116,12 @@
 				</div>
 				<% } %>
 			</div>
-<!-- END SUCCESFULL MESSAGES -->	
+<!-- END SUCCESFULL MESSAGES -->
 
 			<div align="center">
 				<%- body %>
 			</div>
-			
+
 		</section>
 	</div>
 	<div class="panel-footer center">
@@ -159,7 +162,7 @@
 					<div class="row" >
 						<a class="twitter-timeline" href="https://twitter.com/MagnaSIS" data-widget-id="370627588135198720"></a>
 					</div>
-					
+
 				</div>
 				<div class="col-md-4">
 					<div class="row">
@@ -200,5 +203,6 @@
 	});
 </script>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 </body>
 </html>
