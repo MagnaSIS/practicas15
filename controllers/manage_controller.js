@@ -152,7 +152,7 @@ exports.viewLogs = function(req, res) {
 };
 
 //POST '/manager/changeUserRole/:userId'
-exports.changeUserRole = function(req,res){
+/*exports.changeUserRole = function(req,res){
 	if (req.body.role==="MANAGER" || req.body.role==="STUDENT"){
 		req.user.role=req.body.role;
 		req.user.save({fields: ["role"]}).then(function() {
@@ -185,7 +185,7 @@ exports.changeUserRole = function(req,res){
 		req.session.errors = [{"message": 'Rol incorrecto...'}];
         res.redirect('/manager');
 	}
-};
+};*/
 
 //POST '/manager/createStudent/:userId'
 exports.createStudentFromUser = function(req,res){
