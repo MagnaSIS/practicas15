@@ -26,9 +26,9 @@ var mailer = require('../libs/mailer.js');
 
 // GET /students
 exports.new = function(req, res) {
+	req.session.where='/students'; // No borrar, es para cuando comprueba si existe el usuario con el midleware de user_controller.notExistUser sepa donde volver y mostrar el error.
   var errors = req.session.errors || {};
   req.session.errors = {};
-  req.session.where = '';
   var student = {
     name: "",
     surname: "",
@@ -50,8 +50,7 @@ exports.new = function(req, res) {
 
 // POST /students
 exports.create = function(req, res) {
-  var name = req.body.name;
-  var apellidos = req.body.lastname;
+	req.session.where='';
   var email = req.body.email;
   var password = req.body.password;
   var password1 = req.body.password1;
@@ -85,7 +84,7 @@ exports.create = function(req, res) {
 //  var allowCredits= /^(([1]\d\d)|\d\d|([2][0-3]\d)|(240))$/;
 //  var allowSpecialisation= /^(IS|IC|C)$/;
   /* TODO validar Student Y User antes de crearlos */
-  if (allowedEmail.test(email) && allowedName.test(name) && allowedLastName.test(apellidos)) {
+  if (allowedEmail.test(email) && allowedName.test(req.body.name) && allowedLastName.test(req.body.lastname)) {
     var emailMatch = email.match(allowedEmail);
     //guardar en base de datos
     models.User.create({

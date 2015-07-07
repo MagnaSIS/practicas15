@@ -9,21 +9,15 @@ var hasher = require('../libs/utilities.js');
 exports.notExistUser = function(req, res, next) {
   /* TODO cambiar el email en caso de que sea 'ikasle.ehu.es' > 'ikasle.ehu.eus' */
   var email = req.body.email;
-  models.User.find({
-    where: {
-      email: email.toLowerCase()
-    }
-  }).then(function(user) {
+  models.User.find({where: {email: email.toLowerCase()}}).then(function(user) {
     if (user) {
     	req.session.errors = [{"message": 'Ya existe el usuario'}];
-    	var backUrl=req.session.backurl;
-    	req.session.backurl="";
+    	var backUrl=req.session.req.session.where;
+    	req.session.where="";
     	res.redirect(backUrl);
-      next(new Error("Ya existe el usuario"));
-    }
-    else {
-    	req.session.backurl=""
-      next();
+    }else {
+    	req.session.backurl="";
+    	next();
     }
   });
 };
