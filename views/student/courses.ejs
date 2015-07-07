@@ -1,441 +1,121 @@
 
 <div class="row">
-<div class="bg-info"><br>
-	<p>Aquí puedes seleccionar las asignaturas que pretendes cursar el próximo año académico.</p>
-	<p>Una vez seleccionadas, cambiarán de color: verde, si hay plazas libres, o rojo, si el número de alumnos inscritos es superior al número de plazas.</p>
-	<p>De esta manera, podrás hacerte una idea de la demanda que hay para cada asignatura.</p>
-	<p>Cuantos más alumnos participen, mejor será la información que recibamos todos.</p>
-	<p><strong>ATENCIÓN:</strong> Te recomendamos que eches un vistazo a la <a href="http://www.ehu.eus/documents/340468/4166549/ORD-bateragarritasuna-15-16.pdf" target="_blank">tabla de incompatibilidades</a> antes de hacer tu selección.</p>
-	<br>
-</div>
+	<div class="bg-info"><br>
+		<p>Aquí puedes seleccionar las asignaturas que pretendes cursar el próximo año académico.</p>
+		<p>Una vez seleccionadas, cambiarán de color: verde, si hay plazas libres, o rojo, si el número de alumnos inscritos es superior al número de plazas.</p>
+		<p>De esta manera, podrás hacerte una idea de la demanda que hay para cada asignatura.</p>
+		<p>Cuantos más alumnos participen, mejor será la información que recibamos todos.</p>
+		<p><strong>ATENCIÓN:</strong> Te recomendamos que eches un vistazo a la <a href="http://www.ehu.eus/documents/340468/4166549/ORD-bateragarritasuna-15-16.pdf" target="_blank">tabla de incompatibilidades</a> antes de hacer tu selección.</p>
+		<br>
+	</div>
 </div>
 <div class="table-responsive">
-
-<table class="table">
-	<tr>
-		<th rowspan="2">Nombre del curso</th>
-		<th rowspan="2">Curso</th>
-		<th rowspan="2">Cuatrimestre</th>
-		<th rowspan="2">Especialización</th>
-		<th rowspan="2">Créditos</th>
-		<th rowspan="2">Plazas</th>
-		<th colspan="3">Alumnos inscritos</th>
-		<th rowspan="2">Detalles</th>
-		<th rowspan="2">Apuntarse</th>
-	</tr>
-	<tr>
-		<th>2º</th>
-		<th>3º</th>
-		<th>4º</th>
-	</tr>
-<tr><td colspan="4"><hr></td><td colspan="5">3º - 1 cuatrimestre - Ingeniería del Software</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "1º" && courses[i].specialisation == "IS"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
-
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
-
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
-				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
-			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
+	<table class="table">
+		<tr>
+			<th rowspan="2">Nombre del curso</th>
+			<th rowspan="2">Curso</th>
+			<th rowspan="2">Cuatrimestre</th>
+			<th rowspan="2">Especialización</th>
+			<th rowspan="2">Créditos</th>
+			<th rowspan="2">Plazas</th>
+			<th colspan="3">Alumnos inscritos</th>
+			<th rowspan="2">Detalles</th>
+			<th rowspan="2">Apuntarse</th>
 		</tr>
-	<% } %>
-<% } %>
-<tr><td colspan="4"><hr></td><td colspan="5">3º - 1 cuatrimestre - Ingeniería de Computadores</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "1º" && courses[i].specialisation == "IC"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
-
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
-
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
-				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
-			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
+		<tr>
+			<th>2º</th>
+			<th>3º</th>
+			<th>4º</th>
 		</tr>
-	<% } %>
-<% } %>
-<tr><td colspan="4"><hr></td><td colspan="5">3º - 1 cuatrimestre - Computación</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "1º" && courses[i].specialisation == "C"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
 
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
+		<% var grupos = [[3, 1, "IS"], 
+						[3, 1, "C"],
+						[3, 1, "IC"],
+						[3, 2, "IS"],
+						[3, 2, "C"],
+						[3, 2, "IC"],
+						[4, 1, ""],
+						[4, 2, ""]]; %>
 
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
+		<% var j; for (j = 0; j < grupos.length; j++) { %>
+
+			<% var id = grupos[j][0] + "_" + grupos[j][1] + "_" + grupos[j][2] %>
+			<% var id_up = grupos[j][0] + "_" + grupos[j][1] + "_" + grupos[j][2] + "_up" %>
+			<% var id_down = grupos[j][0] + "_" + grupos[j][1] + "_" + grupos[j][2] + "_down" %>
+
+			<tr class="clickable_row" onclick="hide_show('<%= id %>')" data-toggle="collapse" data-target=".<%= id %>">
+				<td colspan="11" class="center">
+					<div class="row">
+						<div class="col-xs-2">
+						</div>
+						<div class="col-xs-1">
+							<span class="glyphicon glyphicon-triangle-bottom" id="<%= id_down %>_1"></span> 
+							<span style="display: none;" class="glyphicon glyphicon-triangle-top" id="<%= id_up %>_1"></span> 
+						</div>
+						<div class="col-xs-6">
+							<%= grupos[j][0] %>º - <%= grupos[j][1] %> cuatrimestre
+							<% if(grupos[j][2] == "IS"){ %> - Ingeniería del Software <% } %>
+							<% if(grupos[j][2] == "C"){ %> - Computación <% } %>
+							<% if(grupos[j][2] == "IC"){ %> - Ingeniería de Computadores <% } %>
+						</div>
+						<div class="col-xs-1">
+							<span class="glyphicon glyphicon-triangle-bottom" id="<%= id_down %>_2"></span>
+							<span style="display: none;" class="glyphicon glyphicon-triangle-top" id="<%= id_up %>_2"></span>
+						</div>
+						<div class="col-xs-2">
+						</div>
+					</div>
+				</td>
+			</tr>
+			<% var i; for (i = 0; i < courses.length; i++) { %>
+				<% if(courses[i].year == "4º"){ grupos[j][2] = courses[i].specialisation } %>
+				<% if(courses[i].year == (grupos[j][0] + "º") && courses[i].semester == (grupos[j][1] + "º") && courses[i].specialisation == grupos[j][2]){ %>
+					<% 	var inscritos = [0, 0, 0, 0, 0];
+						for (var k=0; k<courses[i].Students.length; k++)
+							inscritos[courses[i].Students[k].year]++;
+						var esta = false;
+						var pos = 0;
+						var c;
+						for(c = 0; c < userCourses.length; c++)
+						if(userCourses[c].CourseId== courses[i].id){
+							esta = true;
+							pos = c;
+						}
+						if(esta){
+							if(courses[i].Students.length > courses[i].vacancies){
+					%>
+								<tr class="alert alert-danger collapse <%= id %>">
+							<% }else{ %>
+								<tr class="alert alert-success collapse <%= id %>">
+							<% } %>
+						<% }else{ %>
+							<tr class="alert alert-info collapse <%= id %>">
+						<% } %>
+						<td><%= courses[i].name %></td>
+						<td><%= courses[i].year %></td>
+						<td><%= courses[i].semester %></td>
+						<td><%= courses[i].specialisation %></td>
+						<td><%= courses[i].credits %></td>
+						<td><%= courses[i].vacancies %></td>
+						<td><%= inscritos[2] %></td>
+						<td><%= inscritos[3] %></td>
+						<td><%= inscritos[4] %></td>
+						<td><%= courses[i].description %></td>
+						<td>
+							<form action="/students/manageCourses" method="POST">
+								<input type="hidden" name="courseID" value="<%=courses[i].id %>"/>
+								<% if (esta) { %>
+									<input type="hidden" name="add" value="no"/>
+									<button class="btn btn-default" type="submit">Descartar</button>
+								<% }else{ %>
+									<input type="hidden" name="add" value="yes"/>
+									<button class="btn btn-default" type="submit">Seleccionar</button>
+								<% } %>
+							</form>
+						</td>
+					</tr>
 				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
 			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
-		</tr>
-	<% } %>
-<% } %>
-<tr><td colspan="4"><hr></td><td colspan="5">3º - 2 cuatrimestre - Ingeniería del Software</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "2º" && courses[i].specialisation == "IS"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
-
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
-
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
-				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
-			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
-		</tr>
-	<% } %>
-<% } %>
-<tr><td colspan="4"><hr></td><td colspan="5">3º - 2 cuatrimestre - Ingeniería de Computadores</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "2º" && courses[i].specialisation == "IC"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
-
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
-
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
-				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
-			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
-		</tr>
-	<% } %>
-<% } %>
-<tr><td colspan="4"><hr></td><td colspan="5">3º - 2 cuatrimestre - Computación</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "3º" && courses[i].semester == "2º" && courses[i].specialisation == "C"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
-
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
-
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
-				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
-			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
-		</tr>
-	<% } %>
-<% } %>
-<tr><td colspan="4"><hr></td><td colspan="5">4º - 1 cuatrimestre</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "4º" && courses[i].semester == "1º"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
-
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
-
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
-				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
-			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
-		</tr>
-	<% } %>
-<% } %>
-<tr><td colspan="4"><hr></td><td colspan="5">4º - 2 cuatrimestre</td><td colspan="2"><hr></td></tr>
-<% var i; for (i=0; i<courses.length; i++) { %>
-	<% if(courses[i].year == "4º" && courses[i].semester == "2º"){ %>
-			<% 	var inscritos=[0, 0, 0, 0, 0];
-				for (var k=0; k<courses[i].Students.length; k++) {
-					inscritos[courses[i].Students[k].year]++;
-				}
-				var esta=false;
-
-				var pos=0;
-		 		var c; for (c=0; c< userCourses.length; c++) {
-				if (userCourses[c].CourseId== courses[i].id) {
-					esta=true;
-					pos=c;
-				 }
-			 }
-
-			 if (esta) {
-			 	if (courses[i].Students.length > courses[i].vacancies){ %>
-					<tr class="alert alert-danger">
-				<% }else  {%>
-					<tr class="alert alert-success">
-				<% } %>
-			<% }else{ %>
-				<tr class="alert alert-info">
-			<% } %>
-
-
-			<td><%=courses[i].name%></td>
-			<td><%=courses[i].year%></td>
-			<td><%=courses[i].semester%></td>
-			<td><%=courses[i].specialisation%></td>
-			<td><%=courses[i].credits%></td>
-			<td><%=courses[i].vacancies%></td>
-			<td><%=inscritos[2]%></td>
-			<td><%=inscritos[3]%></td>
-			<td><%=inscritos[4]%></td>
-			<td><%=courses[i].description%></td>
-			<td><form action="/students/manageCourses" method="POST">
-				<input type="hidden" name="courseID" value="<%=courses[i].id%>"/>
-			<% if (esta) { %>
-				<input type="hidden" name="add" value="no"/>
-				<button class="btn btn-default" type="submit">Descartar</button>
-			<% }else{ %>
-				<input type="hidden" name="add" value="yes"/>
-				<button class="btn btn-default" type="submit">Seleccionar</button>
-			<% } %>
-			</form></td>
-		</tr>
-	<% } %>
-<% } %>
-
-</table>
+		<% } %>
+	</table>
 </div>
