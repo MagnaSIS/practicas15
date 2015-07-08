@@ -29,4 +29,7 @@ exports.defaultAdminPassword= process.env.defaultAdminPassword;
 exports.gmailAccount= process.env.gmailAccount;
 exports.gmailPassword=process.env.gmailPassword;
 
-
+/*
+ * Captcha code 
+ */
+exports.captchacode = process.env.captcha;

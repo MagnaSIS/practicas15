@@ -33,7 +33,7 @@ exports.sendMail = function(req, res) {
   var allowedName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
   var allowedLastName = /^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]+$/;
 
-  recaptcha(req.body["g-recaptcha-response"], "6LdWbAkTAAAAABCuXsM4oQOviYH7G08pAeoJ2N4G", function(success) {
+  recaptcha(req.body["g-recaptcha-response"], require('../config').captchacode, function(success) {
 
     if (allowedEmail.test(email) &&
       allowedName.test(name) &&
