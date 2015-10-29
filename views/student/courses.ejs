@@ -68,8 +68,7 @@
 				</td>
 			</tr>
 			<% var i; for (i = 0; i < courses.length; i++) { %>
-				<% if(courses[i].year == "4º"){ grupos[j][2] = courses[i].specialisation } %>
-				<% if(courses[i].year == (grupos[j][0] + "º") && courses[i].semester == (grupos[j][1] + "º") && courses[i].specialisation == grupos[j][2]){ %>
+				<% if(courses[i].year == (grupos[j][0] + "º") && courses[i].semester == (grupos[j][1] + "º") && (courses[i].specialisation == grupos[j][2] || courses[i].year == "4º")){ %>
 					<% 	var inscritos = [0, 0, 0, 0, 0];
 						for (var k=0; k<courses[i].Students.length; k++)
 							inscritos[courses[i].Students[k].year]++;
@@ -96,7 +95,7 @@
 						<td>
 							<button id="<%= courses[i].id%>_button" type="button" class="btn btn-default"
 							<% if (esta) { %>
-								 onclick="removeCourse('<%= courses[i].id %>')">Descartar
+								 onclick="('<%= courses[i].id %>')">Descartar
 							<% } else { %>
 								onclick="selectCourse('<%= courses[i].id %>')">Seleccionar
 							<% } %>
